@@ -4,7 +4,7 @@ import {
   saveChatGptApiKeyKey,
 } from "./chatGptApiKeyStore";
 
-export function useChatGptApiKey(): [string, (key: string) => void] {
+export function useChatGptApiKeyState(): [string, (key: string) => void] {
   const [key, setKey] = useState<string>(loadChatGptApiKeyKey());
 
   function saveKey(key: string): void {

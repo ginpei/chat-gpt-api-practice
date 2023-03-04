@@ -1,6 +1,6 @@
 import { FormEventHandler, useState } from "react";
 import { NiceButton } from "../../domains/button/NiceButton";
-import { useChatGptApiKey as useChatGptApiKeyState } from "../../domains/chatGptApiKey/chatGptApiKeyHooks";
+import { useChatGptApiKeyState } from "../../domains/chatGptApiKey/chatGptApiKeyHooks";
 import { saveChatGptApiKeyKey } from "../../domains/chatGptApiKey/chatGptApiKeyStore";
 import { NiceLink } from "../../domains/link/NiceLink";
 
