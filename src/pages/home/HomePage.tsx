@@ -1,7 +1,16 @@
+import dynamic from "next/dynamic";
 import Head from "next/head";
 import { ReactNode } from "react";
 import { useChatGptApiKey } from "../../domains/chatGptApiKey/chatGptApiKeyHooks";
-import { ChatGptApiKeyForm } from "./ChatGptApiKeyForm";
+import { ChatSection } from "./ChatSection";
+
+// to access localStorage in rendering
+const ChatGptApiKeyForm = dynamic(
+  () => import("./ChatGptApiKeyForm").then((mod) => mod.ChatGptApiKeyForm),
+  {
+    ssr: false,
+  }
+);
 
 export function HomePage(): JSX.Element {
   const key = useChatGptApiKey();
@@ -17,6 +26,7 @@ export function HomePage(): JSX.Element {
   return (
     <Frame>
       <ChatGptApiKeyForm />
+      <ChatSection />
     </Frame>
   );
 }

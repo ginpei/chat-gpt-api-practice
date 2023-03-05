@@ -14,3 +14,8 @@ export function useChatGptApiKeyState(): [string, (key: string) => void] {
 
   return [key, saveKey];
 }
+
+export function useChatGptApiKey(): string {
+  const [apiKey] = useChatGptApiKeyState();
+  return apiKey;
+}
