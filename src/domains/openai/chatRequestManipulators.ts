@@ -11,6 +11,9 @@ export async function sendChatRequest(options: ChatApiQuery): Promise<{}> {
 
   const init: RequestInit = {
     body: JSON.stringify(options),
+    headers: {
+      "Content-Type": "application/json",
+    },
     method: "POST",
   };
   const res = await fetch(chatApiPath, init);
