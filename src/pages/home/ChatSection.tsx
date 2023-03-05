@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { NiceButton } from "../../domains/button/NiceButton";
 import { useChatGptApiKey } from "../../domains/chatGptApiKey/chatGptApiKeyHooks";
 import { useError } from "../../domains/error/errorHooks";
@@ -9,13 +10,14 @@ export interface ChatSectionProps {}
 export function ChatSection(): JSX.Element {
   const apiKey = useChatGptApiKey();
   const [sendError, setSendError] = useError();
-
-  const prompt = "Say something funny";
+  const [requestMessage, setRequestMessage] = useState("Say something funny");
+  const [responseMessage, setResponseMessage] = useState("");
 
   const onSendClick = async () => {
     setSendError(null);
     try {
-      await sendChatRequest({ apiKey, prompt });
+      const result = await sendChatRequest({ apiKey, prompt: requestMessage });
+      setResponseMessage(result.message);
     } catch (error) {
       console.error(error);
       setSendError(toError(error));
@@ -27,8 +29,15 @@ export function ChatSection(): JSX.Element {
       <h1>ChatSection</h1>
       {sendError && <p className="text-red-700">{sendError.message}</p>}
       <p>
+        <input
+          className="border"
+          onChange={(v) => setRequestMessage(v.currentTarget.value)}
+          type="text"
+          value={requestMessage}
+        />
         <NiceButton onClick={onSendClick}>Send</NiceButton>
       </p>
+      <p>{responseMessage}</p>
     </div>
   );
 }
