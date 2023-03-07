@@ -1,15 +1,10 @@
 import { useState } from "react";
 import { NiceButton } from "../../domains/button/NiceButton";
-import {
-  buildChatMessage,
-  ChatMessage,
-  createChatMessage,
-} from "../../domains/chat/ChatMessage";
-import { useChatGptApiKey } from "../../domains/openai/chatGptApiKeyHooks";
+import { buildChatMessage, ChatMessage } from "../../domains/chat/ChatMessage";
 import { useError } from "../../domains/error/errorHooks";
 import { toError } from "../../domains/error/errorManipulators";
-import { generateRandomId } from "../../domains/id/id";
 import { VStack } from "../../domains/layout/VStack";
+import { useChatGptApiKey } from "../../domains/openai/chatGptApiKeyHooks";
 import { sendChatRequest } from "../../domains/openai/chatRequestManipulators";
 import { ChatItem } from "./ChatItem";
 
