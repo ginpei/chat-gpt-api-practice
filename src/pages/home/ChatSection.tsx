@@ -5,7 +5,7 @@ import {
   ChatMessage,
   createChatMessage,
 } from "../../domains/chat/ChatMessage";
-import { useChatGptApiKey } from "../../domains/chatGptApiKey/chatGptApiKeyHooks";
+import { useChatGptApiKey } from "../../domains/openai/chatGptApiKeyHooks";
 import { useError } from "../../domains/error/errorHooks";
 import { toError } from "../../domains/error/errorManipulators";
 import { generateRandomId } from "../../domains/id/id";

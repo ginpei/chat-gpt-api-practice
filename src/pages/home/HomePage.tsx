@@ -1,7 +1,7 @@
 import dynamic from "next/dynamic";
 import Head from "next/head";
 import { ReactNode } from "react";
-import { useChatGptApiKey } from "../../domains/chatGptApiKey/chatGptApiKeyHooks";
+import { useChatGptApiKey } from "../../domains/openai/chatGptApiKeyHooks";
 import { ChatSection } from "./ChatSection";
 
 // to access localStorage in rendering
