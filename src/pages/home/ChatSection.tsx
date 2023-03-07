@@ -69,6 +69,7 @@ export function ChatSection(): JSX.Element {
           <ChatItem key={message.id} message={message} />
         ))}
       </VStack>
+      <div aria-hidden className="min-h-[5em]"></div>
     </div>
   );
 }
