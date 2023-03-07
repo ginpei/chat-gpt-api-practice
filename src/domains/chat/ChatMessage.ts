@@ -10,7 +10,7 @@ export interface ChatMessage {
 export function createChatMessage(init: Partial<ChatMessage>): ChatMessage {
   return {
     body: init?.body ?? "",
-    id: init?.body ?? "",
+    id: init?.id ?? "",
     date: init?.date ?? NaN,
     name: init?.name ?? "",
   };
