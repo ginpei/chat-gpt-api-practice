@@ -27,12 +27,12 @@ export default async function handler(
   res: NextApiResponse<ChatApiResponse>
 ) {
   try {
-    const query: any = req.body;
+    const { apiKey, prompt }: ChatApiQuery = req.body;
 
-    const api = getOpenAiApi(query.apiKey);
+    const api = getOpenAiApi(apiKey);
     const { data } = await api.createCompletion({
       model: "text-davinci-003",
-      prompt: query.prompt,
+      prompt: prompt,
       temperature: 0.6,
     });
 
