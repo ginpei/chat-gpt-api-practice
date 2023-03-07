@@ -7,6 +7,7 @@ import { toError } from "../../domains/error/errorManipulators";
 import { VStack } from "../../domains/layout/VStack";
 import { useChatGptApiKey } from "../../domains/openai/chatGptApiKeyHooks";
 import { sendChatRequest } from "../../domains/openai/chatRequestManipulators";
+import { ChatForm } from "./ChatForm";
 import { ChatItem } from "./ChatItem";
 
 export interface ChatSectionProps {}
@@ -17,7 +18,7 @@ export function ChatSection(): JSX.Element {
   const [requestMessage, setRequestMessage] = useState("Say something funny");
   const [chatLog, setChatLog] = useState(loadChatLog());
 
-  const onSendClick = async () => {
+  const onSubmit = async () => {
     setSendError(null);
     try {
       const userMessage = buildChatMessage({
@@ -50,15 +51,11 @@ export function ChatSection(): JSX.Element {
     <div className="ChatSection">
       <h1>ChatSection</h1>
       {sendError && <p className="text-red-700">{sendError.message}</p>}
-      <p>
-        <input
-          className="border"
-          onChange={(v) => setRequestMessage(v.currentTarget.value)}
-          type="text"
-          value={requestMessage}
-        />
-        <NiceButton onClick={onSendClick}>Send</NiceButton>
-      </p>
+      <ChatForm
+        input={requestMessage}
+        onInputChange={setRequestMessage}
+        onSubmit={onSubmit}
+      />
       <VStack>
         {chatLog.map((message) => (
           <ChatItem key={message.id} message={message} />
