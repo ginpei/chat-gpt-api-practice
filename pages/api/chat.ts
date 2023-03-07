@@ -1,5 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
+import { CreateCompletionResponseChoicesInner } from "openai";
 import { getOpenAiApi } from "../../src/domains/openai/openAiApiStore";
 
 export interface ChatApiQuery {
@@ -10,7 +11,7 @@ export interface ChatApiQuery {
 export type ChatApiResponse = ChatApiSuccessResponse | ChatApiErrorResponse;
 
 export interface ChatApiSuccessResponse {
-  message: string;
+  response: CreateCompletionResponseChoicesInner[];
   ok: true;
 }
 
@@ -35,13 +36,13 @@ export default async function handler(
       temperature: 0.6,
     });
 
-    const message = data.choices[0].text;
-    if (!message) {
+    const result = data.choices;
+    if (!result) {
       throw new Error(`API returned an empty text`);
     }
 
     res.status(200).json({
-      message,
+      response: result,
       ok: true,
     });
   } catch (error) {

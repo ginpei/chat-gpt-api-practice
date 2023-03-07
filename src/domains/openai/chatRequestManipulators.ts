@@ -2,15 +2,12 @@ import {
   ChatApiErrorResponse,
   chatApiPath,
   ChatApiQuery,
+  ChatApiSuccessResponse,
 } from "../../../pages/api/chat";
-
-export interface ChatResponse {
-  message: string;
-}
 
 export async function sendChatRequest(
   options: ChatApiQuery
-): Promise<ChatResponse> {
+): Promise<ChatApiSuccessResponse> {
   if (!options.apiKey) {
     throw new Error("`apiKey` is required");
   }
@@ -28,8 +25,6 @@ export async function sendChatRequest(
     throw new Error(errorBody.message);
   }
 
-  // TODO
-  const data: any = await res.json();
-
-  return { message: data.message };
+  const data: ChatApiSuccessResponse = await res.json();
+  return data;
 }

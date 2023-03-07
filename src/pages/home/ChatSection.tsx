@@ -8,6 +8,8 @@ import {
 import { useChatGptApiKey } from "../../domains/chatGptApiKey/chatGptApiKeyHooks";
 import { useError } from "../../domains/error/errorHooks";
 import { toError } from "../../domains/error/errorManipulators";
+import { generateRandomId } from "../../domains/id/id";
+import { VStack } from "../../domains/layout/VStack";
 import { sendChatRequest } from "../../domains/openai/chatRequestManipulators";
 import { ChatItem } from "./ChatItem";
 
@@ -29,8 +31,12 @@ export function ChatSection(): JSX.Element {
       setChatLog((v) => [...v, userMessage]);
 
       const result = await sendChatRequest({ apiKey, prompt: requestMessage });
+
+      // TODO
+      console.log("# result", result);
+
       const aiMessage = buildChatMessage({
-        body: result.message,
+        body: result.response[0].text ?? "?",
         name: "ai",
       });
       setChatLog((v) => [...v, aiMessage]);
@@ -53,11 +59,11 @@ export function ChatSection(): JSX.Element {
         />
         <NiceButton onClick={onSendClick}>Send</NiceButton>
       </p>
-      <div>
+      <VStack>
         {chatLog.map((message) => (
           <ChatItem key={message.id} message={message} />
         ))}
-      </div>
+      </VStack>
     </div>
   );
 }
