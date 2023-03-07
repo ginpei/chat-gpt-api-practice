@@ -17,8 +17,10 @@ export function ChatSection(): JSX.Element {
   const [sendError, setSendError] = useError();
   const [requestMessage, setRequestMessage] = useState("Say something funny");
   const [chatLog, setChatLog] = useState(loadChatLog());
+  const [processingChat, setProcessingChat] = useState(false);
 
   const onSubmit = async () => {
+    setProcessingChat(true);
     setSendError(null);
     try {
       const userMessage = buildChatMessage({
@@ -41,9 +43,12 @@ export function ChatSection(): JSX.Element {
         saveChatLog(newChatLog);
         return newChatLog;
       });
+      setRequestMessage("");
     } catch (error) {
       console.error(error);
       setSendError(toError(error));
+    } finally {
+      setProcessingChat(false);
     }
   };
 
@@ -51,11 +56,14 @@ export function ChatSection(): JSX.Element {
     <div className="ChatSection">
       <h1>ChatSection</h1>
       {sendError && <p className="text-red-700">{sendError.message}</p>}
-      <ChatForm
-        input={requestMessage}
-        onInputChange={setRequestMessage}
-        onSubmit={onSubmit}
-      />
+      <div className="sticky top-0">
+        <ChatForm
+          disabled={processingChat}
+          input={requestMessage}
+          onInputChange={setRequestMessage}
+          onSubmit={onSubmit}
+        />
+      </div>
       <VStack>
         {chatLog.map((message) => (
           <ChatItem key={message.id} message={message} />

@@ -1,13 +1,17 @@
 import { FormEventHandler } from "react";
 import { NiceButton } from "../../domains/button/NiceButton";
+import { NiceInput } from "../../domains/input/NiceInput";
+import { HStack } from "../../domains/layout/HStack";
 
 export interface ChatFormProps {
+  disabled?: boolean;
   input: string;
   onInputChange: (input: string) => void;
   onSubmit: (input: string) => void;
 }
 
 export function ChatForm({
+  disabled,
   input,
   onInputChange,
   onSubmit,
@@ -18,14 +22,19 @@ export function ChatForm({
   };
 
   return (
-    <form className="ChatForm" onSubmit={onFormSubmit}>
-      <input
-        className="border"
-        onChange={(v) => onInputChange(v.currentTarget.value)}
-        type="text"
-        value={input}
-      />
-      <NiceButton>Send</NiceButton>
+    <form className="ChatForm p-2 bg-gray-100" onSubmit={onFormSubmit}>
+      <fieldset className="contents" disabled={disabled}>
+        <HStack>
+          <NiceInput
+            className="flex-grow"
+            onChange={(v) => onInputChange(v.currentTarget.value)}
+            placeholder="What is the HTML?"
+            type="text"
+            value={input}
+          />
+          <NiceButton>Send</NiceButton>
+        </HStack>
+      </fieldset>
     </form>
   );
 }
