@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { NiceButton } from "../../domains/button/NiceButton";
+import { loadChatLog, saveChatLog } from "../../domains/chat/chatLogStore";
 import { buildChatMessage, ChatMessage } from "../../domains/chat/ChatMessage";
 import { useError } from "../../domains/error/errorHooks";
 import { toError } from "../../domains/error/errorManipulators";
@@ -14,7 +15,7 @@ export function ChatSection(): JSX.Element {
   const apiKey = useChatGptApiKey();
   const [sendError, setSendError] = useError();
   const [requestMessage, setRequestMessage] = useState("Say something funny");
-  const [chatLog, setChatLog] = useState<ChatMessage[]>([]);
+  const [chatLog, setChatLog] = useState(loadChatLog());
 
   const onSendClick = async () => {
     setSendError(null);
@@ -34,7 +35,11 @@ export function ChatSection(): JSX.Element {
         body: result.response[0].text ?? "?",
         name: "ai",
       });
-      setChatLog((v) => [...v, aiMessage]);
+      setChatLog((v) => {
+        const newChatLog = [...v, aiMessage];
+        saveChatLog(newChatLog);
+        return newChatLog;
+      });
     } catch (error) {
       console.error(error);
       setSendError(toError(error));

@@ -2,11 +2,16 @@ import dynamic from "next/dynamic";
 import Head from "next/head";
 import { ReactNode } from "react";
 import { useChatGptApiKey } from "../../domains/openai/chatGptApiKeyHooks";
-import { ChatSection } from "./ChatSection";
 
 // to access localStorage in rendering
 const ChatGptApiKeyForm = dynamic(
   () => import("./ChatGptApiKeyForm").then((mod) => mod.ChatGptApiKeyForm),
+  {
+    ssr: false,
+  }
+);
+const ChatSection = dynamic(
+  () => import("./ChatSection").then((mod) => mod.ChatSection),
   {
     ssr: false,
   }
