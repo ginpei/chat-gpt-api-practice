@@ -1,9 +1,15 @@
 import { useState } from "react";
 import { NiceButton } from "../../domains/button/NiceButton";
+import {
+  buildChatMessage,
+  ChatMessage,
+  createChatMessage,
+} from "../../domains/chat/ChatMessage";
 import { useChatGptApiKey } from "../../domains/chatGptApiKey/chatGptApiKeyHooks";
 import { useError } from "../../domains/error/errorHooks";
 import { toError } from "../../domains/error/errorManipulators";
 import { sendChatRequest } from "../../domains/openai/chatRequestManipulators";
+import { ChatItem } from "./ChatItem";
 
 export interface ChatSectionProps {}
 
@@ -11,13 +17,23 @@ export function ChatSection(): JSX.Element {
   const apiKey = useChatGptApiKey();
   const [sendError, setSendError] = useError();
   const [requestMessage, setRequestMessage] = useState("Say something funny");
-  const [responseMessage, setResponseMessage] = useState("");
+  const [chatLog, setChatLog] = useState<ChatMessage[]>([]);
 
   const onSendClick = async () => {
     setSendError(null);
     try {
+      const userMessage = buildChatMessage({
+        body: requestMessage,
+        name: "you",
+      });
+      setChatLog((v) => [...v, userMessage]);
+
       const result = await sendChatRequest({ apiKey, prompt: requestMessage });
-      setResponseMessage(result.message);
+      const aiMessage = buildChatMessage({
+        body: result.message,
+        name: "ai",
+      });
+      setChatLog((v) => [...v, aiMessage]);
     } catch (error) {
       console.error(error);
       setSendError(toError(error));
@@ -37,7 +53,11 @@ export function ChatSection(): JSX.Element {
         />
         <NiceButton onClick={onSendClick}>Send</NiceButton>
       </p>
-      <p>{responseMessage}</p>
+      <div>
+        {chatLog.map((message) => (
+          <ChatItem key={message.id} message={message} />
+        ))}
+      </div>
     </div>
   );
 }
