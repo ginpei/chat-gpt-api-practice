@@ -38,18 +38,23 @@ export function SettingsDialog({
   return (
     <NiceDialog onClose={onClose} open={open} title="Settings">
       <form className="p-4" method="dialog">
-        <p>
+        <div className="flex justify-between items-center gap-4">
           API key:{" "}
           {apiContext.apiKey ? (
-            <>****</>
+            "********"
           ) : (
             <span className="italic text-red-500">not set</span>
           )}
-        </p>
-        <NiceButton onClick={onUpdateClick}>Set API key...</NiceButton>
+          <NiceButton onClick={onUpdateClick} type="button">
+            ✏️
+          </NiceButton>
+        </div>
         <p>
-          <NiceLink href="https://platform.openai.com/account/api-keys">
-            Manage your API keys
+          <NiceLink
+            href="https://platform.openai.com/account/api-keys"
+            target="_blank"
+          >
+            Manage your API keys 🚀
           </NiceLink>
         </p>
       </form>

@@ -21,7 +21,7 @@ export function ChatGptApiKeyForm({}: ChatGptApiKeyFormProps): JSX.Element {
   return (
     <div className="ChatGptApiKeyForm">
       <HStack>
-        <NiceButton onClick={onCogClick}>⚙️</NiceButton>
+        <NiceButton onClick={onCogClick}>⚙️ Settings</NiceButton>
         {!apiContext.apiKey && (
           <span className="text-red-500">* You have to set API key to use</span>
         )}
