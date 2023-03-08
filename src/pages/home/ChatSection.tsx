@@ -67,7 +67,6 @@ export function ChatSection(): JSX.Element {
 
   return (
     <div className="ChatSection">
-      <h1>ChatSection</h1>
       {sendError && <p className="text-red-700">{sendError.message}</p>}
       <div className="sticky top-0 bg-gray-100 p-2">
         <VStack gap="gap-2">
