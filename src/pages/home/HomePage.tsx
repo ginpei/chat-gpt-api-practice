@@ -28,23 +28,15 @@ export function HomePage(): JSX.Element {
 
   return (
     <ChatGptApiContextProvider value={chatGptApiContextState}>
-      <Frame>
+      <div className="HomePage m-4">
+        <Head>
+          <title>Home</title>
+          <meta name="description" content="Practicing ChatGPT API" />
+          <link rel="icon" href="/icon-512.png" />
+        </Head>
+        <h1>ChatGPT API practice</h1>
         <ChatSection />
-      </Frame>
+      </div>
     </ChatGptApiContextProvider>
-  );
-}
-
-function Frame({ children }: { children: ReactNode }): JSX.Element {
-  return (
-    <div className="HomePage m-4">
-      <Head>
-        <title>Home</title>
-        <meta name="description" content="Practicing ChatGPT API" />
-        <link rel="icon" href="/icon-512.png" />
-      </Head>
-      <h1>ChatGPT API practice</h1>
-      {children}
-    </div>
   );
 }
