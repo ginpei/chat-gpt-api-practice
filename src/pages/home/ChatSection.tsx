@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { NiceButton } from "../../domains/button/NiceButton";
 import { loadChatLog, saveChatLog } from "../../domains/chat/chatLogStore";
-import { buildChatMessage, ChatMessage } from "../../domains/chat/ChatMessage";
+import { buildChatMessage } from "../../domains/chat/ChatMessage";
 import { useError } from "../../domains/error/errorHooks";
 import { toError } from "../../domains/error/errorManipulators";
 import { VStack } from "../../domains/layout/VStack";
-import { useChatGptApiKey } from "../../domains/openai/chatGptApiKeyHooks";
+import { useChatGptApiContext } from "../../domains/openai/chatGptApiContext";
 import { sendChatRequest } from "../../domains/openai/chatRequestManipulators";
 import { ChatForm } from "./ChatForm";
 import { ChatItem } from "./ChatItem";
@@ -13,7 +12,7 @@ import { ChatItem } from "./ChatItem";
 export interface ChatSectionProps {}
 
 export function ChatSection(): JSX.Element {
-  const apiKey = useChatGptApiKey();
+  const [apiContext] = useChatGptApiContext();
   const [sendError, setSendError] = useError();
   const [requestMessage, setRequestMessage] = useState("Say something funny");
   const [chatLog, setChatLog] = useState(loadChatLog());
@@ -29,7 +28,10 @@ export function ChatSection(): JSX.Element {
       });
       setChatLog((v) => [...v, userMessage]);
 
-      const result = await sendChatRequest({ apiKey, prompt: requestMessage });
+      const result = await sendChatRequest({
+        apiKey: apiContext.apiKey,
+        prompt: requestMessage,
+      });
 
       // TODO
       console.log("# result", result);

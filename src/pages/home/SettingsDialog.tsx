@@ -5,7 +5,8 @@ import {
   NiceDialogCoreProps,
 } from "../../domains/dialog/NiceDialog";
 import { NiceLink } from "../../domains/link/NiceLink";
-import { useChatGptApiKeyState } from "../../domains/openai/chatGptApiKeyHooks";
+import { useChatGptApiContext } from "../../domains/openai/chatGptApiContext";
+import { saveChatGptApiKeyKey } from "../../domains/openai/chatGptApiKeyStore";
 
 export interface SettingsDialogProps extends NiceDialogCoreProps {}
 
@@ -13,10 +14,10 @@ export function SettingsDialog({
   onClose,
   open,
 }: SettingsDialogProps): JSX.Element {
-  const [key, setChatGptApiKey] = useChatGptApiKeyState();
+  const [apiContext, setApiContext] = useChatGptApiContext();
 
   const onUpdateClick: FormEventHandler = () => {
-    const newKey = window.prompt("API key", key);
+    const newKey = window.prompt("API key", apiContext.apiKey);
     if (newKey === null) {
       return;
     }
@@ -30,7 +31,8 @@ export function SettingsDialog({
       }
     }
 
-    setChatGptApiKey(newKey);
+    setApiContext((v) => ({ ...v, apiKey: newKey }));
+    saveChatGptApiKeyKey(newKey);
   };
 
   return (
@@ -38,7 +40,7 @@ export function SettingsDialog({
       <form className="p-4" method="dialog">
         <p>
           API key:{" "}
-          {key ? (
+          {apiContext.apiKey ? (
             <>****</>
           ) : (
             <span className="italic text-red-500">not set</span>

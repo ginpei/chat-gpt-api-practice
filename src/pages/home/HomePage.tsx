@@ -1,7 +1,11 @@
 import dynamic from "next/dynamic";
 import Head from "next/head";
 import { ReactNode } from "react";
-import { useChatGptApiKey } from "../../domains/openai/chatGptApiKeyHooks";
+import {
+  ChatGptApiContextProvider,
+  useChatGptApiContextState,
+} from "../../domains/openai/chatGptApiContext";
+import { loadChatGptApiKeyKey } from "../../domains/openai/chatGptApiKeyStore";
 
 // to access localStorage in rendering
 const ChatGptApiKeyForm = dynamic(
@@ -18,21 +22,17 @@ const ChatSection = dynamic(
 );
 
 export function HomePage(): JSX.Element {
-  const key = useChatGptApiKey();
-
-  if (key === undefined) {
-    return (
-      <Frame>
-        <></>
-      </Frame>
-    );
-  }
+  const chatGptApiContextState = useChatGptApiContextState({
+    apiKey: loadChatGptApiKeyKey(),
+  });
 
   return (
-    <Frame>
-      <ChatGptApiKeyForm />
-      <ChatSection />
-    </Frame>
+    <ChatGptApiContextProvider value={chatGptApiContextState}>
+      <Frame>
+        <ChatGptApiKeyForm />
+        <ChatSection />
+      </Frame>
+    </ChatGptApiContextProvider>
   );
 }
 
