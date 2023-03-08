@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { NiceButton } from "../../domains/button/NiceButton";
 import { loadChatLog, saveChatLog } from "../../domains/chat/chatLogStore";
 import { buildChatMessage } from "../../domains/chat/ChatMessage";
 import { useError } from "../../domains/error/errorHooks";
@@ -54,17 +55,34 @@ export function ChatSection(): JSX.Element {
     }
   };
 
+  const onClearHistoryClick = () => {
+    const ok = window.confirm("Are you sure you want to remove all chat log?");
+    if (!ok) {
+      return;
+    }
+    saveChatLog([]);
+    setChatLog([]);
+  };
+
   return (
     <div className="ChatSection">
       <h1>ChatSection</h1>
       {sendError && <p className="text-red-700">{sendError.message}</p>}
-      <div className="sticky top-0">
-        <ChatForm
-          disabled={processingChat}
-          input={requestMessage}
-          onInputChange={setRequestMessage}
-          onSubmit={onSubmit}
-        />
+      <div className="sticky top-0 bg-gray-100 p-2">
+        <VStack gap="gap-2">
+          <ChatForm
+            disabled={processingChat}
+            input={requestMessage}
+            onInputChange={setRequestMessage}
+            onSubmit={onSubmit}
+          />
+          <details>
+            <summary>Tools</summary>
+            <NiceButton onClick={onClearHistoryClick}>
+              🗑️ Clear history...
+            </NiceButton>
+          </details>
+        </VStack>
       </div>
       <VStack>
         {chatLog.map((message) => (

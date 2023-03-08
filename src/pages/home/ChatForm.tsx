@@ -22,7 +22,7 @@ export function ChatForm({
   };
 
   return (
-    <form className="ChatForm p-2 bg-gray-100" onSubmit={onFormSubmit}>
+    <form className="ChatForm" onSubmit={onFormSubmit}>
       <fieldset className="contents" disabled={disabled}>
         <HStack>
           <NiceInput
