@@ -30,13 +30,13 @@ export default async function handler(
     const { apiKey, prompt }: ChatApiQuery = req.body;
 
     const api = getOpenAiApi(apiKey);
-    const { data } = await api.createCompletion({
+    const apiRes = await api.createCompletion({
       model: "text-davinci-003",
       prompt: prompt,
       temperature: 0.6,
     });
 
-    const result = data.choices;
+    const result = apiRes.data.choices;
     if (!result) {
       throw new Error(`API returned an empty text`);
     }
