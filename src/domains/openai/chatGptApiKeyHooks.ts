@@ -5,6 +5,7 @@ import {
 } from "./chatGptApiKeyStore";
 
 export function useChatGptApiKeyState(): [string, (key: string) => void] {
+  // TODO replace with context
   const [key, setKey] = useState<string>(loadChatGptApiKeyKey());
 
   function saveKey(key: string): void {
