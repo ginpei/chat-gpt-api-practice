@@ -8,6 +8,7 @@ import { VStack } from "../../domains/layout/VStack";
 import { useChatGptApiContext } from "../../domains/openai/chatGptApiContext";
 import { sendChatRequest } from "../../domains/openai/chatRequestManipulators";
 import { ChatForm } from "./ChatForm";
+import { ChatGptApiKeyForm } from "./ChatGptApiKeyForm";
 import { ChatItem } from "./ChatItem";
 
 export interface ChatSectionProps {}
@@ -76,11 +77,14 @@ export function ChatSection(): JSX.Element {
             onInputChange={setRequestMessage}
             onSubmit={onSubmit}
           />
-          <details>
+          <details open={apiContext.apiKey === "" ? true : undefined}>
             <summary>Tools</summary>
-            <NiceButton onClick={onClearHistoryClick}>
-              🗑️ Clear history...
-            </NiceButton>
+            <div className="flex gap-2">
+              <ChatGptApiKeyForm />
+              <NiceButton onClick={onClearHistoryClick}>
+                🗑️ Clear history...
+              </NiceButton>
+            </div>
           </details>
         </VStack>
       </div>

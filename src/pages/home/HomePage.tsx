@@ -29,7 +29,6 @@ export function HomePage(): JSX.Element {
   return (
     <ChatGptApiContextProvider value={chatGptApiContextState}>
       <Frame>
-        <ChatGptApiKeyForm />
         <ChatSection />
       </Frame>
     </ChatGptApiContextProvider>
