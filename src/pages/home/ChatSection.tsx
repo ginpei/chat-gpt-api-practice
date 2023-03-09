@@ -53,7 +53,7 @@ export function ChatSection(): JSX.Element {
       console.log("# result", result);
 
       const aiMessage = buildChatMessage({
-        body: result.response[0].text ?? "?",
+        body: result.data.choices[0].text ?? "?",
         name: "ai",
       });
       setChatLog((v) => {
