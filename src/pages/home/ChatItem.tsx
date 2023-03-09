@@ -16,7 +16,7 @@ export function ChatItem({ message }: ChatItemProps): JSX.Element {
     <div className="ChatItem">
       <HStack>
         <div>{nameMap[message.name]}</div>
-        <div>
+        <div className="whitespace-pre-wrap">
           {message.body}{" "}
           <small>({new Date(message.date).toLocaleString()})</small>
         </div>
