@@ -28,11 +28,24 @@ export function ChatSection(): JSX.Element {
         body: requestMessage,
         name: "you",
       });
-      setChatLog((v) => [...v, userMessage]);
+      const messageWithUserUpdate = [...chatLog, userMessage];
+      setChatLog(messageWithUserUpdate);
+
+      const prompt = messageWithUserUpdate
+        .map((message) => {
+          if (message.name === "ai") {
+            return `AI: ${message.body}`;
+          }
+          if (message.name === "you") {
+            return `Human: ${message.body}`;
+          }
+          return "";
+        })
+        .join("\n");
 
       const result = await sendChatRequest({
         apiKey: apiContext.apiKey,
-        prompt: requestMessage,
+        prompt,
       });
 
       // TODO
