@@ -34,6 +34,7 @@ export default async function handler(
       model: "text-davinci-003",
       prompt: prompt,
       temperature: 0.6,
+      max_tokens: 150,
     });
 
     const result = apiRes.data.choices;
