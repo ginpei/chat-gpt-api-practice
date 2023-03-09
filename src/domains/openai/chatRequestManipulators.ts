@@ -1,15 +1,16 @@
 import type { CreateCompletionResponse } from "openai";
 
-export interface ChatApiQuery {
+export interface ChatRequestQuery {
   apiKey: string;
   prompt: string;
 }
 
-export interface ChatApiSuccessResponse {
+export interface ChatRequestResponse {
   data: CreateCompletionResponse;
   ok: true;
 }
 
+// (Is there an official type?)
 export interface CreateCompletionErrorResponse {
   error: {
     code: null;
@@ -23,8 +24,8 @@ export interface CreateCompletionErrorResponse {
  * @see API Reference - OpenAI API https://platform.openai.com/docs/api-reference/completions
  */
 export async function sendChatRequest(
-  options: ChatApiQuery
-): Promise<ChatApiSuccessResponse> {
+  options: ChatRequestQuery
+): Promise<ChatRequestResponse> {
   if (!options.apiKey) {
     throw new Error("`apiKey` is required");
   }
