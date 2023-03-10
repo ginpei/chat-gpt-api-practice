@@ -1,4 +1,5 @@
 import type {
+  CreateCompletionRequest,
   CreateCompletionResponse,
   CreateImageRequest,
   ImagesResponse,
@@ -51,7 +52,7 @@ export async function sendChatRequest(
       prompt: options.prompt,
       temperature: 0.6,
       max_tokens: 500, // TODO have option
-    }),
+    } satisfies CreateCompletionRequest),
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${options.apiKey}`,
