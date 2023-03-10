@@ -12,6 +12,7 @@ import { VStack } from "../../domains/layout/VStack";
 import { useChatGptApiContext } from "../../domains/openai/chatGptApiContext";
 import { sendChatRequest } from "../../domains/openai/chatRequestManipulators";
 import { waitUntil } from "../../domains/time/waitFunctions";
+import { SendOptionCloseHandler, SendOptionPopup } from "./SendOptionPopup";
 import { useOnCtrlEnter } from "./shortcutHooks";
 import { ToolsDialog } from "./ToolsDialog";
 
@@ -27,6 +28,8 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
   const [processingChat, setProcessingChat] = useState(false);
   const [toolsDialogOpen, setToolsDialogOpen] = useState(false);
   const refText = useRef<HTMLTextAreaElement>(null);
+  const refSendOptionButton = useRef<HTMLButtonElement>(null);
+  const [sendOptionVisible, setSendOptionVisible] = useState(false);
 
   useOnCtrlEnter(refText.current, () => {
     onSubmit();
@@ -83,6 +86,15 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
     }
   };
 
+  const onSendOptionClose: SendOptionCloseHandler = (type) => {
+    setSendOptionVisible(false);
+    if (type === "text") {
+      onSubmit();
+    } else if (type === undefined) {
+      // do nothing
+    }
+  };
+
   const onToolsClick = () => {
     setToolsDialogOpen(true);
   };
@@ -106,16 +118,31 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
             value={requestMessage}
           />
           <div className="flex flex-row-reverse gap-1 justify-between">
-            <PrimaryButton disabled={processingChat} type="submit">
-              📨 Send{" "}
-              <small className="text-xs text-gray-300">(Ctrl+Enter)</small>
-            </PrimaryButton>
+            <div className="flex gap-1">
+              <PrimaryButton disabled={processingChat} type="submit">
+                📨 Send{" "}
+                <small className="text-xs text-gray-300">(Ctrl+Enter)</small>
+              </PrimaryButton>
+              <PrimaryButton
+                disabled={processingChat}
+                onClick={() => setSendOptionVisible(true)}
+                ref={refSendOptionButton}
+                type="button"
+              >
+                ︙
+              </PrimaryButton>
+            </div>
             <NiceButton onClick={onToolsClick} type="button">
               🛠️ Tools...
             </NiceButton>
           </div>
         </form>
       </VStack>
+      <SendOptionPopup
+        hoverOn={refSendOptionButton}
+        onClose={onSendOptionClose}
+        open={sendOptionVisible}
+      />
       <ToolsDialog onClose={onToolsDialogClose} open={toolsDialogOpen} />
     </div>
   );
