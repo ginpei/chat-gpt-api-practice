@@ -26,6 +26,7 @@ export function HomePage(): JSX.Element {
   });
   const chatHistoryContextState = useChatHistoryContextState({
     messages: loadChatLog(),
+    tokenUsage: 0,
   });
 
   return (
