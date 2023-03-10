@@ -73,6 +73,7 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
   return (
     <div className="ChatControlBlock bg-gray-100 p-4">
       <VStack gap="gap-2">
+        {!apiContext.apiKey && <p className="text-red-700">Set API key</p>}
         {sendError && <p className="text-red-700">{sendError.message}</p>}
         <ChatForm
           disabled={processingChat}
