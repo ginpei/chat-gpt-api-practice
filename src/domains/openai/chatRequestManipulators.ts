@@ -1,4 +1,8 @@
-import type { CreateCompletionResponse, ImagesResponse } from "openai";
+import type {
+  CreateCompletionResponse,
+  CreateImageRequest,
+  ImagesResponse,
+} from "openai";
 
 export interface ChatRequestQuery {
   apiKey: string;
@@ -78,7 +82,8 @@ export async function sendImageRequest(
   const init: RequestInit = {
     body: JSON.stringify({
       prompt: options.prompt,
-    }),
+      size: "256x256",
+    } satisfies CreateImageRequest),
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${options.apiKey}`,
