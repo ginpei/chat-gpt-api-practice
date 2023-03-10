@@ -1,4 +1,9 @@
 import dynamic from "next/dynamic";
+import {
+  ChatHistoryContextProvider,
+  useChatHistoryContextState,
+} from "../../domains/chat/ChatHistoryContext";
+import { loadChatLog } from "../../domains/chat/chatLogStore";
 import { BasicHead } from "../../domains/globalUi/BasicHead";
 import { HeadLine } from "../../domains/globalUi/HeadLine";
 import {
@@ -25,25 +30,30 @@ export function HomePage(): JSX.Element {
   const chatGptApiContextState = useChatGptApiContextState({
     apiKey: loadChatGptApiKeyKey(),
   });
+  const chatHistoryContextState = useChatHistoryContextState({
+    messages: loadChatLog(),
+  });
 
   return (
     <ChatGptApiContextProvider value={chatGptApiContextState}>
-      <BasicHead />
-      <style>{
-        /*css*/ `
+      <ChatHistoryContextProvider value={chatHistoryContextState}>
+        <BasicHead />
+        <style>{
+          /*css*/ `
 html,
 body,
 #__next {
   height: 100%;
 }
       `
-      }</style>
-      <div className="HomePage h-full flex flex-col [html]:h-full">
-        <HeadLine />
-        <div className="overflow-hidden flex-grow [&>*]:h-full">
-          <ChatSection />
+        }</style>
+        <div className="HomePage h-full flex flex-col [html]:h-full">
+          <HeadLine />
+          <div className="overflow-hidden flex-grow [&>*]:h-full">
+            <ChatSection />
+          </div>
         </div>
-      </div>
+      </ChatHistoryContextProvider>
     </ChatGptApiContextProvider>
   );
 }

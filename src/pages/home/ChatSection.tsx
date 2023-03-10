@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { NiceButton } from "../../domains/button/NiceButton";
-import { loadChatLog, saveChatLog } from "../../domains/chat/chatLogStore";
+import { useChatHistoryContext } from "../../domains/chat/ChatHistoryContext";
+import { saveChatLog } from "../../domains/chat/chatLogStore";
 import { buildChatMessage } from "../../domains/chat/ChatMessage";
 import { buildPrompt } from "../../domains/chat/chatMessageManipulators";
 import { useError } from "../../domains/error/errorHooks";
@@ -17,9 +18,9 @@ export interface ChatSectionProps {}
 export function ChatSection(): JSX.Element {
   const [apiContext] = useChatGptApiContext();
   const [sendError, setSendError] = useError();
-  const [chatLog, setChatLog] = useState(loadChatLog());
+  const [history, setHistory] = useChatHistoryContext();
   const [requestMessage, setRequestMessage] = useState(
-    chatLog.length > 0 ? "" : "Say something funny"
+    history.messages.length > 0 ? "" : "Say something funny"
   );
   const [processingChat, setProcessingChat] = useState(false);
   const [toolsOpen] = useState(apiContext.apiKey === "" ? true : undefined);
@@ -32,8 +33,8 @@ export function ChatSection(): JSX.Element {
         body: requestMessage,
         name: "you",
       });
-      const messageWithUserUpdate = [...chatLog, userMessage];
-      setChatLog(messageWithUserUpdate);
+      const messageWithUserUpdate = [...history.messages, userMessage];
+      setHistory({ ...history, messages: messageWithUserUpdate });
 
       const prompt = buildPrompt(messageWithUserUpdate);
 
@@ -49,10 +50,10 @@ export function ChatSection(): JSX.Element {
         body: result.data.choices[0].text?.trim() ?? "?",
         name: "ai",
       });
-      setChatLog((v) => {
-        const newChatLog = [...v, aiMessage];
-        saveChatLog(newChatLog);
-        return newChatLog;
+      setHistory((prevHistory) => {
+        const newMessages = [...prevHistory.messages, aiMessage];
+        saveChatLog(newMessages);
+        return { ...prevHistory, messages: newMessages };
       });
       setRequestMessage("");
     } catch (error) {
@@ -69,7 +70,7 @@ export function ChatSection(): JSX.Element {
       return;
     }
     saveChatLog([]);
-    setChatLog([]);
+    setHistory({ ...history, messages: [] });
   };
 
   return (
@@ -95,7 +96,7 @@ export function ChatSection(): JSX.Element {
         </VStack>
       </div>
       <div className="flex-grow overflow-auto">
-        {chatLog.map((message) => (
+        {history.messages.map((message) => (
           <ChatItem key={message.id} message={message} />
         ))}
         <div aria-hidden className="min-h-[5em]"></div>
