@@ -9,7 +9,8 @@ export const PrimaryButton = forwardRef<HTMLButtonElement, PrimaryButtonProps>(
         className={`
         PrimaryButton ${className}
         border border-ginpei bg-ginpei p-2 text-white
-        hover:shadow-inner
+        hover:bg-sky-900
+        focus:bg-sky-900
         disabled:bg-gray-400
         `}
         ref={ref}

@@ -9,7 +9,8 @@ export const NiceButton = forwardRef<HTMLButtonElement, NiceButtonProps>(
         className={`
         NiceButton ${className}
         border border-ginpei bg-white p-2 text-ginpei
-        hover:shadow-inner
+        hover:bg-stone-50
+        focus:bg-stone-50
         disabled:bg-gray-100 disabled:text-gray-500
         `}
         ref={ref}
