@@ -16,7 +16,7 @@ import {
 } from "../../domains/openai/chatRequestManipulators";
 import { waitUntil } from "../../domains/time/waitFunctions";
 import { SendOptionCloseHandler, SendOptionPopup } from "./SendOptionPopup";
-import { useOnCtrlEnter } from "./shortcutHooks";
+import { useOnKey } from "./shortcutHooks";
 import { ToolsDialog } from "./ToolsDialog";
 
 export interface ChatControlBlockProps {}
@@ -34,7 +34,11 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
   const refSendOptionButton = useRef<HTMLButtonElement>(null);
   const [sendOptionVisible, setSendOptionVisible] = useState(false);
 
-  useOnCtrlEnter(refText.current, () => {
+  useOnKey("Shift+Enter", refText.current, () => {
+    setSendOptionVisible(true);
+  });
+
+  useOnKey("Ctrl+Enter", refText.current, () => {
     submit();
   });
 

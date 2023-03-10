@@ -1,20 +1,30 @@
-import { KeyboardEventHandler, useEffect } from "react";
+import { useEffect } from "react";
 
-export function useOnCtrlEnter(
+export interface KeyCombination {
+  alt: boolean;
+  code: string;
+  ctrl: boolean;
+  shift: boolean;
+}
+
+export function useOnKey(
+  key: string,
   el: HTMLElement | null,
   callback: () => void
 ): void {
   useEffect(() => {
+    const combination = parseKeyCombination(key);
+
     const onKeyPress = (event: KeyboardEvent) => {
       if (!el || !document.activeElement) {
         return;
       }
 
       if (
-        !event.ctrlKey ||
-        event.altKey ||
-        event.shiftKey ||
-        event.code !== "Enter"
+        event.ctrlKey !== combination.ctrl ||
+        event.altKey !== combination.alt ||
+        event.shiftKey !== combination.shift ||
+        event.code !== combination.code
       ) {
         return;
       }
@@ -30,5 +40,24 @@ export function useOnCtrlEnter(
 
     document.addEventListener("keypress", onKeyPress);
     return () => document.removeEventListener("keypress", onKeyPress);
-  }, [callback, el]);
+  }, [callback, el, key]);
+}
+
+function parseKeyCombination(input: string): KeyCombination {
+  const rxKeyCombination = /^(Ctrl\+)?(Alt\+)?(Shift\+)?(\w+)$/;
+  const matched = input.match(rxKeyCombination);
+  if (!matched) {
+    throw new Error(`Wrong key combination`);
+  }
+  const ctrl = Boolean(matched[1]);
+  const alt = Boolean(matched[2]);
+  const shift = Boolean(matched[3]);
+  const code = matched[4];
+
+  return {
+    alt,
+    code,
+    ctrl,
+    shift,
+  };
 }
