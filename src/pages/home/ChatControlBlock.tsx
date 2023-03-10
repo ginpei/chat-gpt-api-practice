@@ -88,25 +88,24 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
       <VStack gap="gap-2">
         {!apiContext.apiKey && <p className="text-red-700">Set API key</p>}
         {sendError && <p className="text-red-700">{sendError.message}</p>}
-        <form className="ChatForm" onSubmit={onFormSubmit}>
-          <fieldset className="flex flex-col gap-1" disabled={processingChat}>
-            <NiceText
-              className="flex-grow"
-              onChange={(v) => setRequestMessage(v.currentTarget.value)}
-              placeholder="What is the HTML?"
-              ref={refText}
-              value={requestMessage}
-            />
-            <div className="flex flex-row-reverse gap-1 justify-between">
-              <PrimaryButton type="submit">
-                📨 Send{" "}
-                <small className="text-xs text-gray-300">(Ctrl+Enter)</small>
-              </PrimaryButton>
-              <NiceButton onClick={onToolsClick} type="button">
-                🛠️ Tools...
-              </NiceButton>
-            </div>
-          </fieldset>
+        <form className="ChatForm flex flex-col gap-1" onSubmit={onFormSubmit}>
+          <NiceText
+            className="flex-grow"
+            disabled={processingChat}
+            onChange={(v) => setRequestMessage(v.currentTarget.value)}
+            placeholder="What is the HTML?"
+            ref={refText}
+            value={requestMessage}
+          />
+          <div className="flex flex-row-reverse gap-1 justify-between">
+            <PrimaryButton disabled={processingChat} type="submit">
+              📨 Send{" "}
+              <small className="text-xs text-gray-300">(Ctrl+Enter)</small>
+            </PrimaryButton>
+            <NiceButton onClick={onToolsClick} type="button">
+              🛠️ Tools...
+            </NiceButton>
+          </div>
         </form>
       </VStack>
       <ToolsDialog onClose={onSettingsDialogClose} open={settingsOpen} />
