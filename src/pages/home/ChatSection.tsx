@@ -2,6 +2,7 @@ import { useState } from "react";
 import { NiceButton } from "../../domains/button/NiceButton";
 import { loadChatLog, saveChatLog } from "../../domains/chat/chatLogStore";
 import { buildChatMessage } from "../../domains/chat/ChatMessage";
+import { buildPrompt } from "../../domains/chat/chatMessageManipulators";
 import { useError } from "../../domains/error/errorHooks";
 import { toError } from "../../domains/error/errorManipulators";
 import { VStack } from "../../domains/layout/VStack";
@@ -31,18 +32,7 @@ export function ChatSection(): JSX.Element {
       const messageWithUserUpdate = [...chatLog, userMessage];
       setChatLog(messageWithUserUpdate);
 
-      const prompt =
-        messageWithUserUpdate
-          .map((message) => {
-            if (message.name === "ai") {
-              return `AI: ${message.body}`;
-            }
-            if (message.name === "you") {
-              return `Human: ${message.body}`;
-            }
-            return "";
-          })
-          .join("\n") + "\nAI:";
+      const prompt = buildPrompt(messageWithUserUpdate);
 
       const result = await sendChatRequest({
         apiKey: apiContext.apiKey,
