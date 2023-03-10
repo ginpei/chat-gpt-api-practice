@@ -11,6 +11,7 @@ import { NiceText } from "../../domains/input/NiceText";
 import { VStack } from "../../domains/layout/VStack";
 import { useChatGptApiContext } from "../../domains/openai/chatGptApiContext";
 import { sendChatRequest } from "../../domains/openai/chatRequestManipulators";
+import { waitUntil } from "../../domains/time/waitFunctions";
 import { useOnCtrlEnter } from "./shortcutHooks";
 import { ToolsDialog } from "./ToolsDialog";
 
@@ -67,6 +68,9 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
         return { ...prevHistory, messages: newMessages };
       });
       setRequestMessage("");
+      waitUntil(() => !refText.current?.disabled).then(() =>
+        refText.current?.focus()
+      );
     } catch (error) {
       console.error(error);
       setSendError(toError(error));
