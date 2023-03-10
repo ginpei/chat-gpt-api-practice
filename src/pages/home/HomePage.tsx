@@ -29,7 +29,16 @@ export function HomePage(): JSX.Element {
   return (
     <ChatGptApiContextProvider value={chatGptApiContextState}>
       <BasicHead />
-      <div className="HomePage h-[100vh] flex flex-col">
+      <style>{
+        /*css*/ `
+html,
+body,
+#__next {
+  height: 100%;
+}
+      `
+      }</style>
+      <div className="HomePage h-full flex flex-col [html]:h-full">
         <HeadLine />
         <div className="overflow-hidden flex-grow [&>*]:h-full">
           <ChatSection />
