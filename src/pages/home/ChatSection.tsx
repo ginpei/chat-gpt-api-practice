@@ -20,6 +20,7 @@ export function ChatSection(): JSX.Element {
   const [requestMessage, setRequestMessage] = useState("Say something funny");
   const [chatLog, setChatLog] = useState(loadChatLog());
   const [processingChat, setProcessingChat] = useState(false);
+  const [toolsOpen] = useState(apiContext.apiKey === "" ? true : undefined);
 
   const onSubmit = async () => {
     setProcessingChat(true);
@@ -80,7 +81,7 @@ export function ChatSection(): JSX.Element {
             onInputChange={setRequestMessage}
             onSubmit={onSubmit}
           />
-          <details open={apiContext.apiKey === "" ? true : undefined}>
+          <details open={toolsOpen}>
             <summary>Tools</summary>
             <div className="flex gap-2">
               <ChatGptApiKeyForm />
