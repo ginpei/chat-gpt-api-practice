@@ -1,10 +1,12 @@
 import { FormEventHandler } from "react";
 import { NiceButton } from "../../domains/button/NiceButton";
+import { NiceButtonLink } from "../../domains/button/NiceButtonLink";
 import {
   createChatHistoryContextValue,
   useChatHistoryContext,
 } from "../../domains/chat/ChatHistoryContext";
 import { saveChatLog } from "../../domains/chat/chatLogStore";
+import { buildPromptText } from "../../domains/chat/chatMessageManipulators";
 import { DialogGroupHeading } from "../../domains/dialog/DialogGroupHeading";
 import {
   NiceDialog,
@@ -77,9 +79,17 @@ export function ToolsDialog({ onClose, open }: ToolsDialogProps): JSX.Element {
           </article>
           <article>
             <DialogGroupHeading>History</DialogGroupHeading>
-            <NiceButton onClick={onClearHistoryClick} type="button">
-              🗑️ Clear history...
-            </NiceButton>
+            <VStack>
+              <NiceButton onClick={onClearHistoryClick} type="button">
+                🗑️ Clear history...
+              </NiceButton>
+              <NiceButtonLink
+                download="chatHistory.txt"
+                href={`data:text/plain,${buildPromptText(history.messages)}`}
+              >
+                💾 Download
+              </NiceButtonLink>
+            </VStack>
           </article>
         </VStack>
       </form>

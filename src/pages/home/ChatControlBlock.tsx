@@ -4,7 +4,7 @@ import { PrimaryButton } from "../../domains/button/PrimaryButton";
 import { useChatHistoryContext } from "../../domains/chat/ChatHistoryContext";
 import { saveChatLog } from "../../domains/chat/chatLogStore";
 import { buildChatMessage } from "../../domains/chat/ChatMessage";
-import { buildPrompt } from "../../domains/chat/chatMessageManipulators";
+import { buildPromptText } from "../../domains/chat/chatMessageManipulators";
 import { useError } from "../../domains/error/errorHooks";
 import { toError } from "../../domains/error/errorManipulators";
 import { NiceText } from "../../domains/input/NiceText";
@@ -48,7 +48,7 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
       const messageWithUserUpdate = [...history.messages, userMessage];
       setHistory({ ...history, messages: messageWithUserUpdate });
 
-      const prompt = buildPrompt(messageWithUserUpdate);
+      const prompt = buildPromptText(messageWithUserUpdate) + "\nAI:";
 
       const result = await sendChatRequest({
         apiKey: apiContext.apiKey,
