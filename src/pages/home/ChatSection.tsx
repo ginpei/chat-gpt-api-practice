@@ -10,7 +10,7 @@ export function ChatSection(): JSX.Element {
   return (
     <div className="ChatSection flex flex-col-reverse content-between">
       <ChatControlBlock />
-      <div className="flex-grow overflow-auto">
+      <div className="flex-grow overflow-auto bg-stone-50">
         {history.messages.map((message) => (
           <ChatItem key={message.id} message={message} />
         ))}
