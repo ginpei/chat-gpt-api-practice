@@ -1,7 +1,8 @@
-import { FormEventHandler } from "react";
+import { FormEventHandler, useRef } from "react";
 import { NiceButton } from "../../domains/button/NiceButton";
 import { PrimaryButton } from "../../domains/button/PrimaryButton";
 import { NiceText } from "../../domains/input/NiceText";
+import { useOnCtrlEnter } from "./shortcutHooks";
 
 export interface ChatFormProps {
   disabled?: boolean;
@@ -18,6 +19,12 @@ export function ChatForm({
   onSubmit,
   onToolsClick,
 }: ChatFormProps): JSX.Element {
+  const refText = useRef<HTMLTextAreaElement>(null);
+
+  useOnCtrlEnter(refText.current, () => {
+    onSubmit(input);
+  });
+
   const onFormSubmit: FormEventHandler = (event) => {
     event.preventDefault();
     onSubmit(input);
@@ -30,10 +37,14 @@ export function ChatForm({
           className="flex-grow"
           onChange={(v) => onInputChange(v.currentTarget.value)}
           placeholder="What is the HTML?"
+          ref={refText}
           value={input}
         />
         <div className="flex flex-row-reverse gap-1 justify-between">
-          <PrimaryButton type="submit">📨 Send</PrimaryButton>
+          <PrimaryButton type="submit">
+            📨 Send{" "}
+            <small className="text-xs text-gray-300">(Ctrl+Enter)</small>
+          </PrimaryButton>
           <NiceButton onClick={onToolsClick} type="button">
             🛠️ Tools...
           </NiceButton>
