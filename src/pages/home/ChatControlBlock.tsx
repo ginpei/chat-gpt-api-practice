@@ -9,7 +9,7 @@ import { VStack } from "../../domains/layout/VStack";
 import { useChatGptApiContext } from "../../domains/openai/chatGptApiContext";
 import { sendChatRequest } from "../../domains/openai/chatRequestManipulators";
 import { ChatForm } from "./ChatForm";
-import { ChatGptApiKeyForm } from "./ChatGptApiKeyForm";
+import { ToolsDialog } from "./ToolsDialog";
 
 export interface ChatControlBlockProps {}
 
@@ -21,7 +21,7 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
     history.messages.length > 0 ? "" : "Say something funny"
   );
   const [processingChat, setProcessingChat] = useState(false);
-  const [toolsOpen] = useState(apiContext.apiKey === "" ? true : undefined);
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   const onSubmit = async () => {
     setProcessingChat(true);
@@ -62,6 +62,14 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
     }
   };
 
+  const onToolsClick = () => {
+    setSettingsOpen(true);
+  };
+
+  const onSettingsDialogClose = () => {
+    setSettingsOpen(false);
+  };
+
   return (
     <div className="ChatControlBlock bg-gray-100 p-4">
       <VStack gap="gap-2">
@@ -71,9 +79,10 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
           input={requestMessage}
           onInputChange={setRequestMessage}
           onSubmit={onSubmit}
+          onToolsClick={onToolsClick}
         />
-        <ChatGptApiKeyForm />
       </VStack>
+      <ToolsDialog onClose={onSettingsDialogClose} open={settingsOpen} />
     </div>
   );
 }

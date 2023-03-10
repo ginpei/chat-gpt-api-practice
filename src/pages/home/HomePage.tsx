@@ -13,12 +13,6 @@ import {
 import { loadChatGptApiKeyKey } from "../../domains/openai/chatGptApiKeyStore";
 
 // to access localStorage in rendering
-const ChatGptApiKeyForm = dynamic(
-  () => import("./ChatGptApiKeyForm").then((mod) => mod.ChatGptApiKeyForm),
-  {
-    ssr: false,
-  }
-);
 const ChatSection = dynamic(
   () => import("./ChatSection").then((mod) => mod.ChatSection),
   {
