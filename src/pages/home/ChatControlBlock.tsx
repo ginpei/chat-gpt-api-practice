@@ -10,7 +10,10 @@ import { toError } from "../../domains/error/errorManipulators";
 import { NiceText } from "../../domains/input/NiceText";
 import { VStack } from "../../domains/layout/VStack";
 import { useChatGptApiContext } from "../../domains/openai/chatGptApiContext";
-import { sendChatRequest } from "../../domains/openai/chatRequestManipulators";
+import {
+  sendChatRequest,
+  sendImageRequest,
+} from "../../domains/openai/chatRequestManipulators";
 import { waitUntil } from "../../domains/time/waitFunctions";
 import { SendOptionCloseHandler, SendOptionPopup } from "./SendOptionPopup";
 import { useOnCtrlEnter } from "./shortcutHooks";
@@ -44,6 +47,8 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
     setSendOptionVisible(false);
     if (type === "text") {
       submit();
+    } else if (type === "image") {
+      submitImageRequest();
     } else if (type === undefined) {
       // do nothing
     }
@@ -64,6 +69,7 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
       const userMessage = buildChatMessage({
         body: requestMessage,
         name: "you",
+        type: "chat",
       });
       const messageWithUserUpdate = [...history.messages, userMessage];
       setHistory({ ...history, messages: messageWithUserUpdate });
@@ -81,6 +87,7 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
       const aiMessage = buildChatMessage({
         body: result.data.choices[0].text?.trim() ?? "?",
         name: "ai",
+        type: "chat",
       });
       setHistory((prevHistory) => {
         const newMessages = [...prevHistory.messages, aiMessage];
@@ -89,6 +96,51 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
           ...prevHistory,
           messages: newMessages,
           tokenUsage: result.data.usage?.total_tokens ?? NaN,
+        };
+      });
+      setRequestMessage("");
+      waitUntil(() => !refText.current?.disabled).then(() =>
+        refText.current?.focus()
+      );
+    } catch (error) {
+      console.error(error);
+      setSendError(toError(error));
+    } finally {
+      setProcessingChat(false);
+    }
+  };
+
+  const submitImageRequest = async () => {
+    setProcessingChat(true);
+    setSendError(null);
+    try {
+      const userMessage = buildChatMessage({
+        body: requestMessage,
+        name: "you",
+        type: "image",
+      });
+      const messageWithUserUpdate = [...history.messages, userMessage];
+      setHistory({ ...history, messages: messageWithUserUpdate });
+
+      const result = await sendImageRequest({
+        apiKey: apiContext.apiKey,
+        prompt: requestMessage,
+      });
+
+      // TODO
+      console.log("# result", result);
+
+      const aiMessage = buildChatMessage({
+        body: result.data.data[0].url ?? "",
+        name: "ai",
+        type: "image",
+      });
+      setHistory((prevHistory) => {
+        const newMessages = [...prevHistory.messages, aiMessage];
+        saveChatLog(newMessages);
+        return {
+          ...prevHistory,
+          messages: newMessages,
         };
       });
       setRequestMessage("");

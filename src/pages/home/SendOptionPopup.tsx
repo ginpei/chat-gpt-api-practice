@@ -46,9 +46,7 @@ export function SendOptionPopup({
         <MenuItem disabled onClick={() => onClose("system")}>
           🖥️ Send system description
         </MenuItem>
-        <MenuItem disabled onClick={() => onClose("image")}>
-          🖼️ Request image
-        </MenuItem>
+        <MenuItem onClick={() => onClose("image")}>🖼️ Request image</MenuItem>
         <MenuItem onClick={() => onClose(undefined)}>
           <small>Cancel</small>
         </MenuItem>
