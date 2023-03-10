@@ -25,7 +25,7 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
     history.messages.length > 0 ? "" : "Say something funny"
   );
   const [processingChat, setProcessingChat] = useState(false);
-  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [toolsDialogOpen, setToolsDialogOpen] = useState(false);
   const refText = useRef<HTMLTextAreaElement>(null);
 
   useOnCtrlEnter(refText.current, () => {
@@ -84,11 +84,11 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
   };
 
   const onToolsClick = () => {
-    setSettingsOpen(true);
+    setToolsDialogOpen(true);
   };
 
-  const onSettingsDialogClose = () => {
-    setSettingsOpen(false);
+  const onToolsDialogClose = () => {
+    setToolsDialogOpen(false);
   };
 
   return (
@@ -116,7 +116,7 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
           </div>
         </form>
       </VStack>
-      <ToolsDialog onClose={onSettingsDialogClose} open={settingsOpen} />
+      <ToolsDialog onClose={onToolsDialogClose} open={toolsDialogOpen} />
     </div>
   );
 }
