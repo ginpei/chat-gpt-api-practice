@@ -15,15 +15,7 @@ export function HomePage(): JSX.Element {
   return (
     <ContextsProvider>
       <BasicHead />
-      <style>{
-        /*css*/ `
-          html,
-          body,
-          #__next {
-            height: 100%;
-          }
-        `
-      }</style>
+      <style>{/*css*/ `html,body,#__next{ height:100%; }`}</style>
       <div className="HomePage h-full flex flex-col [html]:h-full">
         <HeadLine />
         <div className="overflow-hidden flex-grow [&>*]:h-full">
