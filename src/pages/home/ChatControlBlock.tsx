@@ -40,6 +40,23 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
     submit();
   };
 
+  const onSendOptionClose: SendOptionCloseHandler = (type) => {
+    setSendOptionVisible(false);
+    if (type === "text") {
+      submit();
+    } else if (type === undefined) {
+      // do nothing
+    }
+  };
+
+  const onToolsClick = () => {
+    setToolsDialogOpen(true);
+  };
+
+  const onToolsDialogClose = () => {
+    setToolsDialogOpen(false);
+  };
+
   const submit = async () => {
     setProcessingChat(true);
     setSendError(null);
@@ -84,23 +101,6 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
     } finally {
       setProcessingChat(false);
     }
-  };
-
-  const onSendOptionClose: SendOptionCloseHandler = (type) => {
-    setSendOptionVisible(false);
-    if (type === "text") {
-      submit();
-    } else if (type === undefined) {
-      // do nothing
-    }
-  };
-
-  const onToolsClick = () => {
-    setToolsDialogOpen(true);
-  };
-
-  const onToolsDialogClose = () => {
-    setToolsDialogOpen(false);
   };
 
   return (
