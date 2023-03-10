@@ -10,6 +10,7 @@ export const NiceText = forwardRef<HTMLTextAreaElement, NiceTextProps>(
         ${className} NiceText
         border border-ginpei p-2
         hover:shadow-inner
+        disabled:text-gray-400
         `}
         ref={ref}
         {...props}

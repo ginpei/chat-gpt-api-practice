@@ -10,6 +10,7 @@ export const PrimaryButton = forwardRef<HTMLButtonElement, PrimaryButtonProps>(
         PrimaryButton ${className}
         border border-ginpei bg-ginpei p-2 text-white
         hover:shadow-inner
+        disabled:bg-gray-400
         `}
         ref={ref}
         {...props}
