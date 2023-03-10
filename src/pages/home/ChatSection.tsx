@@ -80,7 +80,7 @@ export function ChatSection(): JSX.Element {
   };
 
   return (
-    <div className="ChatSection h-[100vh] flex flex-col-reverse content-between">
+    <div className="ChatSection flex flex-col-reverse content-between">
       {sendError && <p className="text-red-700">{sendError.message}</p>}
       <div className="bg-gray-100 p-4">
         <VStack gap="gap-2">
