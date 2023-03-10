@@ -14,6 +14,9 @@ export function ChatSection(): JSX.Element {
         {history.messages.map((message) => (
           <ChatItem key={message.id} message={message} />
         ))}
+        <div className="px-4 py-2 text-end text-sm text-gray-300">
+          Total token usage: {history.tokenUsage}
+        </div>
         <div aria-hidden className="min-h-[5em]"></div>
       </div>
     </div>

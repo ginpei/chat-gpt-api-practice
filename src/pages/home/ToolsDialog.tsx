@@ -1,6 +1,9 @@
 import { FormEventHandler } from "react";
 import { NiceButton } from "../../domains/button/NiceButton";
-import { useChatHistoryContext } from "../../domains/chat/ChatHistoryContext";
+import {
+  createChatHistoryContextValue,
+  useChatHistoryContext,
+} from "../../domains/chat/ChatHistoryContext";
 import { saveChatLog } from "../../domains/chat/chatLogStore";
 import { DialogGroupHeading } from "../../domains/dialog/DialogGroupHeading";
 import {
@@ -43,7 +46,7 @@ export function ToolsDialog({ onClose, open }: ToolsDialogProps): JSX.Element {
       return;
     }
     saveChatLog([]);
-    setHistory({ ...history, messages: [] });
+    setHistory(createChatHistoryContextValue());
   };
 
   return (

@@ -65,7 +65,11 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
       setHistory((prevHistory) => {
         const newMessages = [...prevHistory.messages, aiMessage];
         saveChatLog(newMessages);
-        return { ...prevHistory, messages: newMessages };
+        return {
+          ...prevHistory,
+          messages: newMessages,
+          tokenUsage: result.data.usage?.total_tokens ?? NaN,
+        };
       });
       setRequestMessage("");
       waitUntil(() => !refText.current?.disabled).then(() =>
