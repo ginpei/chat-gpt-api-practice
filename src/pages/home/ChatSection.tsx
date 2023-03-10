@@ -1,24 +1,13 @@
-import { useChatHistoryContext } from "../../domains/chat/ChatHistoryContext";
 import { ChatControlBlock } from "./ChatControlBlock";
-import { ChatItem } from "./ChatItem";
+import { ChatHistoryBlock } from "./ChatHistoryBlock";
 
 export interface ChatSectionProps {}
 
 export function ChatSection(): JSX.Element {
-  const [history] = useChatHistoryContext();
-
   return (
     <div className="ChatSection flex flex-col-reverse content-between">
       <ChatControlBlock />
-      <div className="flex-grow overflow-auto bg-stone-50">
-        {history.messages.map((message) => (
-          <ChatItem key={message.id} message={message} />
-        ))}
-        <div className="px-4 py-2 text-end text-sm text-gray-300">
-          Total token usage: {history.tokenUsage}
-        </div>
-        <div aria-hidden className="min-h-[5em]"></div>
-      </div>
+      <ChatHistoryBlock />
     </div>
   );
 }
