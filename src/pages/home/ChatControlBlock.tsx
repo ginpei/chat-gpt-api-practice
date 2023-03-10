@@ -1,14 +1,17 @@
-import { useState } from "react";
+import { FormEventHandler, useRef, useState } from "react";
+import { NiceButton } from "../../domains/button/NiceButton";
+import { PrimaryButton } from "../../domains/button/PrimaryButton";
 import { useChatHistoryContext } from "../../domains/chat/ChatHistoryContext";
 import { saveChatLog } from "../../domains/chat/chatLogStore";
 import { buildChatMessage } from "../../domains/chat/ChatMessage";
 import { buildPrompt } from "../../domains/chat/chatMessageManipulators";
 import { useError } from "../../domains/error/errorHooks";
 import { toError } from "../../domains/error/errorManipulators";
+import { NiceText } from "../../domains/input/NiceText";
 import { VStack } from "../../domains/layout/VStack";
 import { useChatGptApiContext } from "../../domains/openai/chatGptApiContext";
 import { sendChatRequest } from "../../domains/openai/chatRequestManipulators";
-import { ChatForm } from "./ChatForm";
+import { useOnCtrlEnter } from "./shortcutHooks";
 import { ToolsDialog } from "./ToolsDialog";
 
 export interface ChatControlBlockProps {}
@@ -22,6 +25,16 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
   );
   const [processingChat, setProcessingChat] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const refText = useRef<HTMLTextAreaElement>(null);
+
+  useOnCtrlEnter(refText.current, () => {
+    onSubmit();
+  });
+
+  const onFormSubmit: FormEventHandler = (event) => {
+    event.preventDefault();
+    onSubmit();
+  };
 
   const onSubmit = async () => {
     setProcessingChat(true);
@@ -75,13 +88,26 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
       <VStack gap="gap-2">
         {!apiContext.apiKey && <p className="text-red-700">Set API key</p>}
         {sendError && <p className="text-red-700">{sendError.message}</p>}
-        <ChatForm
-          disabled={processingChat}
-          input={requestMessage}
-          onInputChange={setRequestMessage}
-          onSubmit={onSubmit}
-          onToolsClick={onToolsClick}
-        />
+        <form className="ChatForm" onSubmit={onFormSubmit}>
+          <fieldset className="flex flex-col gap-1" disabled={processingChat}>
+            <NiceText
+              className="flex-grow"
+              onChange={(v) => setRequestMessage(v.currentTarget.value)}
+              placeholder="What is the HTML?"
+              ref={refText}
+              value={requestMessage}
+            />
+            <div className="flex flex-row-reverse gap-1 justify-between">
+              <PrimaryButton type="submit">
+                📨 Send{" "}
+                <small className="text-xs text-gray-300">(Ctrl+Enter)</small>
+              </PrimaryButton>
+              <NiceButton onClick={onToolsClick} type="button">
+                🛠️ Tools...
+              </NiceButton>
+            </div>
+          </fieldset>
+        </form>
       </VStack>
       <ToolsDialog onClose={onSettingsDialogClose} open={settingsOpen} />
     </div>
