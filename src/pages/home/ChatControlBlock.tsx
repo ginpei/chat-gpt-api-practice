@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { NiceButton } from "../../domains/button/NiceButton";
 import { useChatHistoryContext } from "../../domains/chat/ChatHistoryContext";
-import { loadChatLog, saveChatLog } from "../../domains/chat/chatLogStore";
+import { saveChatLog } from "../../domains/chat/chatLogStore";
 import { buildChatMessage } from "../../domains/chat/ChatMessage";
 import { buildPrompt } from "../../domains/chat/chatMessageManipulators";
 import { useError } from "../../domains/error/errorHooks";
@@ -63,15 +62,6 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
     }
   };
 
-  const onClearHistoryClick = () => {
-    const ok = window.confirm("Are you sure you want to remove all chat log?");
-    if (!ok) {
-      return;
-    }
-    saveChatLog([]);
-    setHistory({ ...history, messages: [] });
-  };
-
   return (
     <div className="ChatControlBlock bg-gray-100 p-4">
       <VStack gap="gap-2">
@@ -82,15 +72,7 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
           onInputChange={setRequestMessage}
           onSubmit={onSubmit}
         />
-        <details open={toolsOpen}>
-          <summary>Tools</summary>
-          <div className="flex gap-2">
-            <ChatGptApiKeyForm />
-            <NiceButton onClick={onClearHistoryClick}>
-              🗑️ Clear history...
-            </NiceButton>
-          </div>
-        </details>
+        <ChatGptApiKeyForm />
       </VStack>
     </div>
   );
