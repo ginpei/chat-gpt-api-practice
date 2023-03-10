@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic";
-import Head from "next/head";
+import { BasicHead } from "../../domains/globalUi/BasicHead";
+import { HeadLine } from "../../domains/globalUi/HeadLine";
 import {
   ChatGptApiContextProvider,
   useChatGptApiContextState,
@@ -27,12 +28,8 @@ export function HomePage(): JSX.Element {
 
   return (
     <ChatGptApiContextProvider value={chatGptApiContextState}>
+      <BasicHead />
       <div className="HomePage">
-        <Head>
-          <title>AI chat</title>
-          <meta name="description" content="Practicing ChatGPT API" />
-          <link rel="icon" href="/icon-512.png" />
-        </Head>
         <ChatSection />
       </div>
     </ChatGptApiContextProvider>
