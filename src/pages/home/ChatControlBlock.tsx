@@ -32,15 +32,15 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
   const [sendOptionVisible, setSendOptionVisible] = useState(false);
 
   useOnCtrlEnter(refText.current, () => {
-    onSubmit();
+    submit();
   });
 
   const onFormSubmit: FormEventHandler = (event) => {
     event.preventDefault();
-    onSubmit();
+    submit();
   };
 
-  const onSubmit = async () => {
+  const submit = async () => {
     setProcessingChat(true);
     setSendError(null);
     try {
@@ -89,7 +89,7 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
   const onSendOptionClose: SendOptionCloseHandler = (type) => {
     setSendOptionVisible(false);
     if (type === "text") {
-      onSubmit();
+      submit();
     } else if (type === undefined) {
       // do nothing
     }
