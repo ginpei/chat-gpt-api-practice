@@ -5,21 +5,34 @@ export interface ChatItemProps {
   message: ChatMessage;
 }
 
-const nameMap = {
+const iconMap = {
   "": "?",
   ai: "💻💭",
   you: "👤",
 } as const;
 
+const textColorMap = {
+  "": "",
+  ai: "text-sky-700",
+  you: "text-gray-700",
+} as const;
+
+const bgColorMap = {
+  "": "",
+  ai: "bg-sky-50",
+  you: "bg-white",
+} as const;
+
 export function ChatItem({ message }: ChatItemProps): JSX.Element {
   return (
-    <div className="ChatItem">
+    <div className={`ChatItem px-4 py-2 ${bgColorMap[message.name]}`}>
       <HStack>
-        <div>{nameMap[message.name]}</div>
-        <div className="whitespace-pre-wrap">
-          {message.body}{" "}
-          <small>({new Date(message.date).toLocaleString()})</small>
-        </div>
+        <span className="w-8 mr-2 whitespace-nowrap">
+          {iconMap[message.name]}
+        </span>
+        <span className={`whitespace-pre-wrap ${textColorMap[message.name]}`}>
+          {message.body}
+        </span>
       </HStack>
     </div>
   );

@@ -27,13 +27,12 @@ export function HomePage(): JSX.Element {
 
   return (
     <ChatGptApiContextProvider value={chatGptApiContextState}>
-      <div className="HomePage m-4">
+      <div className="HomePage">
         <Head>
-          <title>Home</title>
+          <title>AI chat</title>
           <meta name="description" content="Practicing ChatGPT API" />
           <link rel="icon" href="/icon-512.png" />
         </Head>
-        <h1>ChatGPT API practice</h1>
         <ChatSection />
       </div>
     </ChatGptApiContextProvider>

@@ -80,9 +80,9 @@ export function ChatSection(): JSX.Element {
   };
 
   return (
-    <div className="ChatSection">
+    <div className="ChatSection h-[100vh] flex flex-col-reverse content-between">
       {sendError && <p className="text-red-700">{sendError.message}</p>}
-      <div className="sticky top-0 bg-gray-100 p-2">
+      <div className="bg-gray-100 p-4">
         <VStack gap="gap-2">
           <ChatForm
             disabled={processingChat}
@@ -101,12 +101,12 @@ export function ChatSection(): JSX.Element {
           </details>
         </VStack>
       </div>
-      <VStack>
+      <div className="flex-grow overflow-auto">
         {chatLog.map((message) => (
           <ChatItem key={message.id} message={message} />
         ))}
-      </VStack>
-      <div aria-hidden className="min-h-[5em]"></div>
+        <div aria-hidden className="min-h-[5em]"></div>
+      </div>
     </div>
   );
 }
