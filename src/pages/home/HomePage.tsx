@@ -1,6 +1,5 @@
 import dynamic from "next/dynamic";
 import Head from "next/head";
-import { ReactNode } from "react";
 import {
   ChatGptApiContextProvider,
   useChatGptApiContextState,
