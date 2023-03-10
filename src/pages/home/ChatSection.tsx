@@ -17,8 +17,10 @@ export interface ChatSectionProps {}
 export function ChatSection(): JSX.Element {
   const [apiContext] = useChatGptApiContext();
   const [sendError, setSendError] = useError();
-  const [requestMessage, setRequestMessage] = useState("Say something funny");
   const [chatLog, setChatLog] = useState(loadChatLog());
+  const [requestMessage, setRequestMessage] = useState(
+    chatLog.length > 0 ? "" : "Say something funny"
+  );
   const [processingChat, setProcessingChat] = useState(false);
   const [toolsOpen] = useState(apiContext.apiKey === "" ? true : undefined);
 
