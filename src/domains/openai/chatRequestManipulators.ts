@@ -50,7 +50,6 @@ export async function sendChatRequest(
     body: JSON.stringify({
       model: "text-davinci-003",
       prompt: options.prompt,
-      temperature: 0.6,
       max_tokens: 500, // TODO have option
     } satisfies CreateCompletionRequest),
     headers: {
