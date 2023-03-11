@@ -30,7 +30,7 @@ export function ChatHistoryBlock({}: ChatHistoryBlockProps): JSX.Element {
         <div className="grid p-4">
           <ClearChatHistoryButton onProceed={onClearHistory} />
         </div>
-      )}{" "}
+      )}
       <div aria-hidden className="min-h-[5em]"></div>
     </div>
   );
