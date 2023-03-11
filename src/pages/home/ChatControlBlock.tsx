@@ -2,7 +2,7 @@ import { FormEventHandler, useRef, useState } from "react";
 import { NiceButton } from "../../domains/button/NiceButton";
 import { PrimaryButton } from "../../domains/button/PrimaryButton";
 import { useChatHistoryContext } from "../../domains/chat/ChatHistoryContext";
-import { saveChatLog } from "../../domains/chat/chatLogStore";
+import { saveHistoryLog } from "../../domains/chat/chatLogStore";
 import { buildChatMessage } from "../../domains/chat/ChatMessage";
 import { buildPromptText } from "../../domains/chat/chatMessageManipulators";
 import { useError } from "../../domains/error/errorHooks";
@@ -111,12 +111,13 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
       });
       setHistory((prevHistory) => {
         const newMessages = [...prevHistory.messages, aiMessage];
-        saveChatLog(newMessages);
-        return {
+        const newHistory = {
           ...prevHistory,
           messages: newMessages,
           tokenUsage: result.data.usage?.total_tokens ?? NaN,
         };
+        saveHistoryLog(newHistory);
+        return newHistory;
       });
       setRequestMessage("");
       waitUntil(() => !refText.current?.disabled).then(() =>
@@ -157,11 +158,12 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
       });
       setHistory((prevHistory) => {
         const newMessages = [...prevHistory.messages, aiMessage];
-        saveChatLog(newMessages);
-        return {
+        const newHistory = {
           ...prevHistory,
           messages: newMessages,
         };
+        saveHistoryLog(newHistory);
+        return newHistory;
       });
       setRequestMessage("");
       waitUntil(() => !refText.current?.disabled).then(() =>

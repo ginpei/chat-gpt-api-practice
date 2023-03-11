@@ -5,7 +5,7 @@ import {
   createChatHistoryContextValue,
   useChatHistoryContext,
 } from "../../domains/chat/ChatHistoryContext";
-import { saveChatLog } from "../../domains/chat/chatLogStore";
+import { saveHistoryLog } from "../../domains/chat/chatLogStore";
 import { buildPromptText } from "../../domains/chat/chatMessageManipulators";
 import { DialogGroupHeading } from "../../domains/dialog/DialogGroupHeading";
 import {
@@ -47,7 +47,7 @@ export function ToolsDialog({ onClose, open }: ToolsDialogProps): JSX.Element {
     if (!ok) {
       return;
     }
-    saveChatLog([]);
+    saveHistoryLog([]);
     setHistory(createChatHistoryContextValue());
   };
 

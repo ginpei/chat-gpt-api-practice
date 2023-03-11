@@ -1,17 +1,22 @@
+import {
+  ChatHistoryContextValue,
+  createChatHistoryContextValue,
+} from "./ChatHistoryContext";
 import { ChatMessage } from "./ChatMessage";
 
-const storeKey = "chat-gpt-api-practice/chatLog";
+const storeKey = "chat-gpt-api-practice/chatHistory";
 
-export function loadChatLog(): ChatMessage[] {
+export function loadHistoryLog(): ChatHistoryContextValue {
   // SSR
   if (typeof window === "undefined") {
-    return [];
+    return createChatHistoryContextValue();
   }
 
   const json = localStorage.getItem(storeKey);
-  return json ? JSON.parse(json) : [];
+  const raw = json ? JSON.parse(json) : {};
+  return createChatHistoryContextValue(raw);
 }
 
-export function saveChatLog(value: ChatMessage[]): void {
+export function saveHistoryLog(value: ChatHistoryContextValue): void {
   localStorage.setItem(storeKey, JSON.stringify(value));
 }

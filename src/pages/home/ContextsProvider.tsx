@@ -2,7 +2,7 @@ import {
   ChatHistoryContextProvider,
   useChatHistoryContextState,
 } from "../../domains/chat/ChatHistoryContext";
-import { loadChatLog } from "../../domains/chat/chatLogStore";
+import { loadHistoryLog } from "../../domains/chat/chatLogStore";
 import {
   ChatGptApiContextProvider,
   useChatGptApiContextState,
@@ -19,10 +19,7 @@ export function ContextsProvider({
   const chatGptApiContextState = useChatGptApiContextState({
     apiKey: loadChatGptApiKeyKey(),
   });
-  const chatHistoryContextState = useChatHistoryContextState({
-    messages: loadChatLog(),
-    tokenUsage: 0,
-  });
+  const chatHistoryContextState = useChatHistoryContextState(loadHistoryLog());
 
   return (
     <ChatGptApiContextProvider value={chatGptApiContextState}>
