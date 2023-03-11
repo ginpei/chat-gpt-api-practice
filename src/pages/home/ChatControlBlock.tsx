@@ -14,6 +14,8 @@ import {
   sendChatRequest,
   sendImageRequest,
 } from "../../domains/openai/chatRequestManipulators";
+import { DragPositionHandler } from "../../domains/resize/Dragger";
+import { VResizeBar } from "../../domains/resize/VResizeBar";
 import { waitUntil } from "../../domains/time/waitFunctions";
 import { SendOptionCloseHandler, SendOptionPopup } from "./SendOptionPopup";
 import { useOnKey } from "./shortcutHooks";
@@ -33,6 +35,8 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
   const refText = useRef<HTMLTextAreaElement>(null);
   const refSendOptionButton = useRef<HTMLButtonElement>(null);
   const [sendOptionVisible, setSendOptionVisible] = useState(false);
+  const [textBoxHeightPx, setTextBoxHeightPx] = useState(66);
+  const [textBoxHeightTransitionPx, setTextBoxHeightTransitionPx] = useState(0);
 
   useOnKey("Shift+Enter", refText.current, () => {
     setSendOptionVisible(true);
@@ -41,6 +45,18 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
   useOnKey("Ctrl+Enter", refText.current, () => {
     submit();
   });
+
+  const onResizeBarMove: DragPositionHandler = (pos) => {
+    const minHeight = 42;
+    const dy = -pos.dy;
+    const px = Math.max(minHeight - textBoxHeightPx, dy);
+    setTextBoxHeightTransitionPx(px);
+  };
+
+  const onResizeBarDone: DragPositionHandler = () => {
+    setTextBoxHeightPx(textBoxHeightPx + textBoxHeightTransitionPx);
+    setTextBoxHeightTransitionPx(0);
+  };
 
   const onFormSubmit: FormEventHandler = (event) => {
     event.preventDefault();
@@ -160,17 +176,21 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
   };
 
   return (
-    <div className="ChatControlBlock border-t p-4 border-t-gray-200 bg-gray-100">
+    <div className="ChatControlBlock border-t px-4 pb-4 border-t-gray-200 bg-gray-100">
       <VStack gap="gap-2">
+        <VResizeBar onDone={onResizeBarDone} onMove={onResizeBarMove} />
         {!apiContext.apiKey && <p className="text-red-700">Set API key</p>}
         {sendError && <p className="text-red-700">{sendError.message}</p>}
         <form className="ChatForm flex flex-col gap-1" onSubmit={onFormSubmit}>
           <NiceText
-            className="flex-grow"
+            className="resize-none"
             disabled={processingChat}
             onChange={(v) => setRequestMessage(v.currentTarget.value)}
             placeholder="What is the HTML?"
             ref={refText}
+            style={{
+              height: `${textBoxHeightPx + textBoxHeightTransitionPx}px`,
+            }}
             value={requestMessage}
           />
           <div className="flex flex-row-reverse gap-1 justify-between">
