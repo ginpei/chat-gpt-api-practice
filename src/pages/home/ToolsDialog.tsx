@@ -47,7 +47,7 @@ export function ToolsDialog({ onClose, open }: ToolsDialogProps): JSX.Element {
     if (!ok) {
       return;
     }
-    saveHistoryLog([]);
+    saveHistoryLog(createChatHistoryContextValue());
     setHistory(createChatHistoryContextValue());
   };
 
