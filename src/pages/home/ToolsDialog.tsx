@@ -7,6 +7,7 @@ import {
 } from "../../domains/chat/ChatHistoryContext";
 import { saveHistoryLog } from "../../domains/chat/chatLogStore";
 import { buildPromptText } from "../../domains/chat/chatMessageManipulators";
+import { ClearChatHistoryButton } from "./ClearChatHistoryButton";
 import { DialogGroupHeading } from "../../domains/dialog/DialogGroupHeading";
 import {
   NiceDialog,
@@ -42,11 +43,7 @@ export function ToolsDialog({ onClose, open }: ToolsDialogProps): JSX.Element {
     saveChatGptApiKeyKey(newKey);
   };
 
-  const onClearHistoryClick = () => {
-    const ok = window.confirm("Are you sure you want to remove all chat log?");
-    if (!ok) {
-      return;
-    }
+  const onClearHistory = () => {
     saveHistoryLog(createChatHistoryContextValue());
     setHistory(createChatHistoryContextValue());
   };
@@ -80,9 +77,7 @@ export function ToolsDialog({ onClose, open }: ToolsDialogProps): JSX.Element {
           <article>
             <DialogGroupHeading>History</DialogGroupHeading>
             <VStack>
-              <NiceButton onClick={onClearHistoryClick} type="button">
-                🗑️ Clear history...
-              </NiceButton>
+              <ClearChatHistoryButton onProceed={onClearHistory} />
               <NiceButtonLink
                 download="chatHistory.txt"
                 href={`data:text/plain,${buildPromptText(history.messages)}`}
