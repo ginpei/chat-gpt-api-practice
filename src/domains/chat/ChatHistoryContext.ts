@@ -10,7 +10,7 @@ import { ChatMessage } from "./ChatMessage";
 
 export interface ChatHistoryContextValue {
   messages: ChatMessage[];
-  tokenUsage: number;
+  completionTokenUsage: number;
 }
 
 export type ChatHistoryContextValueSetter = Dispatch<
@@ -35,7 +35,7 @@ export function createChatHistoryContextValue(
 ): ChatHistoryContextValue {
   return {
     messages: init?.messages ?? [],
-    tokenUsage: init?.tokenUsage ?? 0,
+    completionTokenUsage: init?.completionTokenUsage ?? 0,
   };
 }
 

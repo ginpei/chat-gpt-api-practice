@@ -12,7 +12,7 @@ export function ChatHistoryBlock({}: ChatHistoryBlockProps): JSX.Element {
         <ChatItem key={message.id} message={message} />
       ))}
       <div className="px-4 py-2 text-end text-sm text-gray-300">
-        Total token usage: {history.tokenUsage}
+        Total token usage: {history.completionTokenUsage}
       </div>
       <div aria-hidden className="min-h-[5em]"></div>
     </div>

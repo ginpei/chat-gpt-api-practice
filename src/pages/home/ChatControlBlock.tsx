@@ -116,7 +116,7 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
         const newHistory: ChatHistoryContextValue = {
           ...prevHistory,
           messages: [...prevHistory.messages, aiMessage],
-          tokenUsage: result.data.usage?.total_tokens ?? NaN,
+          completionTokenUsage: result.data.usage?.total_tokens ?? NaN,
         };
         saveHistoryLog(newHistory);
         return newHistory;
