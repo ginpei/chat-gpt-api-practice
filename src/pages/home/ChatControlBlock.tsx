@@ -1,7 +1,10 @@
 import { FormEventHandler, useRef, useState } from "react";
 import { NiceButton } from "../../domains/button/NiceButton";
 import { PrimaryButton } from "../../domains/button/PrimaryButton";
-import { useChatHistoryContext } from "../../domains/chat/ChatHistoryContext";
+import {
+  ChatHistoryContextValue,
+  useChatHistoryContext,
+} from "../../domains/chat/ChatHistoryContext";
 import { saveHistoryLog } from "../../domains/chat/chatLogStore";
 import { buildChatMessage } from "../../domains/chat/ChatMessage";
 import { buildPromptText } from "../../domains/chat/chatMessageManipulators";
@@ -110,10 +113,9 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
         type: "chat",
       });
       setHistory((prevHistory) => {
-        const newMessages = [...prevHistory.messages, aiMessage];
-        const newHistory = {
+        const newHistory: ChatHistoryContextValue = {
           ...prevHistory,
-          messages: newMessages,
+          messages: [...prevHistory.messages, aiMessage],
           tokenUsage: result.data.usage?.total_tokens ?? NaN,
         };
         saveHistoryLog(newHistory);
@@ -157,10 +159,9 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
         type: "image",
       });
       setHistory((prevHistory) => {
-        const newMessages = [...prevHistory.messages, aiMessage];
-        const newHistory = {
+        const newHistory: ChatHistoryContextValue = {
           ...prevHistory,
-          messages: newMessages,
+          messages: [...prevHistory.messages, aiMessage],
         };
         saveHistoryLog(newHistory);
         return newHistory;
