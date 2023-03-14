@@ -1,13 +1,7 @@
 import { FormEventHandler, useRef, useState } from "react";
 import { NiceButton } from "../../domains/button/NiceButton";
 import { PrimaryButton } from "../../domains/button/PrimaryButton";
-import {
-  ChatHistoryContextValue,
-  useChatHistoryContext,
-} from "../../domains/chat/ChatHistoryContext";
-import { saveHistoryLog } from "../../domains/chat/chatLogStore";
-import { buildChatMessage } from "../../domains/chat/ChatMessage";
-import { buildPromptText } from "../../domains/chat/chatMessageManipulators";
+import { useChatHistoryContext } from "../../domains/chat/ChatHistoryContext";
 import { useError } from "../../domains/error/errorHooks";
 import { toError } from "../../domains/error/errorManipulators";
 import { NiceText } from "../../domains/input/NiceText";
@@ -15,14 +9,13 @@ import { KeyAssign } from "../../domains/key/KeyAssign";
 import { Container } from "../../domains/layout/Container";
 import { VStack } from "../../domains/layout/VStack";
 import { useChatGptApiContext } from "../../domains/openai/chatGptApiContext";
-import {
-  sendChatRequest,
-  sendImageRequest,
-} from "../../domains/openai/chatRequestManipulators";
 import { DragPositionHandler } from "../../domains/resize/Dragger";
 import { VResizeBar } from "../../domains/resize/VResizeBar";
 import { waitUntil } from "../../domains/time/waitFunctions";
-import { useSubmitChatMessage } from "./chatRequestManagers";
+import {
+  useSubmitChatMessage,
+  useSubmitImageRequest,
+} from "./chatRequestManagers";
 import { SendOptionCloseHandler, SendOptionPopup } from "./SendOptionPopup";
 import { useOnKey } from "./shortcutHooks";
 import { ToolsDialog } from "./ToolsDialog";
@@ -46,13 +39,14 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
   const [textBoxHeightPx, setTextBoxHeightPx] = useState(66);
   const [textBoxHeightTransitionPx, setTextBoxHeightTransitionPx] = useState(0);
   const submitChatMessage = useSubmitChatMessage();
+  const submitImageRequest = useSubmitImageRequest();
 
   useOnKey("Ctrl+Shift+Enter", refText.current, () => {
     setSendOptionVisible(true);
   });
 
   useOnKey("Ctrl+Enter", refText.current, () => {
-    submit();
+    submitChatMessageForm();
   });
 
   const onResizeBarMove: DragPositionHandler = (pos) => {
@@ -69,15 +63,15 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
 
   const onFormSubmit: FormEventHandler = (event) => {
     event.preventDefault();
-    submit();
+    submitChatMessageForm();
   };
 
   const onSendOptionClose: SendOptionCloseHandler = (type) => {
     setSendOptionVisible(false);
     if (type === "text") {
-      submit();
+      submitChatMessageForm();
     } else if (type === "image") {
-      submitImageRequest();
+      submitImageRequestForm();
     } else if (type === undefined) {
       // do nothing
     }
@@ -91,7 +85,7 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
     setToolsDialogOpen(false);
   };
 
-  const submit = async () => {
+  const submitChatMessageForm = async () => {
     setProcessingChat(true);
     setSendError(null);
     try {
@@ -109,39 +103,12 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
     }
   };
 
-  const submitImageRequest = async () => {
+  const submitImageRequestForm = async () => {
     setProcessingChat(true);
     setSendError(null);
     try {
-      const userMessage = buildChatMessage({
-        body: requestMessage,
-        name: "you",
-        type: "image",
-      });
-      const messageWithUserUpdate = [...history.messages, userMessage];
-      setHistory({ ...history, messages: messageWithUserUpdate });
+      await submitImageRequest(requestMessage);
 
-      const result = await sendImageRequest({
-        apiKey: apiContext.apiKey,
-        prompt: requestMessage,
-      });
-
-      // TODO
-      console.log("# result", result);
-
-      const aiMessage = buildChatMessage({
-        body: result.data.data[0].url ?? "",
-        name: "ai",
-        type: "image",
-      });
-      setHistory((prevHistory) => {
-        const newHistory: ChatHistoryContextValue = {
-          ...prevHistory,
-          messages: [...prevHistory.messages, aiMessage],
-        };
-        saveHistoryLog(newHistory);
-        return newHistory;
-      });
       setRequestMessage("");
       waitUntil(() => !refText.current?.disabled).then(() =>
         refText.current?.focus()
