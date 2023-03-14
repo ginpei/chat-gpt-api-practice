@@ -35,7 +35,9 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
     history.messages.length > 0 ? "" : "Say something funny"
   );
   const [processingChat, setProcessingChat] = useState(false);
-  const [toolsDialogOpen, setToolsDialogOpen] = useState(false);
+  const [toolsDialogOpen, setToolsDialogOpen] = useState(
+    apiContext.apiKey === ""
+  );
   const refText = useRef<HTMLTextAreaElement>(null);
   const refSendOptionButton = useRef<HTMLButtonElement>(null);
   const [sendOptionVisible, setSendOptionVisible] = useState(false);
