@@ -2,8 +2,8 @@ import { useEffect } from "react";
 
 export interface KeyCombination {
   alt: boolean;
-  code: string;
   ctrl: boolean;
+  key: string;
   shift: boolean;
 }
 
@@ -20,11 +20,12 @@ export function useOnKey(
         return;
       }
 
+      const key = event.key.length === 1 ? event.key.toUpperCase() : event.key;
       if (
         event.ctrlKey !== combination.ctrl ||
         event.altKey !== combination.alt ||
         event.shiftKey !== combination.shift ||
-        event.code !== combination.code
+        key !== combination.key
       ) {
         return;
       }
@@ -52,12 +53,12 @@ function parseKeyCombination(input: string): KeyCombination {
   const ctrl = Boolean(matched[1]);
   const alt = Boolean(matched[2]);
   const shift = Boolean(matched[3]);
-  const code = matched[4];
+  const key = matched[4];
 
   return {
     alt,
-    code,
     ctrl,
+    key,
     shift,
   };
 }
