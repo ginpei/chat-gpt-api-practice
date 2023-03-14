@@ -11,6 +11,7 @@ import { buildPromptText } from "../../domains/chat/chatMessageManipulators";
 import { useError } from "../../domains/error/errorHooks";
 import { toError } from "../../domains/error/errorManipulators";
 import { NiceText } from "../../domains/input/NiceText";
+import { KeyAssign } from "../../domains/key/KeyAssign";
 import { Container } from "../../domains/layout/Container";
 import { VStack } from "../../domains/layout/VStack";
 import { useChatGptApiContext } from "../../domains/openai/chatGptApiContext";
@@ -206,8 +207,7 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
             <div className="flex flex-row-reverse gap-1 justify-between">
               <div className="flex gap-1">
                 <PrimaryButton disabled={processingChat} type="submit">
-                  📨 Send{" "}
-                  <small className="text-xs text-gray-300">(Ctrl+Enter)</small>
+                  📨 Send <KeyAssign theme="primary">(Ctrl+Enter)</KeyAssign>
                 </PrimaryButton>
                 <PrimaryButton
                   disabled={processingChat}

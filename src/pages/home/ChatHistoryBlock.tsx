@@ -3,6 +3,7 @@ import { useChatHistoryContext } from "../../domains/chat/ChatHistoryContext";
 import { Container } from "../../domains/layout/Container";
 import { ChatItem } from "./ChatItem";
 import { useClearChatHistoryAction } from "./chatHistoryManipulators";
+import { KeyAssign } from "../../domains/key/KeyAssign";
 
 export interface ChatHistoryBlockProps {}
 
@@ -25,7 +26,7 @@ export function ChatHistoryBlock({}: ChatHistoryBlockProps): JSX.Element {
         <Container>
           <div className="grid">
             <NiceButton onClick={clearHistoryClick} type="button">
-              🗑️ Clear history...
+              🗑️ Clear history... <KeyAssign>(Ctrl+L)</KeyAssign>
             </NiceButton>
           </div>
         </Container>
