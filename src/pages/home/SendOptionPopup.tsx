@@ -1,7 +1,6 @@
 import { ComponentPropsWithoutRef, RefObject, useEffect, useRef } from "react";
 
 export interface SendOptionPopupProps {
-  hoverOn: RefObject<HTMLElement | null>;
   onClose: SendOptionCloseHandler;
   open: boolean;
 }
@@ -11,16 +10,14 @@ export type SendOptionCloseHandler = (
 ) => void;
 
 export function SendOptionPopup({
-  hoverOn,
   onClose,
   open,
 }: SendOptionPopupProps): JSX.Element {
   const refDialog = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
-    const elTarget = hoverOn.current;
     const elDialog = refDialog.current;
-    if (!elTarget || !elDialog) {
+    if (!elDialog) {
       return;
     }
 
@@ -29,7 +26,7 @@ export function SendOptionPopup({
     } else if (!open && elDialog.open) {
       elDialog.close();
     }
-  }, [hoverOn, open]);
+  }, [open]);
 
   const onDialogClose = () => {
     onClose(undefined);

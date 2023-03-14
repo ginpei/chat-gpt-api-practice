@@ -226,11 +226,7 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
           </form>
         </VStack>
       </Container>
-      <SendOptionPopup
-        hoverOn={refSendOptionButton}
-        onClose={onSendOptionClose}
-        open={sendOptionVisible}
-      />
+      <SendOptionPopup onClose={onSendOptionClose} open={sendOptionVisible} />
       <ToolsDialog onClose={onToolsDialogClose} open={toolsDialogOpen} />
     </div>
   );
