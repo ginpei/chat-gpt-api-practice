@@ -7,6 +7,10 @@ export interface KeyCombination {
   shift: boolean;
 }
 
+/**
+ * @param key e.g. `Ctrl+Shift+Alt+Delete`
+ * @param el Give `null` to disable
+ */
 export function useOnKey(
   key: string,
   el: HTMLElement | null,
