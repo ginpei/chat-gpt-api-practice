@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useDialogOpen } from "../dialogHooks";
+import { useFocusTrap } from "../focus/focusHooks";
 
 export interface NiceDialogProps<T = void> extends NiceDialogCoreProps<T> {
   children: React.ReactNode;
@@ -19,6 +20,7 @@ export function NiceDialog({
 }: NiceDialogProps): JSX.Element {
   const refDialog = useRef<HTMLDialogElement>(null);
   useDialogOpen(refDialog, open);
+  useFocusTrap(refDialog);
   const elDialog = refDialog.current;
 
   useEffect(() => {

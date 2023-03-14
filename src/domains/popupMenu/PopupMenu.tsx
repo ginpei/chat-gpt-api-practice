@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { useFocusTrap } from "../focus/focusHooks";
 
 export interface PopupMenuProps<Result> extends PopupMenuCoreProps<Result> {
   children: React.ReactNode;
@@ -17,6 +18,8 @@ export function PopupMenu<Result>({
   children,
 }: PopupMenuProps<Result>): JSX.Element {
   const refDialog = useRef<HTMLDialogElement>(null);
+
+  useFocusTrap(refDialog);
 
   useEffect(() => {
     const elDialog = refDialog.current;
