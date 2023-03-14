@@ -1,9 +1,9 @@
-import { NiceButton } from "../../domains/button/NiceButton";
-import { useChatHistoryContext } from "../../domains/chat/ChatHistoryContext";
-import { Container } from "../../domains/layout/Container";
+import { NiceButton } from "../../../domains/button/NiceButton";
+import { useChatHistoryContext } from "../../../domains/chat/ChatHistoryContext";
+import { Container } from "../../../domains/layout/Container";
 import { ChatItem } from "./ChatItem";
-import { useClearChatHistoryAction } from "./chatHistoryManipulators";
-import { KeyAssign } from "../../domains/key/KeyAssign";
+import { useClearChatHistoryAction } from "../chatHistoryManipulators";
+import { KeyAssign } from "../../../domains/key/KeyAssign";
 
 export interface ChatHistoryBlockProps {}
 

@@ -1,18 +1,18 @@
 import { FormEventHandler } from "react";
-import { NiceButton } from "../../domains/button/NiceButton";
-import { NiceButtonLink } from "../../domains/button/NiceButtonLink";
-import { useChatHistoryContext } from "../../domains/chat/ChatHistoryContext";
-import { buildPromptText } from "../../domains/chat/chatMessageManipulators";
-import { DialogGroupHeading } from "../../domains/dialog/DialogGroupHeading";
+import { NiceButton } from "../../../domains/button/NiceButton";
+import { NiceButtonLink } from "../../../domains/button/NiceButtonLink";
+import { useChatHistoryContext } from "../../../domains/chat/ChatHistoryContext";
+import { buildPromptText } from "../../../domains/chat/chatMessageManipulators";
+import { DialogGroupHeading } from "../../../domains/dialog/DialogGroupHeading";
 import {
   NiceDialog,
   NiceDialogCoreProps,
-} from "../../domains/dialog/NiceDialog";
-import { VStack } from "../../domains/layout/VStack";
-import { NiceLink } from "../../domains/link/NiceLink";
-import { useChatGptApiContext } from "../../domains/openai/chatGptApiContext";
-import { saveChatGptApiKeyKey } from "../../domains/openai/chatGptApiKeyStore";
-import { useClearChatHistoryAction } from "./chatHistoryManipulators";
+} from "../../../domains/dialog/NiceDialog";
+import { VStack } from "../../../domains/layout/VStack";
+import { NiceLink } from "../../../domains/link/NiceLink";
+import { useChatGptApiContext } from "../../../domains/openai/chatGptApiContext";
+import { saveChatGptApiKeyKey } from "../../../domains/openai/chatGptApiKeyStore";
+import { useClearChatHistoryAction } from "../chatHistoryManipulators";
 
 export interface ToolsDialogProps extends NiceDialogCoreProps {}
 

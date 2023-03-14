@@ -1,6 +1,6 @@
-import { ChatMessage } from "../../domains/chat/ChatMessage";
-import { Container } from "../../domains/layout/Container";
-import { HStack } from "../../domains/layout/HStack";
+import { ChatMessage } from "../../../domains/chat/ChatMessage";
+import { Container } from "../../../domains/layout/Container";
+import { HStack } from "../../../domains/layout/HStack";
 
 export interface ChatItemProps {
   message: ChatMessage;

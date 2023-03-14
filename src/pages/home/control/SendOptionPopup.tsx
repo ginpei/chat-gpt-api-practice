@@ -2,8 +2,8 @@ import {
   PopupMenu,
   PopupMenuCloseHandler,
   PopupMenuCoreProps,
-} from "../../domains/popupMenu/PopupMenu";
-import { PopupMenuItem } from "../../domains/popupMenu/PopupMenuItem";
+} from "../../../domains/popupMenu/PopupMenu";
+import { PopupMenuItem } from "../../../domains/popupMenu/PopupMenuItem";
 
 export type SendOptionPopupProps = PopupMenuCoreProps<Result>;
 

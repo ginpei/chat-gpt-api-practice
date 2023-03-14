@@ -1,23 +1,23 @@
 import { FormEventHandler, useCallback, useRef, useState } from "react";
-import { NiceButton } from "../../domains/button/NiceButton";
-import { PrimaryButton } from "../../domains/button/PrimaryButton";
-import { useChatHistoryContext } from "../../domains/chat/ChatHistoryContext";
-import { useError } from "../../domains/error/errorHooks";
-import { toError } from "../../domains/error/errorManipulators";
-import { NiceText } from "../../domains/input/NiceText";
-import { KeyAssign } from "../../domains/key/KeyAssign";
-import { Container } from "../../domains/layout/Container";
-import { VStack } from "../../domains/layout/VStack";
-import { useChatGptApiContext } from "../../domains/openai/chatGptApiContext";
-import { DragPositionHandler } from "../../domains/resize/Dragger";
-import { VResizeBar } from "../../domains/resize/VResizeBar";
-import { waitUntil } from "../../domains/time/waitFunctions";
+import { NiceButton } from "../../../domains/button/NiceButton";
+import { PrimaryButton } from "../../../domains/button/PrimaryButton";
+import { useChatHistoryContext } from "../../../domains/chat/ChatHistoryContext";
+import { useError } from "../../../domains/error/errorHooks";
+import { toError } from "../../../domains/error/errorManipulators";
+import { NiceText } from "../../../domains/input/NiceText";
+import { KeyAssign } from "../../../domains/key/KeyAssign";
+import { Container } from "../../../domains/layout/Container";
+import { VStack } from "../../../domains/layout/VStack";
+import { useChatGptApiContext } from "../../../domains/openai/chatGptApiContext";
+import { DragPositionHandler } from "../../../domains/resize/Dragger";
+import { VResizeBar } from "../../../domains/resize/VResizeBar";
+import { waitUntil } from "../../../domains/time/waitFunctions";
 import {
   useSubmitChatMessage,
   useSubmitImageRequest,
-} from "./chatRequestManagers";
+} from "../chatRequestManagers";
 import { SendOptionCloseHandler, SendOptionPopup } from "./SendOptionPopup";
-import { useOnKey } from "./shortcutHooks";
+import { useOnKey } from "../shortcutHooks";
 import { ToolsDialog } from "./ToolsDialog";
 
 export interface ChatControlBlockProps {}

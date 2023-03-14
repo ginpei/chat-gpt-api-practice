@@ -1,5 +1,5 @@
-import { ChatControlBlock } from "./ChatControlBlock";
-import { ChatHistoryBlock } from "./ChatHistoryBlock";
+import { ChatControlBlock } from "./control/ChatControlBlock";
+import { ChatHistoryBlock } from "./history/ChatHistoryBlock";
 import { useClearChatHistoryAction } from "./chatHistoryManipulators";
 import { useOnKey } from "./shortcutHooks";
 
