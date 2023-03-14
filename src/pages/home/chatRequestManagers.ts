@@ -16,7 +16,7 @@ import {
  * Be aware this also updates data contained in the context and the storage
  * besides sending the request, which means this is not "pure" functionality.
  */
-export function useSubmitChatMessage(): (messageBody: string) => void {
+export function useSubmitChatMessage(): (messageBody: string) => Promise<void> {
   const [apiContext] = useChatGptApiContext();
   const [history, setHistory] = useChatHistoryContext();
 
@@ -59,7 +59,9 @@ export function useSubmitChatMessage(): (messageBody: string) => void {
   );
 }
 
-export function useSubmitImageRequest(): (messageBody: string) => void {
+export function useSubmitImageRequest(): (
+  messageBody: string
+) => Promise<void> {
   const [apiContext] = useChatGptApiContext();
   const [history, setHistory] = useChatHistoryContext();
 

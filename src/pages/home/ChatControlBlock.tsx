@@ -1,4 +1,4 @@
-import { FormEventHandler, useRef, useState } from "react";
+import { FormEventHandler, useCallback, useRef, useState } from "react";
 import { NiceButton } from "../../domains/button/NiceButton";
 import { PrimaryButton } from "../../domains/button/PrimaryButton";
 import { useChatHistoryContext } from "../../domains/chat/ChatHistoryContext";
@@ -85,41 +85,36 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
     setToolsDialogOpen(false);
   };
 
-  const submitChatMessageForm = async () => {
-    setProcessingChat(true);
-    setSendError(null);
-    try {
-      await submitChatMessage(requestMessage);
+  const useSubmitForm = useCallback(
+    (exec: () => Promise<void>) => {
+      return async () => {
+        setProcessingChat(true);
+        setSendError(null);
+        try {
+          await exec();
 
-      setRequestMessage("");
-      waitUntil(() => !refText.current?.disabled).then(() =>
-        refText.current?.focus()
-      );
-    } catch (error) {
-      console.error(error);
-      setSendError(toError(error));
-    } finally {
-      setProcessingChat(false);
-    }
-  };
+          setRequestMessage("");
+          waitUntil(() => !refText.current?.disabled).then(() =>
+            refText.current?.focus()
+          );
+        } catch (error) {
+          console.error(error);
+          setSendError(toError(error));
+        } finally {
+          setProcessingChat(false);
+        }
+      };
+    },
+    [setSendError]
+  );
 
-  const submitImageRequestForm = async () => {
-    setProcessingChat(true);
-    setSendError(null);
-    try {
-      await submitImageRequest(requestMessage);
+  const submitChatMessageForm = useSubmitForm(() =>
+    submitChatMessage(requestMessage)
+  );
 
-      setRequestMessage("");
-      waitUntil(() => !refText.current?.disabled).then(() =>
-        refText.current?.focus()
-      );
-    } catch (error) {
-      console.error(error);
-      setSendError(toError(error));
-    } finally {
-      setProcessingChat(false);
-    }
-  };
+  const submitImageRequestForm = useSubmitForm(() =>
+    submitImageRequest(requestMessage)
+  );
 
   return (
     <div className="ChatControlBlock border-t pb-4 border-t-gray-200 bg-gray-100">
