@@ -17,7 +17,7 @@ import {
   useSubmitImageRequest,
 } from "../chatRequestManagers";
 import { SendOptionCloseHandler, SendOptionPopup } from "./SendOptionPopup";
-import { useOnKey } from "../shortcutHooks";
+import { useOnKey } from "../../../domains/key/keyHooks";
 import { ToolsDialog } from "./ToolsDialog";
 
 export interface ChatControlBlockProps {}

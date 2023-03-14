@@ -1,5 +1,5 @@
 import { RefObject } from "react";
-import { useOnKey } from "../../pages/home/shortcutHooks";
+import { useOnKey } from "../key/keyHooks";
 
 export function useFocusTrap(ref: RefObject<HTMLElement>): void {
   useOnKey("Tab", ref.current, () => {

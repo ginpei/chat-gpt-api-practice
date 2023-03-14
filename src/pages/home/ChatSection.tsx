@@ -1,7 +1,7 @@
 import { ChatControlBlock } from "./control/ChatControlBlock";
 import { ChatHistoryBlock } from "./history/ChatHistoryBlock";
 import { useClearChatHistoryAction } from "./chatHistoryManipulators";
-import { useOnKey } from "./shortcutHooks";
+import { useOnKey } from "../../domains/key/keyHooks";
 
 export interface ChatSectionProps {}
 
