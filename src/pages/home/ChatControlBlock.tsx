@@ -194,10 +194,11 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
             onSubmit={onFormSubmit}
           >
             <NiceText
+              accessKey="I"
               className="resize-none"
               disabled={processingChat}
               onChange={(v) => setRequestMessage(v.currentTarget.value)}
-              placeholder="What is the HTML?"
+              placeholder={`Ask anything here! (Alt+I)${"\n"}e.g. What is the HTML?`}
               ref={refText}
               style={{
                 height: `${textBoxHeightPx + textBoxHeightTransitionPx}px`,
