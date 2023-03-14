@@ -1,9 +1,9 @@
-import { NiceButton } from "../../../domains/button/NiceButton";
 import { useChatHistoryContext } from "../../../domains/chat/ChatHistoryContext";
-import { Container } from "../../../domains/layout/Container";
-import { ChatItem } from "./ChatItem";
-import { useClearChatHistoryAction } from "../chatHistoryManipulators";
 import { KeyAssign } from "../../../domains/key/KeyAssign";
+import { Container } from "../../../domains/layout/Container";
+import { useClearChatHistoryAction } from "../chatHistoryManipulators";
+import { ChatItem } from "./ChatItem";
+import { DiscreetButton } from "./DiscreetButton";
 
 export interface ChatHistoryBlockProps {}
 
@@ -25,9 +25,9 @@ export function ChatHistoryBlock({}: ChatHistoryBlockProps): JSX.Element {
       {history.messages.length > 1 && (
         <Container>
           <div className="grid">
-            <NiceButton onClick={clearHistoryClick} type="button">
+            <DiscreetButton onClick={clearHistoryClick} type="button">
               🗑️ Clear history... <KeyAssign>(Ctrl+L)</KeyAssign>
-            </NiceButton>
+            </DiscreetButton>
           </div>
         </Container>
       )}
