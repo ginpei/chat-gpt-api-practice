@@ -1,71 +1,34 @@
-import { ComponentPropsWithoutRef, RefObject, useEffect, useRef } from "react";
+import {
+  PopupMenu,
+  PopupMenuCloseHandler,
+  PopupMenuCoreProps,
+} from "../../domains/popupMenu/PopupMenu";
+import { PopupMenuItem } from "../../domains/popupMenu/PopupMenuItem";
 
-export interface SendOptionPopupProps {
-  onClose: SendOptionCloseHandler;
-  open: boolean;
-}
+export type SendOptionPopupProps = PopupMenuCoreProps<Result>;
 
-export type SendOptionCloseHandler = (
-  type: "text" | "system" | "image" | undefined
-) => void;
+export type SendOptionCloseHandler = PopupMenuCloseHandler<Result>;
+
+type Result = "text" | "system" | "image";
 
 export function SendOptionPopup({
   onClose,
   open,
 }: SendOptionPopupProps): JSX.Element {
-  const refDialog = useRef<HTMLDialogElement>(null);
-
-  useEffect(() => {
-    const elDialog = refDialog.current;
-    if (!elDialog) {
-      return;
-    }
-
-    if (open && !elDialog.open) {
-      elDialog.showModal();
-    } else if (!open && elDialog.open) {
-      elDialog.close();
-    }
-  }, [open]);
-
-  const onDialogClose = () => {
-    onClose(undefined);
-  };
-
   return (
-    <dialog
-      className="SendOptionPopup p-0"
-      onClose={onDialogClose}
-      ref={refDialog}
-    >
-      <div className="flex flex-col">
-        <MenuItem onClick={() => onClose("text")}>📝 Send text chat</MenuItem>
-        <MenuItem disabled onClick={() => onClose("system")}>
-          🖥️ Send system description
-        </MenuItem>
-        <MenuItem onClick={() => onClose("image")}>🖼️ Request image</MenuItem>
-        <MenuItem onClick={() => onClose(undefined)}>
-          <small>Cancel</small>
-        </MenuItem>
-      </div>
-    </dialog>
-  );
-}
-
-type MenuItemProps = ComponentPropsWithoutRef<"button">;
-
-function MenuItem(props: MenuItemProps): JSX.Element {
-  return (
-    <button
-      className="
-        MenuItem
-        p-4 text-start
-        hover:bg-gray-50
-        focus:bg-gray-50
-        active:bg-gray-100
-        disabled:text-gray-400 disabled:grayscale
-      "
-      {...props}
-    />
+    <PopupMenu onClose={onClose} open={open}>
+      <PopupMenuItem onClick={() => onClose("text")}>
+        📝 Send text chat
+      </PopupMenuItem>
+      <PopupMenuItem disabled onClick={() => onClose("system")}>
+        🖥️ Send system description
+      </PopupMenuItem>
+      <PopupMenuItem onClick={() => onClose("image")}>
+        🖼️ Request image
+      </PopupMenuItem>
+      <PopupMenuItem onClick={() => onClose(undefined)}>
+        <small>Cancel</small>
+      </PopupMenuItem>
+    </PopupMenu>
   );
 }
