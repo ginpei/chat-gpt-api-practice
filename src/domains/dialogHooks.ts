@@ -1,20 +1,19 @@
-import { useEffect } from "react";
+import { RefObject, useEffect } from "react";
 
 export function useDialogOpen(
-  el: HTMLDialogElement | null,
+  refDialog: RefObject<HTMLDialogElement>,
   open: boolean
 ): void {
   useEffect(() => {
+    const el = refDialog.current;
     if (!el) {
       return;
     }
 
-    if (open) {
-      if (!el.open) {
-        el.showModal();
-      }
-    } else {
+    if (open && !el.open) {
+      el.showModal();
+    } else if (!open && el.open) {
       el.close();
     }
-  }, [el, open]);
+  }, [open, refDialog]);
 }

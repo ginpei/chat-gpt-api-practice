@@ -18,7 +18,7 @@ export function NiceDialog({
   title,
 }: NiceDialogProps): JSX.Element {
   const refDialog = useRef<HTMLDialogElement>(null);
-  useDialogOpen(refDialog.current, open);
+  useDialogOpen(refDialog, open);
   const elDialog = refDialog.current;
 
   useEffect(() => {
