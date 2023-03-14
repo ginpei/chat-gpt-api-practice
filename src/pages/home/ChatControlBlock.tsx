@@ -22,6 +22,7 @@ import {
 import { DragPositionHandler } from "../../domains/resize/Dragger";
 import { VResizeBar } from "../../domains/resize/VResizeBar";
 import { waitUntil } from "../../domains/time/waitFunctions";
+import { useSubmitChatMessage } from "./chatRequestManagers";
 import { SendOptionCloseHandler, SendOptionPopup } from "./SendOptionPopup";
 import { useOnKey } from "./shortcutHooks";
 import { ToolsDialog } from "./ToolsDialog";
@@ -44,6 +45,7 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
   const [sendOptionVisible, setSendOptionVisible] = useState(false);
   const [textBoxHeightPx, setTextBoxHeightPx] = useState(66);
   const [textBoxHeightTransitionPx, setTextBoxHeightTransitionPx] = useState(0);
+  const submitChatMessage = useSubmitChatMessage();
 
   useOnKey("Ctrl+Shift+Enter", refText.current, () => {
     setSendOptionVisible(true);
@@ -93,38 +95,8 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
     setProcessingChat(true);
     setSendError(null);
     try {
-      const userMessage = buildChatMessage({
-        body: requestMessage,
-        name: "you",
-        type: "chat",
-      });
-      const messageWithUserUpdate = [...history.messages, userMessage];
-      setHistory({ ...history, messages: messageWithUserUpdate });
+      await submitChatMessage(requestMessage);
 
-      const prompt = buildPromptText(messageWithUserUpdate) + "\nAI:";
-
-      const result = await sendChatRequest({
-        apiKey: apiContext.apiKey,
-        prompt,
-      });
-
-      // TODO
-      console.log("# result", result);
-
-      const aiMessage = buildChatMessage({
-        body: result.data.choices[0].text?.trim() ?? "?",
-        name: "ai",
-        type: "chat",
-      });
-      setHistory((prevHistory) => {
-        const newHistory: ChatHistoryContextValue = {
-          ...prevHistory,
-          messages: [...prevHistory.messages, aiMessage],
-          completionTokenUsage: result.data.usage?.total_tokens ?? NaN,
-        };
-        saveHistoryLog(newHistory);
-        return newHistory;
-      });
       setRequestMessage("");
       waitUntil(() => !refText.current?.disabled).then(() =>
         refText.current?.focus()
