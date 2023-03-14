@@ -65,6 +65,9 @@ export function ToolsDialog({ onClose, open }: ToolsDialogProps): JSX.Element {
                 ✏️
               </NiceButton>
             </div>
+            {!apiContext.apiKey && (
+              <p className="text-red-500">Please set up an API key first:</p>
+            )}
             <p>
               <NiceLink
                 href="https://platform.openai.com/account/api-keys"
