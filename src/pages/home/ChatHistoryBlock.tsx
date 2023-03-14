@@ -6,6 +6,7 @@ import {
 import { saveHistoryLog } from "../../domains/chat/chatLogStore";
 import { ClearChatHistoryButton } from "./ClearChatHistoryButton";
 import { ChatItem } from "./ChatItem";
+import { Container } from "../../domains/layout/Container";
 
 export interface ChatHistoryBlockProps {}
 
@@ -22,14 +23,18 @@ export function ChatHistoryBlock({}: ChatHistoryBlockProps): JSX.Element {
       {history.messages.map((message) => (
         <ChatItem key={message.id} message={message} />
       ))}
-      <div className="px-4 py-2 text-end text-sm text-gray-300">
-        Chat token usage: {history.completionTokenUsage}
-      </div>
+      <Container>
+        <div className="py-2 text-end text-sm text-gray-300">
+          Chat token usage: {history.completionTokenUsage}
+        </div>
+      </Container>
       <div aria-hidden className="min-h-[5em]"></div>
       {history.messages.length > 1 && (
-        <div className="grid p-4">
-          <ClearChatHistoryButton onProceed={onClearHistory} />
-        </div>
+        <Container>
+          <div className="grid">
+            <ClearChatHistoryButton onProceed={onClearHistory} />
+          </div>
+        </Container>
       )}
       <div aria-hidden className="min-h-[5em]"></div>
     </div>

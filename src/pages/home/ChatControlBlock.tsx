@@ -11,6 +11,7 @@ import { buildPromptText } from "../../domains/chat/chatMessageManipulators";
 import { useError } from "../../domains/error/errorHooks";
 import { toError } from "../../domains/error/errorManipulators";
 import { NiceText } from "../../domains/input/NiceText";
+import { Container } from "../../domains/layout/Container";
 import { VStack } from "../../domains/layout/VStack";
 import { useChatGptApiContext } from "../../domains/openai/chatGptApiContext";
 import {
@@ -179,44 +180,49 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
   };
 
   return (
-    <div className="ChatControlBlock border-t px-4 pb-4 border-t-gray-200 bg-gray-100">
-      <VStack gap="gap-2">
-        <VResizeBar onDone={onResizeBarDone} onMove={onResizeBarMove} />
-        {!apiContext.apiKey && <p className="text-red-700">Set API key</p>}
-        {sendError && <p className="text-red-700">{sendError.message}</p>}
-        <form className="ChatForm flex flex-col gap-1" onSubmit={onFormSubmit}>
-          <NiceText
-            className="resize-none"
-            disabled={processingChat}
-            onChange={(v) => setRequestMessage(v.currentTarget.value)}
-            placeholder="What is the HTML?"
-            ref={refText}
-            style={{
-              height: `${textBoxHeightPx + textBoxHeightTransitionPx}px`,
-            }}
-            value={requestMessage}
-          />
-          <div className="flex flex-row-reverse gap-1 justify-between">
-            <div className="flex gap-1">
-              <PrimaryButton disabled={processingChat} type="submit">
-                📨 Send{" "}
-                <small className="text-xs text-gray-300">(Ctrl+Enter)</small>
-              </PrimaryButton>
-              <PrimaryButton
-                disabled={processingChat}
-                onClick={() => setSendOptionVisible(true)}
-                ref={refSendOptionButton}
-                type="button"
-              >
-                ︙
-              </PrimaryButton>
+    <div className="ChatControlBlock border-t pb-4 border-t-gray-200 bg-gray-100">
+      <Container>
+        <VStack gap="gap-2">
+          <VResizeBar onDone={onResizeBarDone} onMove={onResizeBarMove} />
+          {!apiContext.apiKey && <p className="text-red-700">Set API key</p>}
+          {sendError && <p className="text-red-700">{sendError.message}</p>}
+          <form
+            className="ChatForm flex flex-col gap-1"
+            onSubmit={onFormSubmit}
+          >
+            <NiceText
+              className="resize-none"
+              disabled={processingChat}
+              onChange={(v) => setRequestMessage(v.currentTarget.value)}
+              placeholder="What is the HTML?"
+              ref={refText}
+              style={{
+                height: `${textBoxHeightPx + textBoxHeightTransitionPx}px`,
+              }}
+              value={requestMessage}
+            />
+            <div className="flex flex-row-reverse gap-1 justify-between">
+              <div className="flex gap-1">
+                <PrimaryButton disabled={processingChat} type="submit">
+                  📨 Send{" "}
+                  <small className="text-xs text-gray-300">(Ctrl+Enter)</small>
+                </PrimaryButton>
+                <PrimaryButton
+                  disabled={processingChat}
+                  onClick={() => setSendOptionVisible(true)}
+                  ref={refSendOptionButton}
+                  type="button"
+                >
+                  ︙
+                </PrimaryButton>
+              </div>
+              <NiceButton onClick={onToolsClick} type="button">
+                🛠️ Tools...
+              </NiceButton>
             </div>
-            <NiceButton onClick={onToolsClick} type="button">
-              🛠️ Tools...
-            </NiceButton>
-          </div>
-        </form>
-      </VStack>
+          </form>
+        </VStack>
+      </Container>
       <SendOptionPopup
         hoverOn={refSendOptionButton}
         onClose={onSendOptionClose}
