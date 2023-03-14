@@ -49,6 +49,37 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
     submitChatMessageForm();
   });
 
+  const useSubmitForm = useCallback(
+    (exec: () => Promise<void>) => {
+      return async () => {
+        setProcessingChat(true);
+        setSendError(null);
+        try {
+          await exec();
+
+          setRequestMessage("");
+          waitUntil(() => !refText.current?.disabled).then(() =>
+            refText.current?.focus()
+          );
+        } catch (error) {
+          console.error(error);
+          setSendError(toError(error));
+        } finally {
+          setProcessingChat(false);
+        }
+      };
+    },
+    [setSendError]
+  );
+
+  const submitChatMessageForm = useSubmitForm(() =>
+    submitChatMessage(requestMessage)
+  );
+
+  const submitImageRequestForm = useSubmitForm(() =>
+    submitImageRequest(requestMessage)
+  );
+
   const onResizeBarMove: DragPositionHandler = (pos) => {
     const minHeight = 42;
     const dy = -pos.dy;
@@ -84,37 +115,6 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
   const onToolsDialogClose = () => {
     setToolsDialogOpen(false);
   };
-
-  const useSubmitForm = useCallback(
-    (exec: () => Promise<void>) => {
-      return async () => {
-        setProcessingChat(true);
-        setSendError(null);
-        try {
-          await exec();
-
-          setRequestMessage("");
-          waitUntil(() => !refText.current?.disabled).then(() =>
-            refText.current?.focus()
-          );
-        } catch (error) {
-          console.error(error);
-          setSendError(toError(error));
-        } finally {
-          setProcessingChat(false);
-        }
-      };
-    },
-    [setSendError]
-  );
-
-  const submitChatMessageForm = useSubmitForm(() =>
-    submitChatMessage(requestMessage)
-  );
-
-  const submitImageRequestForm = useSubmitForm(() =>
-    submitImageRequest(requestMessage)
-  );
 
   return (
     <div className="ChatControlBlock border-t pb-4 border-t-gray-200 bg-gray-100">
