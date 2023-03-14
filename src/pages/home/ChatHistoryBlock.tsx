@@ -1,22 +1,14 @@
 import { NiceButton } from "../../domains/button/NiceButton";
-import {
-  createChatHistoryContextValue,
-  useChatHistoryContext,
-} from "../../domains/chat/ChatHistoryContext";
-import { saveHistoryLog } from "../../domains/chat/chatLogStore";
-import { ClearChatHistoryButton } from "./ClearChatHistoryButton";
-import { ChatItem } from "./ChatItem";
+import { useChatHistoryContext } from "../../domains/chat/ChatHistoryContext";
 import { Container } from "../../domains/layout/Container";
+import { ChatItem } from "./ChatItem";
+import { useClearChatHistoryAction } from "./chatHistoryManipulators";
 
 export interface ChatHistoryBlockProps {}
 
 export function ChatHistoryBlock({}: ChatHistoryBlockProps): JSX.Element {
-  const [history, setHistory] = useChatHistoryContext();
-
-  const onClearHistory = () => {
-    saveHistoryLog(createChatHistoryContextValue());
-    setHistory(createChatHistoryContextValue());
-  };
+  const [history] = useChatHistoryContext();
+  const clearHistoryClick = useClearChatHistoryAction();
 
   return (
     <div className="ChatHistoryBlock flex-grow overflow-auto bg-stone-50">
@@ -32,7 +24,9 @@ export function ChatHistoryBlock({}: ChatHistoryBlockProps): JSX.Element {
       {history.messages.length > 1 && (
         <Container>
           <div className="grid">
-            <ClearChatHistoryButton onProceed={onClearHistory} />
+            <NiceButton onClick={clearHistoryClick} type="button">
+              🗑️ Clear history...
+            </NiceButton>
           </div>
         </Container>
       )}

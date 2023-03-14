@@ -1,13 +1,8 @@
 import { FormEventHandler } from "react";
 import { NiceButton } from "../../domains/button/NiceButton";
 import { NiceButtonLink } from "../../domains/button/NiceButtonLink";
-import {
-  createChatHistoryContextValue,
-  useChatHistoryContext,
-} from "../../domains/chat/ChatHistoryContext";
-import { saveHistoryLog } from "../../domains/chat/chatLogStore";
+import { useChatHistoryContext } from "../../domains/chat/ChatHistoryContext";
 import { buildPromptText } from "../../domains/chat/chatMessageManipulators";
-import { ClearChatHistoryButton } from "./ClearChatHistoryButton";
 import { DialogGroupHeading } from "../../domains/dialog/DialogGroupHeading";
 import {
   NiceDialog,
@@ -17,12 +12,14 @@ import { VStack } from "../../domains/layout/VStack";
 import { NiceLink } from "../../domains/link/NiceLink";
 import { useChatGptApiContext } from "../../domains/openai/chatGptApiContext";
 import { saveChatGptApiKeyKey } from "../../domains/openai/chatGptApiKeyStore";
+import { useClearChatHistoryAction } from "./chatHistoryManipulators";
 
 export interface ToolsDialogProps extends NiceDialogCoreProps {}
 
 export function ToolsDialog({ onClose, open }: ToolsDialogProps): JSX.Element {
   const [apiContext, setApiContext] = useChatGptApiContext();
-  const [history, setHistory] = useChatHistoryContext();
+  const [history] = useChatHistoryContext();
+  const clearHistoryClick = useClearChatHistoryAction();
 
   const onUpdateClick: FormEventHandler = () => {
     const newKey = window.prompt("API key", apiContext.apiKey);
@@ -41,11 +38,6 @@ export function ToolsDialog({ onClose, open }: ToolsDialogProps): JSX.Element {
 
     setApiContext((v) => ({ ...v, apiKey: newKey }));
     saveChatGptApiKeyKey(newKey);
-  };
-
-  const onClearHistory = () => {
-    saveHistoryLog(createChatHistoryContextValue());
-    setHistory(createChatHistoryContextValue());
   };
 
   return (
@@ -80,7 +72,9 @@ export function ToolsDialog({ onClose, open }: ToolsDialogProps): JSX.Element {
           <article>
             <DialogGroupHeading>History</DialogGroupHeading>
             <VStack>
-              <ClearChatHistoryButton onProceed={onClearHistory} />
+              <NiceButton onClick={clearHistoryClick} type="button">
+                🗑️ Clear history...
+              </NiceButton>
               <NiceButtonLink
                 download="chatHistory.txt"
                 href={`data:text/plain,${buildPromptText(history.messages)}`}
