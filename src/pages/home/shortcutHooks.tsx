@@ -38,8 +38,8 @@ export function useOnKey(
       callback();
     };
 
-    document.addEventListener("keypress", onKeyPress);
-    return () => document.removeEventListener("keypress", onKeyPress);
+    document.addEventListener("keydown", onKeyPress);
+    return () => document.removeEventListener("keydown", onKeyPress);
   }, [callback, el, key]);
 }
 
