@@ -45,7 +45,7 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
   const [textBoxHeightPx, setTextBoxHeightPx] = useState(66);
   const [textBoxHeightTransitionPx, setTextBoxHeightTransitionPx] = useState(0);
 
-  useOnKey("Shift+Enter", refText.current, () => {
+  useOnKey("Ctrl+Shift+Enter", refText.current, () => {
     setSendOptionVisible(true);
   });
 
