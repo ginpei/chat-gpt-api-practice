@@ -71,12 +71,12 @@ export function ChatHistoryBlock({}: ChatHistoryBlockProps): JSX.Element {
           >
             🗑️ Clear history... <KeyAssign>(Ctrl+L)</KeyAssign>
           </DiscreetButton>
-          <DiscreetButton
+          {/* <DiscreetButton
             onClick={() => setSelectFileVisible(true)}
             type="button"
           >
             📁 Open... <KeyAssign>(Ctrl+O)</KeyAssign>
-          </DiscreetButton>
+          </DiscreetButton> */}
         </div>
       </Container>
       <div aria-hidden className="min-h-[5em]"></div>
