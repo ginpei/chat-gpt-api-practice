@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { useUserAssetContext } from "../../domains/chat/UserAssetContext";
-import { saveHistoryLog } from "../../domains/chat/chatLogStore";
+import { saveUserAsset } from "../../domains/chat/userAssetStore";
 import { buildChatMessage } from "../../domains/chat/ChatMessage";
 import { buildPromptText } from "../../domains/chat/chatMessageManipulators";
 import {
@@ -44,13 +44,13 @@ export function useSubmitChatMessage(): (messageBody: string) => Promise<void> {
         type: "chat",
       });
       setUserAsset((prevHistory) => {
-        const newHistory: UserAsset = {
+        const assets: UserAsset = {
           ...prevHistory,
           messages: [...prevHistory.messages, aiMessage],
           completionTokenUsage: result.data.usage?.total_tokens ?? NaN,
         };
-        saveHistoryLog(newHistory);
-        return newHistory;
+        saveUserAsset(assets);
+        return assets;
       });
     },
     [userSettings.apiKey, userAsset, setUserAsset]
@@ -87,12 +87,12 @@ export function useSubmitImageRequest(): (
         type: "image",
       });
       setUserAsset((prevHistory) => {
-        const newHistory: UserAsset = {
+        const assets: UserAsset = {
           ...prevHistory,
           messages: [...prevHistory.messages, aiMessage],
         };
-        saveHistoryLog(newHistory);
-        return newHistory;
+        saveUserAsset(assets);
+        return assets;
       });
     },
     [userSettings.apiKey, userAsset, setUserAsset]

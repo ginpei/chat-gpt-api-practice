@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { loadHistoryLog } from "../../domains/chat/chatLogStore";
+import { loadUserAsset } from "../../domains/chat/userAssetStore";
 import { UserAssetContextProvider } from "../../domains/chat/UserAssetContext";
 import {
   UserSettingsProvider,
@@ -15,7 +15,7 @@ export function ContextsProvider({
   children,
 }: ContextsProviderProps): JSX.Element {
   const userSettingsState = useUserSettingsState(loadUserSettings());
-  const userAssetContextState = useState(loadHistoryLog());
+  const userAssetContextState = useState(loadUserAsset());
 
   return (
     <UserSettingsProvider value={userSettingsState}>

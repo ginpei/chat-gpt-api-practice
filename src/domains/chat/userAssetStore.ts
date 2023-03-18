@@ -2,7 +2,7 @@ import { createUserAsset, UserAsset } from "./UserAsset";
 
 const storeKey = "chat-gpt-api-practice/chatHistory";
 
-export function loadHistoryLog(): UserAsset {
+export function loadUserAsset(): UserAsset {
   // SSR
   if (typeof window === "undefined") {
     return createUserAsset();
@@ -13,6 +13,6 @@ export function loadHistoryLog(): UserAsset {
   return createUserAsset(raw);
 }
 
-export function saveHistoryLog(value: UserAsset): void {
+export function saveUserAsset(value: UserAsset): void {
   localStorage.setItem(storeKey, JSON.stringify(value));
 }

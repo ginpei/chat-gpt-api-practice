@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { useUserAssetContext } from "../../domains/chat/UserAssetContext";
-import { saveHistoryLog } from "../../domains/chat/chatLogStore";
+import { saveUserAsset } from "../../domains/chat/userAssetStore";
 import { createUserAsset } from "../../domains/chat/UserAsset";
 
 export function useClearChatHistoryAction(): () => void {
@@ -12,7 +12,7 @@ export function useClearChatHistoryAction(): () => void {
       return;
     }
 
-    saveHistoryLog(createUserAsset());
+    saveUserAsset(createUserAsset());
     setUserAsset(createUserAsset());
   }, [setUserAsset]);
 
