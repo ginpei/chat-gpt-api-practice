@@ -13,32 +13,6 @@ import { SelectFileCloseHandler, SelectFilePopup } from "./SelectFilePopup";
 
 export interface ChatHistoryBlockProps {}
 
-const notes: Note[] = Array.from({ length: 22 }).map((v, i) =>
-  createChatNote({
-    body: createChatHistory({
-      completionTokenUsage: i * i,
-      messages: [
-        {
-          body: `This is ${i}th message`,
-          date: Date.now(),
-          id: `message-${i}`,
-          name: "you",
-          type: "chat",
-        },
-        {
-          body: `Yo ${i}`,
-          date: Date.now(),
-          id: `message-${i}-2`,
-          name: "ai",
-          type: "chat",
-        },
-      ],
-    }),
-    id: `note-${i}`,
-    title: `Note ${i}`,
-  })
-);
-
 export function ChatHistoryBlock({}: ChatHistoryBlockProps): JSX.Element {
   const [userSettings] = useUserSettings();
   const [userAssets, setUserAssets] = useUserAssetsContext();
@@ -66,10 +40,7 @@ export function ChatHistoryBlock({}: ChatHistoryBlockProps): JSX.Element {
 
   const onFileSelect: SelectFileCloseHandler = (note: Note | undefined) => {
     if (note) {
-      if (note.type === "chat") {
-        // TODO
-        setUserAssets({ ...note.body });
-      }
+      console.log("# note", note);
     }
     setSelectFileVisible(false);
   };
@@ -110,7 +81,7 @@ export function ChatHistoryBlock({}: ChatHistoryBlockProps): JSX.Element {
       </Container>
       <div aria-hidden className="min-h-[5em]"></div>
       <SelectFilePopup
-        notes={notes}
+        notes={userAssets.notes}
         onClose={onFileSelect}
         open={selectFileVisible}
       />
