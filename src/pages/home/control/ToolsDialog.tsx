@@ -1,7 +1,7 @@
 import { FormEventHandler } from "react";
 import { NiceButton } from "../../../domains/button/NiceButton";
 import { NiceButtonLink } from "../../../domains/button/NiceButtonLink";
-import { useUserAssetContext } from "../../../domains/chat/UserAssetContext";
+import { useUserAssetsContext } from "../../../domains/chat/UserAssetsContext";
 import { buildPromptText } from "../../../domains/chat/chatMessageManipulators";
 import { DialogGroupHeading } from "../../../domains/dialog/DialogGroupHeading";
 import {
@@ -21,7 +21,7 @@ export interface ToolsDialogProps extends NiceDialogCoreProps {}
 
 export function ToolsDialog({ onClose, open }: ToolsDialogProps): JSX.Element {
   const [userSettings, setUserSettings] = useUserSettings();
-  const [userAsset] = useUserAssetContext();
+  const [userAssets] = useUserAssetsContext();
   const clearHistoryClick = useClearChatHistoryAction();
 
   const onUpdateClick: FormEventHandler = () => {
@@ -102,7 +102,7 @@ export function ToolsDialog({ onClose, open }: ToolsDialogProps): JSX.Element {
               </NiceButton>
               <NiceButtonLink
                 download="chatHistory.txt"
-                href={`data:text/plain,${buildPromptText(userAsset.messages)}`}
+                href={`data:text/plain,${buildPromptText(userAssets.messages)}`}
               >
                 💾 Download
               </NiceButtonLink>

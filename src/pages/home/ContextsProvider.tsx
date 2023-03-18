@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { loadUserAsset } from "../../domains/chat/userAssetStore";
-import { UserAssetContextProvider } from "../../domains/chat/UserAssetContext";
+import { loadUserAssets } from "../../domains/chat/userAssetsStore";
+import { UserAssetsContextProvider } from "../../domains/chat/UserAssetsContext";
 import {
   UserSettingsProvider,
   useUserSettingsState,
@@ -15,13 +15,13 @@ export function ContextsProvider({
   children,
 }: ContextsProviderProps): JSX.Element {
   const userSettingsState = useUserSettingsState(loadUserSettings());
-  const userAssetContextState = useState(loadUserAsset());
+  const userAssetsContextState = useState(loadUserAssets());
 
   return (
     <UserSettingsProvider value={userSettingsState}>
-      <UserAssetContextProvider value={userAssetContextState}>
+      <UserAssetsContextProvider value={userAssetsContextState}>
         {children}
-      </UserAssetContextProvider>
+      </UserAssetsContextProvider>
     </UserSettingsProvider>
   );
 }

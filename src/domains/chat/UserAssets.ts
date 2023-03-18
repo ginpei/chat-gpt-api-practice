@@ -1,11 +1,11 @@
 import { ChatMessage } from "./ChatMessage";
 
-export interface UserAsset {
+export interface UserAssets {
   messages: ChatMessage[];
   completionTokenUsage: number;
 }
 
-export function createUserAsset(init?: Partial<UserAsset>): UserAsset {
+export function createUserAssets(init?: Partial<UserAssets>): UserAssets {
   return {
     messages: init?.messages ?? [],
     completionTokenUsage: init?.completionTokenUsage ?? 0,

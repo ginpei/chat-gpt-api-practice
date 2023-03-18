@@ -1,6 +1,6 @@
 import { useCallback } from "react";
-import { useUserAssetContext } from "../../domains/chat/UserAssetContext";
-import { saveUserAsset } from "../../domains/chat/userAssetStore";
+import { useUserAssetsContext } from "../../domains/chat/UserAssetsContext";
+import { saveUserAssets } from "../../domains/chat/userAssetsStore";
 import { buildChatMessage } from "../../domains/chat/ChatMessage";
 import { buildPromptText } from "../../domains/chat/chatMessageManipulators";
 import {
@@ -8,7 +8,7 @@ import {
   sendImageRequest,
 } from "../../domains/openai/chatRequestManipulators";
 import { useUserSettings } from "../../domains/userSettings/UserSettingsContext";
-import { UserAsset } from "../../domains/chat/UserAsset";
+import { UserAssets } from "../../domains/chat/UserAssets";
 
 /**
  * Be aware this also updates data contained in the context and the storage
@@ -16,7 +16,7 @@ import { UserAsset } from "../../domains/chat/UserAsset";
  */
 export function useSubmitChatMessage(): (messageBody: string) => Promise<void> {
   const [userSettings] = useUserSettings();
-  const [userAsset, setUserAsset] = useUserAssetContext();
+  const [userAssets, setUserAssets] = useUserAssetsContext();
 
   return useCallback(
     async (messageBody) => {
@@ -25,8 +25,8 @@ export function useSubmitChatMessage(): (messageBody: string) => Promise<void> {
         name: "you",
         type: "chat",
       });
-      const messageWithUserUpdate = [...userAsset.messages, userMessage];
-      setUserAsset({ ...userAsset, messages: messageWithUserUpdate });
+      const messageWithUserUpdate = [...userAssets.messages, userMessage];
+      setUserAssets({ ...userAssets, messages: messageWithUserUpdate });
 
       const prompt = buildPromptText(messageWithUserUpdate) + "\nAI:";
 
@@ -43,17 +43,17 @@ export function useSubmitChatMessage(): (messageBody: string) => Promise<void> {
         name: "ai",
         type: "chat",
       });
-      setUserAsset((prevHistory) => {
-        const assets: UserAsset = {
+      setUserAssets((prevHistory) => {
+        const assets: UserAssets = {
           ...prevHistory,
           messages: [...prevHistory.messages, aiMessage],
           completionTokenUsage: result.data.usage?.total_tokens ?? NaN,
         };
-        saveUserAsset(assets);
+        saveUserAssets(assets);
         return assets;
       });
     },
-    [userSettings.apiKey, userAsset, setUserAsset]
+    [userSettings.apiKey, userAssets, setUserAssets]
   );
 }
 
@@ -61,7 +61,7 @@ export function useSubmitImageRequest(): (
   messageBody: string
 ) => Promise<void> {
   const [userSettings] = useUserSettings();
-  const [userAsset, setUserAsset] = useUserAssetContext();
+  const [userAssets, setUserAssets] = useUserAssetsContext();
 
   return useCallback(
     async (messageBody) => {
@@ -70,8 +70,8 @@ export function useSubmitImageRequest(): (
         name: "you",
         type: "image",
       });
-      const messageWithUserUpdate = [...userAsset.messages, userMessage];
-      setUserAsset({ ...userAsset, messages: messageWithUserUpdate });
+      const messageWithUserUpdate = [...userAssets.messages, userMessage];
+      setUserAssets({ ...userAssets, messages: messageWithUserUpdate });
 
       const result = await sendImageRequest({
         apiKey: userSettings.apiKey,
@@ -86,15 +86,15 @@ export function useSubmitImageRequest(): (
         name: "ai",
         type: "image",
       });
-      setUserAsset((prevHistory) => {
-        const assets: UserAsset = {
+      setUserAssets((prevHistory) => {
+        const assets: UserAssets = {
           ...prevHistory,
           messages: [...prevHistory.messages, aiMessage],
         };
-        saveUserAsset(assets);
+        saveUserAssets(assets);
         return assets;
       });
     },
-    [userSettings.apiKey, userAsset, setUserAsset]
+    [userSettings.apiKey, userAssets, setUserAssets]
   );
 }
