@@ -1,5 +1,6 @@
-import { useEffect, useRef } from "react";
+import { MouseEventHandler, useEffect, useRef } from "react";
 import { useFocusTrap } from "../focus/focusHooks";
+import { isOutside } from "./dialogDomManiplators";
 
 export interface PopupMenuProps<Result> extends PopupMenuCoreProps<Result> {
   children: React.ReactNode;
@@ -34,12 +35,29 @@ export function PopupMenu<Result>({
     }
   }, [open]);
 
+  const onDialogClick: MouseEventHandler = (event) => {
+    const elDialog = refDialog.current;
+    if (!elDialog) {
+      return;
+    }
+
+    const outside = isOutside(elDialog, event);
+    if (outside) {
+      onClose(undefined);
+    }
+  };
+
   const onDialogClose = () => {
     onClose(undefined);
   };
 
   return (
-    <dialog className="PopupMenu p-0" onClose={onDialogClose} ref={refDialog}>
+    <dialog
+      className="PopupMenu p-0"
+      onClick={onDialogClick}
+      onClose={onDialogClose}
+      ref={refDialog}
+    >
       <div className="flex flex-col">{children}</div>
     </dialog>
   );
