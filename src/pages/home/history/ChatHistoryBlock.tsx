@@ -100,7 +100,7 @@ export function ChatHistoryBlock({}: ChatHistoryBlockProps): JSX.Element {
             onClick={() => setSelectFileVisible(true)}
             type="button"
           >
-            📦 Open... <KeyAssign>(Ctrl+O)</KeyAssign>
+            📁 Open... <KeyAssign>(Ctrl+O)</KeyAssign>
           </DiscreetButton>
         </div>
       </Container>
