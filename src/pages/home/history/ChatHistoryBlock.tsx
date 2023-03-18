@@ -87,21 +87,23 @@ export function ChatHistoryBlock({}: ChatHistoryBlockProps): JSX.Element {
         </div>
       </Container>
       <div aria-hidden className="min-h-[5em]"></div>
-      {history.messages.length > 1 && (
-        <Container>
-          <div className="grid gap-4">
-            <DiscreetButton onClick={clearHistoryClick} type="button">
-              🗑️ Clear history... <KeyAssign>(Ctrl+L)</KeyAssign>
-            </DiscreetButton>
-            <DiscreetButton
-              onClick={() => setSelectFileVisible(true)}
-              type="button"
-            >
-              📦 Open... <KeyAssign>(Ctrl+O)</KeyAssign>
-            </DiscreetButton>
-          </div>
-        </Container>
-      )}
+      <Container>
+        <div className="grid gap-4">
+          <DiscreetButton
+            disabled={history.messages.length < 1}
+            onClick={clearHistoryClick}
+            type="button"
+          >
+            🗑️ Clear history... <KeyAssign>(Ctrl+L)</KeyAssign>
+          </DiscreetButton>
+          <DiscreetButton
+            onClick={() => setSelectFileVisible(true)}
+            type="button"
+          >
+            📦 Open... <KeyAssign>(Ctrl+O)</KeyAssign>
+          </DiscreetButton>
+        </div>
+      </Container>
       <div aria-hidden className="min-h-[5em]"></div>
       <SelectFilePopup
         notes={notes}
