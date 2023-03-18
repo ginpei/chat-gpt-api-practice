@@ -1,7 +1,6 @@
 import { FormEventHandler, useCallback, useRef, useState } from "react";
 import { NiceButton } from "../../../domains/button/NiceButton";
 import { PrimaryButton } from "../../../domains/button/PrimaryButton";
-import { useUserAssetsContext } from "../../../domains/chat/UserAssetsContext";
 import { useError } from "../../../domains/error/errorHooks";
 import { toError } from "../../../domains/error/errorManipulators";
 import { NiceText } from "../../../domains/input/NiceText";
@@ -12,6 +11,7 @@ import { VStack } from "../../../domains/layout/VStack";
 import { DragPositionHandler } from "../../../domains/resize/Dragger";
 import { VResizeBar } from "../../../domains/resize/VResizeBar";
 import { waitUntil } from "../../../domains/time/waitFunctions";
+import { useUserAssetsContext } from "../../../domains/userAssets/UserAssetsContext";
 import { useUserSettings } from "../../../domains/userSettings/UserSettingsContext";
 import {
   useSubmitChatMessage,

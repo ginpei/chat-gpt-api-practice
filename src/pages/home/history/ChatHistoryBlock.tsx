@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { createChatHistory } from "../../../domains/chat/ChatHistory";
-import { useUserAssetsContext } from "../../../domains/chat/UserAssetsContext";
 import { KeyAssign } from "../../../domains/key/KeyAssign";
 import { useOnKey } from "../../../domains/key/keyHooks";
 import { Container } from "../../../domains/layout/Container";
+import { useUserAssetsContext } from "../../../domains/userAssets/UserAssetsContext";
 import { useUserSettings } from "../../../domains/userSettings/UserSettingsContext";
 import { useClearChatHistoryAction } from "../chatHistoryManipulators";
 import { ChatItem } from "./ChatItem";

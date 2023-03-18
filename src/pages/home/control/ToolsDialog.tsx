@@ -1,7 +1,6 @@
 import { FormEventHandler } from "react";
 import { NiceButton } from "../../../domains/button/NiceButton";
 import { NiceButtonLink } from "../../../domains/button/NiceButtonLink";
-import { useUserAssetsContext } from "../../../domains/chat/UserAssetsContext";
 import { buildPromptText } from "../../../domains/chat/chatMessageManipulators";
 import { DialogGroupHeading } from "../../../domains/dialog/DialogGroupHeading";
 import {
@@ -10,6 +9,7 @@ import {
 } from "../../../domains/dialog/NiceDialog";
 import { VStack } from "../../../domains/layout/VStack";
 import { NiceLink } from "../../../domains/link/NiceLink";
+import { useUserAssetsContext } from "../../../domains/userAssets/UserAssetsContext";
 import {
   UserSettingsValue,
   useUserSettings,

@@ -1,7 +1,7 @@
 import { useCallback } from "react";
-import { useUserAssetsContext } from "../../domains/chat/UserAssetsContext";
-import { saveUserAssets } from "../../domains/chat/userAssetsStore";
-import { createUserAssets } from "../../domains/chat/UserAssets";
+import { createUserAssets } from "../../domains/userAssets/UserAssets";
+import { useUserAssetsContext } from "../../domains/userAssets/UserAssetsContext";
+import { saveUserAssets } from "../../domains/userAssets/userAssetsStore";
 
 export function useClearChatHistoryAction(): () => void {
   const [, setUserAssets] = useUserAssetsContext();

@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { loadUserAssets } from "../../domains/chat/userAssetsStore";
-import { UserAssetsContextProvider } from "../../domains/chat/UserAssetsContext";
+import { UserAssetsContextProvider } from "../../domains/userAssets/UserAssetsContext";
+import { loadUserAssets } from "../../domains/userAssets/userAssetsStore";
 import {
   UserSettingsProvider,
   useUserSettingsState,

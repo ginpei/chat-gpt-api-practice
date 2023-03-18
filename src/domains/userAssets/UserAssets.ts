@@ -1,4 +1,4 @@
-import { ChatMessage } from "./ChatMessage";
+import { ChatMessage } from "../chat/ChatMessage";
 
 export interface UserAssets {
   messages: ChatMessage[];

@@ -1,14 +1,14 @@
 import { useCallback } from "react";
-import { useUserAssetsContext } from "../../domains/chat/UserAssetsContext";
-import { saveUserAssets } from "../../domains/chat/userAssetsStore";
 import { buildChatMessage } from "../../domains/chat/ChatMessage";
 import { buildPromptText } from "../../domains/chat/chatMessageManipulators";
 import {
   sendChatRequest,
   sendImageRequest,
 } from "../../domains/openai/chatRequestManipulators";
+import { UserAssets } from "../../domains/userAssets/UserAssets";
+import { useUserAssetsContext } from "../../domains/userAssets/UserAssetsContext";
+import { saveUserAssets } from "../../domains/userAssets/userAssetsStore";
 import { useUserSettings } from "../../domains/userSettings/UserSettingsContext";
-import { UserAssets } from "../../domains/chat/UserAssets";
 
 /**
  * Be aware this also updates data contained in the context and the storage
