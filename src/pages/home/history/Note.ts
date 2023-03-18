@@ -1,4 +1,7 @@
-import { ChatMessage } from "../../../domains/chat/ChatMessage";
+import {
+  ChatHistory,
+  createChatHistory,
+} from "../../../domains/chat/ChatHistory";
 
 export interface NoteBase<Body, Type extends NoteType> {
   body: Body;
@@ -9,7 +12,7 @@ export interface NoteBase<Body, Type extends NoteType> {
 
 export type Note = ChatNote | ImageNote;
 
-export type ChatNote = NoteBase<ChatMessage[], "chat">;
+export type ChatNote = NoteBase<ChatHistory, "chat">;
 
 export type ImageNote = NoteBase<[string, string], "image">;
 
@@ -29,5 +32,5 @@ function createNoteBase<Body, Type extends NoteType>(
 }
 
 export function createChatNote(init: Partial<ChatNote>): ChatNote {
-  return createNoteBase(init, "chat", []);
+  return createNoteBase(init, "chat", createChatHistory());
 }

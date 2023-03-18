@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { createChatHistory } from "../../../domains/chat/ChatHistory";
 import { useChatHistoryContext } from "../../../domains/chat/ChatHistoryContext";
 import { KeyAssign } from "../../../domains/key/KeyAssign";
 import { useOnKey } from "../../../domains/key/keyHooks";
@@ -14,22 +15,25 @@ export interface ChatHistoryBlockProps {}
 
 const notes: Note[] = Array.from({ length: 22 }).map((v, i) =>
   createChatNote({
-    body: [
-      {
-        body: `This is ${i}th message`,
-        date: Date.now(),
-        id: `message-${i}`,
-        name: "you",
-        type: "chat",
-      },
-      {
-        body: `Yo ${i}`,
-        date: Date.now(),
-        id: `message-${i}-2`,
-        name: "ai",
-        type: "chat",
-      },
-    ],
+    body: createChatHistory({
+      completionTokenUsage: i * i,
+      messages: [
+        {
+          body: `This is ${i}th message`,
+          date: Date.now(),
+          id: `message-${i}`,
+          name: "you",
+          type: "chat",
+        },
+        {
+          body: `Yo ${i}`,
+          date: Date.now(),
+          id: `message-${i}-2`,
+          name: "ai",
+          type: "chat",
+        },
+      ],
+    }),
     id: `note-${i}`,
     title: `Note ${i}`,
   })
@@ -64,7 +68,7 @@ export function ChatHistoryBlock({}: ChatHistoryBlockProps): JSX.Element {
     if (note) {
       if (note.type === "chat") {
         // TODO
-        setHistory({ ...history, messages: note.body });
+        setHistory({ ...note.body });
       }
     }
     setSelectFileVisible(false);
