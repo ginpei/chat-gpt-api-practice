@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useChatHistoryContext } from "../../../domains/chat/ChatHistoryContext";
 import { KeyAssign } from "../../../domains/key/KeyAssign";
+import { useOnKey } from "../../../domains/key/keyHooks";
 import { Container } from "../../../domains/layout/Container";
 import { useUserSettings } from "../../../domains/userSettings/UserSettingsContext";
 import { useClearChatHistoryAction } from "../chatHistoryManipulators";
@@ -40,6 +41,10 @@ export function ChatHistoryBlock({}: ChatHistoryBlockProps): JSX.Element {
   const clearHistoryClick = useClearChatHistoryAction();
   const refMessageList = useRef<HTMLDivElement>(null);
   const [selectFileVisible, setSelectFileVisible] = useState(false);
+
+  useOnKey("Ctrl+O", document.body, () => {
+    setSelectFileVisible(true);
+  });
 
   useEffect(() => {
     const children = refMessageList.current?.children;
