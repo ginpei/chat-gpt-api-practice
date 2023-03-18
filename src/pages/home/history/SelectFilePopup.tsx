@@ -1,3 +1,4 @@
+import { Note } from "../../../domains/note/Note";
 import {
   PopupMenu,
   PopupMenuCloseHandler,
@@ -5,7 +6,6 @@ import {
 } from "../../../domains/popupMenu/PopupMenu";
 import { PopupMenuHeading } from "../../../domains/popupMenu/PopupMenuHeading";
 import { PopupMenuItem } from "../../../domains/popupMenu/PopupMenuItem";
-import { Note, NoteBase } from "./Note";
 
 export interface SelectFilePopupProps extends PopupMenuCoreProps<Note> {
   notes: Note[];

@@ -3,12 +3,12 @@ import { createChatHistory } from "../../../domains/chat/ChatHistory";
 import { KeyAssign } from "../../../domains/key/KeyAssign";
 import { useOnKey } from "../../../domains/key/keyHooks";
 import { Container } from "../../../domains/layout/Container";
+import { createChatNote, Note } from "../../../domains/note/Note";
 import { useUserAssetsContext } from "../../../domains/userAssets/UserAssetsContext";
 import { useUserSettings } from "../../../domains/userSettings/UserSettingsContext";
 import { useClearChatHistoryAction } from "../chatHistoryManipulators";
 import { ChatItem } from "./ChatItem";
 import { DiscreetButton } from "./DiscreetButton";
-import { createChatNote, Note } from "./Note";
 import { SelectFileCloseHandler, SelectFilePopup } from "./SelectFilePopup";
 
 export interface ChatHistoryBlockProps {}

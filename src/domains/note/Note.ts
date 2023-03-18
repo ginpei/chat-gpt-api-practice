@@ -1,7 +1,4 @@
-import {
-  ChatHistory,
-  createChatHistory,
-} from "../../../domains/chat/ChatHistory";
+import { ChatHistory, createChatHistory } from "../chat/ChatHistory";
 
 export interface NoteBase<Body, Type extends NoteType> {
   body: Body;
