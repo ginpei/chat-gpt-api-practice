@@ -6,24 +6,24 @@ import { useError } from "../../../domains/error/errorHooks";
 import { toError } from "../../../domains/error/errorManipulators";
 import { NiceText } from "../../../domains/input/NiceText";
 import { KeyAssign } from "../../../domains/key/KeyAssign";
+import { useOnKey } from "../../../domains/key/keyHooks";
 import { Container } from "../../../domains/layout/Container";
 import { VStack } from "../../../domains/layout/VStack";
-import { useChatGptApiContext } from "../../../domains/openai/chatGptApiContext";
 import { DragPositionHandler } from "../../../domains/resize/Dragger";
 import { VResizeBar } from "../../../domains/resize/VResizeBar";
 import { waitUntil } from "../../../domains/time/waitFunctions";
+import { useUserSettings } from "../../../domains/userSettings/UserSettingsContext";
 import {
   useSubmitChatMessage,
   useSubmitImageRequest,
 } from "../chatRequestManagers";
 import { SendOptionCloseHandler, SendOptionPopup } from "./SendOptionPopup";
-import { useOnKey } from "../../../domains/key/keyHooks";
 import { ToolsDialog } from "./ToolsDialog";
 
 export interface ChatControlBlockProps {}
 
 export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
-  const [apiContext] = useChatGptApiContext();
+  const [userSettings] = useUserSettings();
   const [history, setHistory] = useChatHistoryContext();
   const [sendError, setSendError] = useError();
   const [requestMessage, setRequestMessage] = useState(
@@ -31,7 +31,7 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
   );
   const [processingChat, setProcessingChat] = useState(false);
   const [toolsDialogOpen, setToolsDialogOpen] = useState(
-    apiContext.apiKey === ""
+    userSettings.apiKey === ""
   );
   const refText = useRef<HTMLTextAreaElement>(null);
   const refSendOptionButton = useRef<HTMLButtonElement>(null);
@@ -121,7 +121,7 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
       <Container>
         <VStack gap="gap-2">
           <VResizeBar onDone={onResizeBarDone} onMove={onResizeBarMove} />
-          {!apiContext.apiKey && <p className="text-red-700">Set API key</p>}
+          {!userSettings.apiKey && <p className="text-red-700">Set API key</p>}
           {sendError && <p className="text-red-700">{sendError.message}</p>}
           <form
             className="ChatForm flex flex-col gap-1"

@@ -6,18 +6,18 @@ import {
 import { saveHistoryLog } from "../../domains/chat/chatLogStore";
 import { buildChatMessage } from "../../domains/chat/ChatMessage";
 import { buildPromptText } from "../../domains/chat/chatMessageManipulators";
-import { useChatGptApiContext } from "../../domains/openai/chatGptApiContext";
 import {
   sendChatRequest,
   sendImageRequest,
 } from "../../domains/openai/chatRequestManipulators";
+import { useUserSettings } from "../../domains/userSettings/UserSettingsContext";
 
 /**
  * Be aware this also updates data contained in the context and the storage
  * besides sending the request, which means this is not "pure" functionality.
  */
 export function useSubmitChatMessage(): (messageBody: string) => Promise<void> {
-  const [apiContext] = useChatGptApiContext();
+  const [userSettings] = useUserSettings();
   const [history, setHistory] = useChatHistoryContext();
 
   return useCallback(
@@ -33,7 +33,7 @@ export function useSubmitChatMessage(): (messageBody: string) => Promise<void> {
       const prompt = buildPromptText(messageWithUserUpdate) + "\nAI:";
 
       const result = await sendChatRequest({
-        apiKey: apiContext.apiKey,
+        apiKey: userSettings.apiKey,
         prompt,
       });
 
@@ -55,14 +55,14 @@ export function useSubmitChatMessage(): (messageBody: string) => Promise<void> {
         return newHistory;
       });
     },
-    [apiContext.apiKey, history, setHistory]
+    [userSettings.apiKey, history, setHistory]
   );
 }
 
 export function useSubmitImageRequest(): (
   messageBody: string
 ) => Promise<void> {
-  const [apiContext] = useChatGptApiContext();
+  const [userSettings] = useUserSettings();
   const [history, setHistory] = useChatHistoryContext();
 
   return useCallback(
@@ -76,7 +76,7 @@ export function useSubmitImageRequest(): (
       setHistory({ ...history, messages: messageWithUserUpdate });
 
       const result = await sendImageRequest({
-        apiKey: apiContext.apiKey,
+        apiKey: userSettings.apiKey,
         prompt: messageBody,
       });
 
@@ -97,6 +97,6 @@ export function useSubmitImageRequest(): (
         return newHistory;
       });
     },
-    [apiContext.apiKey, history, setHistory]
+    [userSettings.apiKey, history, setHistory]
   );
 }

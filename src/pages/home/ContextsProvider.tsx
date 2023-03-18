@@ -4,10 +4,10 @@ import {
 } from "../../domains/chat/ChatHistoryContext";
 import { loadHistoryLog } from "../../domains/chat/chatLogStore";
 import {
-  ChatGptApiContextProvider,
-  useChatGptApiContextState,
-} from "../../domains/openai/chatGptApiContext";
-import { loadChatGptApiKeyKey } from "../../domains/openai/chatGptApiKeyStore";
+  UserSettingsProvider,
+  useUserSettingsState,
+} from "../../domains/userSettings/UserSettingsContext";
+import { loadUserSettings } from "../../domains/userSettings/userSettingsStore";
 
 export interface ContextsProviderProps {
   children: React.ReactNode;
@@ -16,16 +16,14 @@ export interface ContextsProviderProps {
 export function ContextsProvider({
   children,
 }: ContextsProviderProps): JSX.Element {
-  const chatGptApiContextState = useChatGptApiContextState({
-    apiKey: loadChatGptApiKeyKey(),
-  });
+  const userSettingsState = useUserSettingsState(loadUserSettings());
   const chatHistoryContextState = useChatHistoryContextState(loadHistoryLog());
 
   return (
-    <ChatGptApiContextProvider value={chatGptApiContextState}>
+    <UserSettingsProvider value={userSettingsState}>
       <ChatHistoryContextProvider value={chatHistoryContextState}>
         {children}
       </ChatHistoryContextProvider>
-    </ChatGptApiContextProvider>
+    </UserSettingsProvider>
   );
 }

@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { useChatHistoryContext } from "../../../domains/chat/ChatHistoryContext";
 import { KeyAssign } from "../../../domains/key/KeyAssign";
 import { Container } from "../../../domains/layout/Container";
+import { useUserSettings } from "../../../domains/userSettings/UserSettingsContext";
 import { useClearChatHistoryAction } from "../chatHistoryManipulators";
 import { ChatItem } from "./ChatItem";
 import { DiscreetButton } from "./DiscreetButton";
@@ -9,6 +10,7 @@ import { DiscreetButton } from "./DiscreetButton";
 export interface ChatHistoryBlockProps {}
 
 export function ChatHistoryBlock({}: ChatHistoryBlockProps): JSX.Element {
+  const [userSettings] = useUserSettings();
   const [history] = useChatHistoryContext();
   const clearHistoryClick = useClearChatHistoryAction();
   const refMessageList = useRef<HTMLDivElement>(null);
@@ -31,7 +33,11 @@ export function ChatHistoryBlock({}: ChatHistoryBlockProps): JSX.Element {
     <div className="ChatHistoryBlock flex-grow overflow-auto bg-stone-50">
       <div ref={refMessageList}>
         {history.messages.map((message) => (
-          <ChatItem key={message.id} message={message} />
+          <ChatItem
+            key={message.id}
+            message={message}
+            renderMarkdown={userSettings.renderMarkdown}
+          />
         ))}
       </div>
       <Container>

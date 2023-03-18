@@ -10,19 +10,22 @@ import {
 } from "../../../domains/dialog/NiceDialog";
 import { VStack } from "../../../domains/layout/VStack";
 import { NiceLink } from "../../../domains/link/NiceLink";
-import { useChatGptApiContext } from "../../../domains/openai/chatGptApiContext";
-import { saveChatGptApiKeyKey } from "../../../domains/openai/chatGptApiKeyStore";
+import {
+  UserSettingsValue,
+  useUserSettings,
+} from "../../../domains/userSettings/UserSettingsContext";
+import { saveUserSettings } from "../../../domains/userSettings/userSettingsStore";
 import { useClearChatHistoryAction } from "../chatHistoryManipulators";
 
 export interface ToolsDialogProps extends NiceDialogCoreProps {}
 
 export function ToolsDialog({ onClose, open }: ToolsDialogProps): JSX.Element {
-  const [apiContext, setApiContext] = useChatGptApiContext();
+  const [userSettings, setUserSettings] = useUserSettings();
   const [history] = useChatHistoryContext();
   const clearHistoryClick = useClearChatHistoryAction();
 
   const onUpdateClick: FormEventHandler = () => {
-    const newKey = window.prompt("API key", apiContext.apiKey);
+    const newKey = window.prompt("API key", userSettings.apiKey);
     if (newKey === null) {
       return;
     }
@@ -36,8 +39,13 @@ export function ToolsDialog({ onClose, open }: ToolsDialogProps): JSX.Element {
       }
     }
 
-    setApiContext((v) => ({ ...v, apiKey: newKey }));
-    saveChatGptApiKeyKey(newKey);
+    setUserSettings((v) => ({ ...v, apiKey: newKey }));
+    saveUserSettings({ ...userSettings, apiKey: newKey });
+  };
+
+  const updateUserSettings = (newSettings: Partial<UserSettingsValue>) => {
+    setUserSettings({ ...userSettings, ...newSettings });
+    saveUserSettings({ ...userSettings, ...newSettings });
   };
 
   return (
@@ -48,7 +56,7 @@ export function ToolsDialog({ onClose, open }: ToolsDialogProps): JSX.Element {
             <DialogGroupHeading>OpenAI API settings</DialogGroupHeading>
             <div className="flex justify-between items-center gap-4">
               API key:{" "}
-              {apiContext.apiKey ? (
+              {userSettings.apiKey ? (
                 "********"
               ) : (
                 <span className="italic text-red-500">not set</span>
@@ -57,7 +65,7 @@ export function ToolsDialog({ onClose, open }: ToolsDialogProps): JSX.Element {
                 ✏️
               </NiceButton>
             </div>
-            {!apiContext.apiKey && (
+            {!userSettings.apiKey && (
               <p className="text-red-500">Please set up an API key first:</p>
             )}
             <p>
@@ -67,6 +75,23 @@ export function ToolsDialog({ onClose, open }: ToolsDialogProps): JSX.Element {
               >
                 Manage your API keys 🚀
               </NiceLink>
+            </p>
+          </article>
+          <article>
+            <DialogGroupHeading>Rendering</DialogGroupHeading>
+            <p>
+              <label>
+                <input
+                  checked={userSettings.renderMarkdown}
+                  type="checkbox"
+                  onChange={() =>
+                    updateUserSettings({
+                      renderMarkdown: !userSettings.renderMarkdown,
+                    })
+                  }
+                />{" "}
+                Render markdown format
+              </label>
             </p>
           </article>
           <article>
