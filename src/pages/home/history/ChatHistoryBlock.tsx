@@ -1,12 +1,15 @@
-import { useEffect, useRef, useState } from "react";
-import { createChatHistory } from "../../../domains/chat/ChatHistory";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import { KeyAssign } from "../../../domains/key/KeyAssign";
 import { useOnKey } from "../../../domains/key/keyHooks";
 import { Container } from "../../../domains/layout/Container";
-import { createChatNote, Note } from "../../../domains/note/Note";
+import { Note } from "../../../domains/note/Note";
 import { useUserAssetsContext } from "../../../domains/userAssets/UserAssetsContext";
 import { useUserSettings } from "../../../domains/userSettings/UserSettingsContext";
 import { useClearChatHistoryAction } from "../chatHistoryManipulators";
+import {
+  ContinueChatMessage,
+  useSubmitChatMessage,
+} from "../chatRequestManagers";
 import { ChatItem } from "./ChatItem";
 import { DiscreetButton } from "./DiscreetButton";
 import { SelectFileCloseHandler, SelectFilePopup } from "./SelectFilePopup";
@@ -19,6 +22,9 @@ export function ChatHistoryBlock({}: ChatHistoryBlockProps): JSX.Element {
   const clearHistoryClick = useClearChatHistoryAction();
   const refMessageList = useRef<HTMLDivElement>(null);
   const [selectFileVisible, setSelectFileVisible] = useState(false);
+  const submitChatMessage = useSubmitChatMessage();
+  const [processingContinueChatMessage, setProcessingContinueChatMessage] =
+    useState(false);
 
   useOnKey("Ctrl+O", document.body, () => {
     setSelectFileVisible(true);
@@ -38,6 +44,15 @@ export function ChatHistoryBlock({}: ChatHistoryBlockProps): JSX.Element {
     elLastItem.scrollIntoView({ block: "nearest" });
   }, [userAssets.messages.length]);
 
+  const onContinueClick = async () => {
+    setProcessingContinueChatMessage(true);
+    try {
+      await submitChatMessage(ContinueChatMessage);
+    } finally {
+      setProcessingContinueChatMessage(false);
+    }
+  };
+
   const onFileSelect: SelectFileCloseHandler = (note: Note | undefined) => {
     if (note) {
       console.log("# note", note);
@@ -56,6 +71,14 @@ export function ChatHistoryBlock({}: ChatHistoryBlockProps): JSX.Element {
           />
         ))}
       </div>
+      {!userAssets.messages.at(-1)?.complete &&
+        !processingContinueChatMessage && (
+          <div className="grid">
+            <ContinueButton onClick={onContinueClick}>
+              Tap to get continued
+            </ContinueButton>
+          </div>
+        )}
       <Container>
         <div className="py-2 text-end text-sm text-gray-300">
           Chat token usage: {userAssets.completionTokenUsage}
@@ -86,5 +109,18 @@ export function ChatHistoryBlock({}: ChatHistoryBlockProps): JSX.Element {
         open={selectFileVisible}
       />
     </div>
+  );
+}
+function ContinueButton({
+  children,
+  onClick,
+}: {
+  children: ReactNode;
+  onClick: () => void;
+}): JSX.Element {
+  return (
+    <button className="p-4 bg-gray-200 active:bg-gray-300" onClick={onClick}>
+      {children}
+    </button>
   );
 }

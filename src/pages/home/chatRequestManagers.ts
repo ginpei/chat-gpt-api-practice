@@ -6,29 +6,28 @@ import {
   sendImageRequest,
 } from "../../domains/openai/chatRequestManipulators";
 import { UserAssets } from "../../domains/userAssets/UserAssets";
-import { useUserAssetsContext } from "../../domains/userAssets/UserAssetsContext";
+import {
+  UserAssetsContextValueSetter,
+  useUserAssetsContext,
+} from "../../domains/userAssets/UserAssetsContext";
 import { saveUserAssets } from "../../domains/userAssets/userAssetsStore";
 import { useUserSettings } from "../../domains/userSettings/UserSettingsContext";
+
+export const ContinueChatMessage = Symbol("continueChatMessage");
 
 /**
  * Be aware this also updates data contained in the context and the storage
  * besides sending the request, which means this is not "pure" functionality.
  */
-export function useSubmitChatMessage(): (messageBody: string) => Promise<void> {
+export function useSubmitChatMessage(): (
+  messageBody: string | typeof ContinueChatMessage
+) => Promise<void> {
   const [userSettings] = useUserSettings();
   const [userAssets, setUserAssets] = useUserAssetsContext();
 
   return useCallback(
     async (messageBody) => {
-      const userMessage = buildChatMessage({
-        body: messageBody,
-        name: "you",
-        type: "chat",
-      });
-      const messageWithUserUpdate = [...userAssets.messages, userMessage];
-      setUserAssets({ ...userAssets, messages: messageWithUserUpdate });
-
-      const prompt = buildPromptText(messageWithUserUpdate) + "\nAI:";
+      const prompt = getPrompt(messageBody, userAssets, setUserAssets);
 
       const result = await sendChatRequest({
         apiKey: userSettings.apiKey,
@@ -38,8 +37,10 @@ export function useSubmitChatMessage(): (messageBody: string) => Promise<void> {
       // TODO
       console.log("# result", result);
 
+      const choice = result.data.choices[0];
       const aiMessage = buildChatMessage({
-        body: result.data.choices[0].text?.trim() ?? "?",
+        body: choice.text?.trim() ?? "?",
+        complete: choice.finish_reason === "stop",
         name: "ai",
         type: "chat",
       });
@@ -57,6 +58,27 @@ export function useSubmitChatMessage(): (messageBody: string) => Promise<void> {
   );
 }
 
+function getPrompt(
+  messageBody: string | typeof ContinueChatMessage,
+  userAssets: UserAssets,
+  setUserAssets: UserAssetsContextValueSetter
+) {
+  if (messageBody === ContinueChatMessage) {
+    return buildPromptText(userAssets.messages);
+  }
+
+  const userMessage = buildChatMessage({
+    body: messageBody,
+    complete: true,
+    name: "you",
+    type: "chat",
+  });
+  const messageWithUserUpdate = [...userAssets.messages, userMessage];
+  setUserAssets({ ...userAssets, messages: messageWithUserUpdate });
+
+  return buildPromptText(messageWithUserUpdate) + "\nAI:";
+}
+
 export function useSubmitImageRequest(): (
   messageBody: string
 ) => Promise<void> {
@@ -67,6 +89,7 @@ export function useSubmitImageRequest(): (
     async (messageBody) => {
       const userMessage = buildChatMessage({
         body: messageBody,
+        complete: true,
         name: "you",
         type: "image",
       });
@@ -83,6 +106,7 @@ export function useSubmitImageRequest(): (
 
       const aiMessage = buildChatMessage({
         body: result.data.data[0].url ?? "",
+        complete: true,
         name: "ai",
         type: "image",
       });
