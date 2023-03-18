@@ -1,0 +1,33 @@
+import { ChatMessage } from "../../../domains/chat/ChatMessage";
+
+export interface NoteBase<Body, Type extends NoteType> {
+  body: Body;
+  id: string;
+  title: string;
+  type: Type;
+}
+
+export type Note = ChatNote | ImageNote;
+
+export type ChatNote = NoteBase<ChatMessage[], "chat">;
+
+export type ImageNote = NoteBase<[string, string], "image">;
+
+export type NoteType = "chat" | "image";
+
+function createNoteBase<Body, Type extends NoteType>(
+  init: Partial<NoteBase<Body, Type>>,
+  type: Type,
+  initialBody: Body
+): NoteBase<Body, Type> {
+  return {
+    body: init?.body ?? initialBody,
+    id: init?.id ?? "",
+    title: init?.title ?? "",
+    type,
+  };
+}
+
+export function createChatNote(init: Partial<ChatNote>): ChatNote {
+  return createNoteBase(init, "chat", []);
+}
