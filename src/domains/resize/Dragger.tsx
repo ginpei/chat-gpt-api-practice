@@ -84,7 +84,7 @@ export function Dragger({
 
   return (
     <div
-      className="Dragger text-center text-gray-400 cursor-ns-resize"
+      className="Dragger"
       onPointerCancel={onPointerCancel}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
