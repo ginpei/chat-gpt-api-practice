@@ -28,6 +28,6 @@ function createNoteBase<Body, Type extends NoteType>(
   };
 }
 
-export function createChatNote(init: Partial<ChatNote>): ChatNote {
+export function createChatNote(init: Partial<ChatNote> = {}): ChatNote {
   return createNoteBase(init, "chat", createChatHistory());
 }

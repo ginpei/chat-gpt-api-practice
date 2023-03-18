@@ -1,8 +1,10 @@
 import { FormEventHandler, useCallback, useRef, useState } from "react";
 import { NiceButton } from "../../../domains/button/NiceButton";
 import { PrimaryButton } from "../../../domains/button/PrimaryButton";
+import { buildChatMessage } from "../../../domains/chat/ChatMessage";
 import { useError } from "../../../domains/error/errorHooks";
 import { toError } from "../../../domains/error/errorManipulators";
+import { generateRandomId } from "../../../domains/id/id";
 import { NiceText } from "../../../domains/input/NiceText";
 import { KeyAssign } from "../../../domains/key/KeyAssign";
 import { useOnKey } from "../../../domains/key/keyHooks";
@@ -12,6 +14,8 @@ import { DragPositionHandler } from "../../../domains/resize/Dragger";
 import { VResizeBar } from "../../../domains/resize/VResizeBar";
 import { waitUntil } from "../../../domains/time/waitFunctions";
 import { useUserAssetsContext } from "../../../domains/userAssets/UserAssetsContext";
+import { useCurNote } from "../../../domains/userAssets/UserAssetsContextHooks";
+import { saveUserAssets } from "../../../domains/userAssets/userAssetsStore";
 import { useUserSettings } from "../../../domains/userSettings/UserSettingsContext";
 import {
   useSubmitChatMessage,
@@ -40,6 +44,7 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
   const [textBoxHeightTransitionPx, setTextBoxHeightTransitionPx] = useState(0);
   const submitChatMessage = useSubmitChatMessage();
   const submitImageRequest = useSubmitImageRequest();
+  const note = useCurNote();
 
   useOnKey("Ctrl+Shift+Enter", refText.current, () => {
     setSendOptionVisible(true);
@@ -72,9 +77,42 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
     [setSendError]
   );
 
-  const submitChatMessageForm = useSubmitForm(() =>
-    submitChatMessage(requestMessage)
-  );
+  const submitChatMessageForm = () => {
+    // TODO support others
+    if (note.type !== "chat") {
+      throw new Error(`WIP`);
+    }
+
+    requestMessage;
+    const userMessage = buildChatMessage({
+      body: requestMessage,
+      complete: true,
+      name: "you",
+      type: "chat",
+    });
+    note.body.messages.push(userMessage);
+
+    if (note.id === "") {
+      note.id = generateRandomId();
+      userAssets.notes.push(note);
+    } else {
+      const index = userAssets.notes.findIndex((v) => v.id === note.id);
+      if (index < 0) {
+        // this should not happen tho
+        userAssets.notes.push(note);
+      } else {
+        userAssets.notes[index] = { ...note };
+      }
+    }
+
+    const newAssets = { ...userAssets };
+    saveUserAssets(newAssets);
+    setUserAssets(newAssets);
+    setRequestMessage("");
+  };
+  // const submitChatMessageForm = useSubmitForm(() =>
+  //   submitChatMessage(requestMessage)
+  // );
 
   const submitImageRequestForm = useSubmitForm(() =>
     submitImageRequest(requestMessage)

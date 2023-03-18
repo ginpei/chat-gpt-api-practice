@@ -24,9 +24,7 @@ export function SelectFilePopup({
         <PopupMenuHeading>Open</PopupMenuHeading>
         <div className="max-h-[50vh] overflow-y-auto flex flex-col">
           {notes.map((note) => (
-            <PopupMenuItem key={note.id} onClick={() => onClose(note)}>
-              {note.title}
-            </PopupMenuItem>
+            <FileItem key={note.id} note={note} onClick={() => onClose(note)} />
           ))}
           {notes.length < 1 && <div>TODO no notes</div>}
         </div>
@@ -35,5 +33,26 @@ export function SelectFilePopup({
         </PopupMenuItem>
       </form>
     </PopupMenu>
+  );
+}
+
+function FileItem({
+  note,
+  onClick,
+}: {
+  note: Note;
+  onClick: () => void;
+}): JSX.Element {
+  // TODO
+  if (note.type !== "chat") {
+    throw new Error(`WIP`);
+  }
+
+  const title = note.title || note.body.messages[0]?.body || "(New note)";
+
+  return (
+    <PopupMenuItem key={note.id} onClick={onClick}>
+      {title}
+    </PopupMenuItem>
   );
 }

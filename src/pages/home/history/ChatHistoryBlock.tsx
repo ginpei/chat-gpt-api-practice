@@ -1,9 +1,11 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
+import { noop } from "../../../domains/function/noop";
 import { KeyAssign } from "../../../domains/key/KeyAssign";
 import { useOnKey } from "../../../domains/key/keyHooks";
 import { Container } from "../../../domains/layout/Container";
 import { Note } from "../../../domains/note/Note";
 import { useUserAssetsContext } from "../../../domains/userAssets/UserAssetsContext";
+import { useCurNote } from "../../../domains/userAssets/UserAssetsContextHooks";
 import { useUserSettings } from "../../../domains/userSettings/UserSettingsContext";
 import { useClearChatHistoryAction } from "../chatHistoryManipulators";
 import {
@@ -25,6 +27,7 @@ export function ChatHistoryBlock({}: ChatHistoryBlockProps): JSX.Element {
   const submitChatMessage = useSubmitChatMessage();
   const [processingContinueChatMessage, setProcessingContinueChatMessage] =
     useState(false);
+  const note = useCurNote();
 
   useOnKey("Ctrl+O", document.body, () => {
     setSelectFileVisible(true);
@@ -84,6 +87,19 @@ export function ChatHistoryBlock({}: ChatHistoryBlockProps): JSX.Element {
           Chat token usage: {userAssets.completionTokenUsage}
         </div>
       </Container>
+      <div>
+        <div>Cur note: {note.id}</div>
+        <div>
+          {note.type === "chat" &&
+            note.body.messages.map((message) => (
+              <ChatItem
+                key={message.id}
+                message={message}
+                renderMarkdown={userSettings.renderMarkdown}
+              />
+            ))}
+        </div>
+      </div>
       <div aria-hidden className="min-h-[5em]"></div>
       <Container>
         <div className="grid gap-4">
@@ -93,6 +109,13 @@ export function ChatHistoryBlock({}: ChatHistoryBlockProps): JSX.Element {
             type="button"
           >
             🗑️ Clear history... <KeyAssign>(Ctrl+L)</KeyAssign>
+          </DiscreetButton>
+          <DiscreetButton
+            disabled={userAssets.messages.length < 1}
+            onClick={noop}
+            type="button"
+          >
+            📚 New note... <KeyAssign>(Alt+N)</KeyAssign>
           </DiscreetButton>
           <DiscreetButton
             onClick={() => setSelectFileVisible(true)}
