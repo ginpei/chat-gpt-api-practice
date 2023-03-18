@@ -1,0 +1,23 @@
+.ginpei-NiceMarkdown * {
+  all: revert;
+}
+
+.ginpei-NiceMarkdown :first-child {
+  margin-top: 0;
+}
+
+.ginpei-NiceMarkdown :last-child {
+  margin-bottom: 0;
+}
+
+.ginpei-NiceMarkdown table {
+  border-collapse: collapse;
+}
+
+.ginpei-NiceMarkdown th {
+  background-color: #dee;
+}
+.ginpei-NiceMarkdown :where(th, td) {
+  border: thin solid #999;
+  padding: 0.2em 0.5em;
+}
