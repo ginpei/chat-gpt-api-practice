@@ -118,9 +118,9 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
 
   return (
     <div className="ChatControlBlock border-t pb-4 border-t-gray-200 bg-gray-100">
+      <VResizeBar onDone={onResizeBarDone} onMove={onResizeBarMove} />
       <Container>
         <VStack gap="gap-2">
-          <VResizeBar onDone={onResizeBarDone} onMove={onResizeBarMove} />
           {!userSettings.apiKey && <p className="text-red-700">Set API key</p>}
           {sendError && <p className="text-red-700">{sendError.message}</p>}
           <form
