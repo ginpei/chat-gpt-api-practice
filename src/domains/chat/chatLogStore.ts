@@ -1,22 +1,18 @@
-import {
-  UserAssetContextValue,
-  createUserAssetContextValue,
-} from "./UserAssetContext";
-import { ChatMessage } from "./ChatMessage";
+import { createUserAsset, UserAsset } from "./UserAsset";
 
 const storeKey = "chat-gpt-api-practice/chatHistory";
 
-export function loadHistoryLog(): UserAssetContextValue {
+export function loadHistoryLog(): UserAsset {
   // SSR
   if (typeof window === "undefined") {
-    return createUserAssetContextValue();
+    return createUserAsset();
   }
 
   const json = localStorage.getItem(storeKey);
   const raw = json ? JSON.parse(json) : {};
-  return createUserAssetContextValue(raw);
+  return createUserAsset(raw);
 }
 
-export function saveHistoryLog(value: UserAssetContextValue): void {
+export function saveHistoryLog(value: UserAsset): void {
   localStorage.setItem(storeKey, JSON.stringify(value));
 }

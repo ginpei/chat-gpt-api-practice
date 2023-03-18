@@ -1,8 +1,5 @@
 import { useCallback } from "react";
-import {
-  UserAssetContextValue,
-  useUserAssetContext,
-} from "../../domains/chat/UserAssetContext";
+import { useUserAssetContext } from "../../domains/chat/UserAssetContext";
 import { saveHistoryLog } from "../../domains/chat/chatLogStore";
 import { buildChatMessage } from "../../domains/chat/ChatMessage";
 import { buildPromptText } from "../../domains/chat/chatMessageManipulators";
@@ -11,6 +8,7 @@ import {
   sendImageRequest,
 } from "../../domains/openai/chatRequestManipulators";
 import { useUserSettings } from "../../domains/userSettings/UserSettingsContext";
+import { UserAsset } from "../../domains/chat/UserAsset";
 
 /**
  * Be aware this also updates data contained in the context and the storage
@@ -46,7 +44,7 @@ export function useSubmitChatMessage(): (messageBody: string) => Promise<void> {
         type: "chat",
       });
       setUserAsset((prevHistory) => {
-        const newHistory: UserAssetContextValue = {
+        const newHistory: UserAsset = {
           ...prevHistory,
           messages: [...prevHistory.messages, aiMessage],
           completionTokenUsage: result.data.usage?.total_tokens ?? NaN,
@@ -89,7 +87,7 @@ export function useSubmitImageRequest(): (
         type: "image",
       });
       setUserAsset((prevHistory) => {
-        const newHistory: UserAssetContextValue = {
+        const newHistory: UserAsset = {
           ...prevHistory,
           messages: [...prevHistory.messages, aiMessage],
         };
