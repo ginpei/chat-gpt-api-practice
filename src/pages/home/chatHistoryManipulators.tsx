@@ -1,12 +1,12 @@
 import { useCallback } from "react";
 import {
-  createChatHistoryContextValue,
-  useChatHistoryContext,
-} from "../../domains/chat/ChatHistoryContext";
+  createUserAssetContextValue,
+  useUserAssetContext,
+} from "../../domains/chat/UserAssetContext";
 import { saveHistoryLog } from "../../domains/chat/chatLogStore";
 
 export function useClearChatHistoryAction(): () => void {
-  const [, setHistory] = useChatHistoryContext();
+  const [, setUserAsset] = useUserAssetContext();
 
   const action = useCallback(() => {
     const ok = window.confirm("Are you sure you want to remove all chat log?");
@@ -14,9 +14,9 @@ export function useClearChatHistoryAction(): () => void {
       return;
     }
 
-    saveHistoryLog(createChatHistoryContextValue());
-    setHistory(createChatHistoryContextValue());
-  }, [setHistory]);
+    saveHistoryLog(createUserAssetContextValue());
+    setUserAsset(createUserAssetContextValue());
+  }, [setUserAsset]);
 
   return action;
 }

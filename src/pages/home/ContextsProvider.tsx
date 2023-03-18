@@ -1,7 +1,7 @@
 import {
-  ChatHistoryContextProvider,
-  useChatHistoryContextState,
-} from "../../domains/chat/ChatHistoryContext";
+  UserAssetContextProvider,
+  useUserAssetContextState,
+} from "../../domains/chat/UserAssetContext";
 import { loadHistoryLog } from "../../domains/chat/chatLogStore";
 import {
   UserSettingsProvider,
@@ -17,13 +17,13 @@ export function ContextsProvider({
   children,
 }: ContextsProviderProps): JSX.Element {
   const userSettingsState = useUserSettingsState(loadUserSettings());
-  const chatHistoryContextState = useChatHistoryContextState(loadHistoryLog());
+  const userAssetContextState = useUserAssetContextState(loadHistoryLog());
 
   return (
     <UserSettingsProvider value={userSettingsState}>
-      <ChatHistoryContextProvider value={chatHistoryContextState}>
+      <UserAssetContextProvider value={userAssetContextState}>
         {children}
-      </ChatHistoryContextProvider>
+      </UserAssetContextProvider>
     </UserSettingsProvider>
   );
 }

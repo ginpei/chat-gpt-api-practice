@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { createChatHistory } from "../../../domains/chat/ChatHistory";
-import { useChatHistoryContext } from "../../../domains/chat/ChatHistoryContext";
+import { useUserAssetContext } from "../../../domains/chat/UserAssetContext";
 import { KeyAssign } from "../../../domains/key/KeyAssign";
 import { useOnKey } from "../../../domains/key/keyHooks";
 import { Container } from "../../../domains/layout/Container";
@@ -41,7 +41,7 @@ const notes: Note[] = Array.from({ length: 22 }).map((v, i) =>
 
 export function ChatHistoryBlock({}: ChatHistoryBlockProps): JSX.Element {
   const [userSettings] = useUserSettings();
-  const [history, setHistory] = useChatHistoryContext();
+  const [userAsset, setUserAsset] = useUserAssetContext();
   const clearHistoryClick = useClearChatHistoryAction();
   const refMessageList = useRef<HTMLDivElement>(null);
   const [selectFileVisible, setSelectFileVisible] = useState(false);
@@ -52,7 +52,7 @@ export function ChatHistoryBlock({}: ChatHistoryBlockProps): JSX.Element {
 
   useEffect(() => {
     const children = refMessageList.current?.children;
-    if (!children || history.messages.length < 1) {
+    if (!children || userAsset.messages.length < 1) {
       return;
     }
 
@@ -62,13 +62,13 @@ export function ChatHistoryBlock({}: ChatHistoryBlockProps): JSX.Element {
     }
 
     elLastItem.scrollIntoView({ block: "nearest" });
-  }, [history.messages.length]);
+  }, [userAsset.messages.length]);
 
   const onFileSelect: SelectFileCloseHandler = (note: Note | undefined) => {
     if (note) {
       if (note.type === "chat") {
         // TODO
-        setHistory({ ...note.body });
+        setUserAsset({ ...note.body });
       }
     }
     setSelectFileVisible(false);
@@ -77,7 +77,7 @@ export function ChatHistoryBlock({}: ChatHistoryBlockProps): JSX.Element {
   return (
     <div className="ChatHistoryBlock flex-grow overflow-auto bg-stone-50">
       <div ref={refMessageList}>
-        {history.messages.map((message) => (
+        {userAsset.messages.map((message) => (
           <ChatItem
             key={message.id}
             message={message}
@@ -87,14 +87,14 @@ export function ChatHistoryBlock({}: ChatHistoryBlockProps): JSX.Element {
       </div>
       <Container>
         <div className="py-2 text-end text-sm text-gray-300">
-          Chat token usage: {history.completionTokenUsage}
+          Chat token usage: {userAsset.completionTokenUsage}
         </div>
       </Container>
       <div aria-hidden className="min-h-[5em]"></div>
       <Container>
         <div className="grid gap-4">
           <DiscreetButton
-            disabled={history.messages.length < 1}
+            disabled={userAsset.messages.length < 1}
             onClick={clearHistoryClick}
             type="button"
           >

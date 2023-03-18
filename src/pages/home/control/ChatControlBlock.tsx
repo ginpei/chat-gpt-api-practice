@@ -1,7 +1,7 @@
 import { FormEventHandler, useCallback, useRef, useState } from "react";
 import { NiceButton } from "../../../domains/button/NiceButton";
 import { PrimaryButton } from "../../../domains/button/PrimaryButton";
-import { useChatHistoryContext } from "../../../domains/chat/ChatHistoryContext";
+import { useUserAssetContext } from "../../../domains/chat/UserAssetContext";
 import { useError } from "../../../domains/error/errorHooks";
 import { toError } from "../../../domains/error/errorManipulators";
 import { NiceText } from "../../../domains/input/NiceText";
@@ -24,10 +24,10 @@ export interface ChatControlBlockProps {}
 
 export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
   const [userSettings] = useUserSettings();
-  const [history, setHistory] = useChatHistoryContext();
+  const [userAsset, setUserAsset] = useUserAssetContext();
   const [sendError, setSendError] = useError();
   const [requestMessage, setRequestMessage] = useState(
-    history.messages.length > 0 ? "" : "Say something funny"
+    userAsset.messages.length > 0 ? "" : "Say something funny"
   );
   const [processingChat, setProcessingChat] = useState(false);
   const [toolsDialogOpen, setToolsDialogOpen] = useState(
