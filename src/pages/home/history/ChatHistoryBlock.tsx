@@ -82,10 +82,22 @@ export function ChatHistoryBlock({}: ChatHistoryBlockProps): JSX.Element {
   };
 
   const onFileSelect: SelectFileCloseHandler = (note: Note | undefined) => {
-    if (note) {
-      console.log("# note", note);
-    }
     setSelectFileVisible(false);
+    if (note === undefined) {
+      return;
+    }
+
+    // TODO
+    if (note.type !== "chat") {
+      throw new Error(`WIP`);
+    }
+
+    const newAssets: UserAssets = {
+      ...userAssets,
+      curNoteId: note.id,
+    };
+    saveUserAssets(newAssets);
+    setUserAssets(newAssets);
   };
 
   const onNoteRemove = (note: Note) => {
