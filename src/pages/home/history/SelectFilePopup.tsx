@@ -6,6 +6,7 @@ import {
 } from "../../../domains/popupMenu/PopupMenu";
 import { PopupMenuHeading } from "../../../domains/popupMenu/PopupMenuHeading";
 import { PopupMenuItem } from "../../../domains/popupMenu/PopupMenuItem";
+import { FileItem } from "./FileItem";
 
 export interface SelectFilePopupProps extends PopupMenuCoreProps<Note> {
   notes: Note[];
@@ -33,26 +34,5 @@ export function SelectFilePopup({
         </PopupMenuItem>
       </form>
     </PopupMenu>
-  );
-}
-
-function FileItem({
-  note,
-  onClick,
-}: {
-  note: Note;
-  onClick: () => void;
-}): JSX.Element {
-  // TODO
-  if (note.type !== "chat") {
-    throw new Error(`WIP`);
-  }
-
-  const title = note.title || note.body.messages[0]?.body || "(New note)";
-
-  return (
-    <PopupMenuItem key={note.id} onClick={onClick}>
-      {title}
-    </PopupMenuItem>
   );
 }
