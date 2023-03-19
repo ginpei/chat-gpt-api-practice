@@ -88,6 +88,20 @@ export function ChatHistoryBlock({}: ChatHistoryBlockProps): JSX.Element {
     setSelectFileVisible(false);
   };
 
+  const onNoteRemove = (note: Note) => {
+    const ok = window.confirm("Are you sure you want to remove that note?");
+    if (!ok) {
+      return;
+    }
+
+    const newAssets: UserAssets = {
+      ...userAssets,
+      notes: userAssets.notes.filter((v) => v.id !== note.id),
+    };
+    saveUserAssets(newAssets);
+    setUserAssets(newAssets);
+  };
+
   return (
     <div className="ChatHistoryBlock flex-grow overflow-auto bg-stone-50">
       <div ref={refMessageList}>
@@ -155,6 +169,7 @@ export function ChatHistoryBlock({}: ChatHistoryBlockProps): JSX.Element {
       <SelectFilePopup
         notes={userAssets.notes}
         onClose={onFileSelect}
+        onNoteRemove={onNoteRemove}
         open={selectFileVisible}
       />
     </div>

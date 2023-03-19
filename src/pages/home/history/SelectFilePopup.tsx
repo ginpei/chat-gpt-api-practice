@@ -10,14 +10,16 @@ import { FileItem } from "./FileItem";
 
 export interface SelectFilePopupProps extends PopupMenuCoreProps<Note> {
   notes: Note[];
+  onNoteRemove: (note: Note) => void;
 }
 
 export type SelectFileCloseHandler = PopupMenuCloseHandler<Note>;
 
 export function SelectFilePopup({
-  onClose,
-  open,
   notes,
+  onClose,
+  onNoteRemove,
+  open,
 }: SelectFilePopupProps): JSX.Element {
   return (
     <PopupMenu onClose={onClose} open={open}>
@@ -25,7 +27,12 @@ export function SelectFilePopup({
         <PopupMenuHeading>Open</PopupMenuHeading>
         <div className="max-h-[50vh] overflow-y-auto flex flex-col">
           {notes.map((note) => (
-            <FileItem key={note.id} note={note} onClick={() => onClose(note)} />
+            <FileItem
+              key={note.id}
+              note={note}
+              onClick={() => onClose(note)}
+              onRemove={onNoteRemove}
+            />
           ))}
           {notes.length < 1 && <div>TODO no notes</div>}
         </div>
