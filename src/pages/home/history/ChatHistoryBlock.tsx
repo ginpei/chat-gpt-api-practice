@@ -1,11 +1,13 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
-import { noop } from "../../../domains/function/noop";
+import { generateRandomId } from "../../../domains/id/id";
 import { KeyAssign } from "../../../domains/key/KeyAssign";
 import { useOnKey } from "../../../domains/key/keyHooks";
 import { Container } from "../../../domains/layout/Container";
-import { Note } from "../../../domains/note/Note";
+import { createChatNote, Note } from "../../../domains/note/Note";
+import { UserAssets } from "../../../domains/userAssets/UserAssets";
 import { useUserAssetsContext } from "../../../domains/userAssets/UserAssetsContext";
 import { useCurNote } from "../../../domains/userAssets/UserAssetsContextHooks";
+import { saveUserAssets } from "../../../domains/userAssets/userAssetsStore";
 import { useUserSettings } from "../../../domains/userSettings/UserSettingsContext";
 import { useClearChatHistoryAction } from "../chatHistoryManipulators";
 import {
@@ -14,6 +16,7 @@ import {
 } from "../chatRequestManagers";
 import { ChatItem } from "./ChatItem";
 import { DiscreetButton } from "./DiscreetButton";
+import { NewFilePopup, NewFilePopupCloseHandler } from "./NewFilePopup";
 import { SelectFileCloseHandler, SelectFilePopup } from "./SelectFilePopup";
 
 export interface ChatHistoryBlockProps {}
@@ -28,9 +31,14 @@ export function ChatHistoryBlock({}: ChatHistoryBlockProps): JSX.Element {
   const [processingContinueChatMessage, setProcessingContinueChatMessage] =
     useState(false);
   const note = useCurNote();
+  const [newFilePopupVisible, setNewFilePopupVisible] = useState(false);
 
   useOnKey("Ctrl+O", document.body, () => {
     setSelectFileVisible(true);
+  });
+
+  useOnKey("Alt+N", document.body, () => {
+    setNewFilePopupVisible(true);
   });
 
   useEffect(() => {
@@ -54,6 +62,23 @@ export function ChatHistoryBlock({}: ChatHistoryBlockProps): JSX.Element {
     } finally {
       setProcessingContinueChatMessage(false);
     }
+  };
+
+  const onNewFileSelect: NewFilePopupCloseHandler = (type) => {
+    setNewFilePopupVisible(false);
+
+    if (type === undefined) {
+      return;
+    }
+
+    const newNote = createChatNote({ id: generateRandomId() });
+    const newAssets: UserAssets = {
+      ...userAssets,
+      curNoteId: newNote.id,
+      notes: userAssets.notes.concat(newNote),
+    };
+    saveUserAssets(newAssets);
+    setUserAssets(newAssets);
   };
 
   const onFileSelect: SelectFileCloseHandler = (note: Note | undefined) => {
@@ -112,7 +137,7 @@ export function ChatHistoryBlock({}: ChatHistoryBlockProps): JSX.Element {
           </DiscreetButton>
           <DiscreetButton
             disabled={userAssets.messages.length < 1}
-            onClick={noop}
+            onClick={() => setNewFilePopupVisible(true)}
             type="button"
           >
             📚 New note... <KeyAssign>(Alt+N)</KeyAssign>
@@ -126,6 +151,7 @@ export function ChatHistoryBlock({}: ChatHistoryBlockProps): JSX.Element {
         </div>
       </Container>
       <div aria-hidden className="min-h-[5em]"></div>
+      <NewFilePopup onClose={onNewFileSelect} open={newFilePopupVisible} />
       <SelectFilePopup
         notes={userAssets.notes}
         onClose={onFileSelect}
