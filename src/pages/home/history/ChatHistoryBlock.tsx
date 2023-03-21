@@ -14,6 +14,7 @@ import {
   ContinueChatMessage,
   useSubmitChatMessage,
 } from "../chatRequestManagers";
+import { useSetCurNoteId, useStartNewNote } from "../notes/noteHooks";
 import { ChatItem } from "./ChatItem";
 import { DiscreetButton } from "./DiscreetButton";
 import { NewFilePopup, NewFilePopupCloseHandler } from "./NewFilePopup";
@@ -32,6 +33,8 @@ export function ChatHistoryBlock({}: ChatHistoryBlockProps): JSX.Element {
     useState(false);
   const note = useCurNote();
   const [newFilePopupVisible, setNewFilePopupVisible] = useState(false);
+  const setCurNoteId = useSetCurNoteId();
+  const startNewNote = useStartNewNote();
 
   useOnKey("Ctrl+O", document.body, () => {
     setSelectFileVisible(true);
@@ -71,14 +74,7 @@ export function ChatHistoryBlock({}: ChatHistoryBlockProps): JSX.Element {
       return;
     }
 
-    const newNote = createChatNote({ id: generateRandomId() });
-    const newAssets: UserAssets = {
-      ...userAssets,
-      curNoteId: newNote.id,
-      notes: userAssets.notes.concat(newNote),
-    };
-    saveUserAssets(newAssets);
-    setUserAssets(newAssets);
+    startNewNote();
   };
 
   const onFileSelect: SelectFileCloseHandler = (note: Note | undefined) => {
@@ -92,12 +88,7 @@ export function ChatHistoryBlock({}: ChatHistoryBlockProps): JSX.Element {
       throw new Error(`WIP`);
     }
 
-    const newAssets: UserAssets = {
-      ...userAssets,
-      curNoteId: note.id,
-    };
-    saveUserAssets(newAssets);
-    setUserAssets(newAssets);
+    setCurNoteId(note.id);
   };
 
   const onNoteRemove = (note: Note) => {
