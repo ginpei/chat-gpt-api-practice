@@ -1,7 +1,14 @@
-import { FormEventHandler, useCallback, useRef, useState } from "react";
+import {
+  FormEventHandler,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { NiceButton } from "../../../domains/button/NiceButton";
 import { PrimaryButton } from "../../../domains/button/PrimaryButton";
 import { buildChatMessage } from "../../../domains/chat/ChatMessage";
+import { buildPromptText } from "../../../domains/chat/chatMessageManipulators";
 import { useError } from "../../../domains/error/errorHooks";
 import { toError } from "../../../domains/error/errorManipulators";
 import { generateRandomId } from "../../../domains/id/id";
@@ -10,9 +17,14 @@ import { KeyAssign } from "../../../domains/key/KeyAssign";
 import { useOnKey } from "../../../domains/key/keyHooks";
 import { Container } from "../../../domains/layout/Container";
 import { VStack } from "../../../domains/layout/VStack";
+import {
+  ChatRequestResponse,
+  sendChatRequest,
+} from "../../../domains/openai/chatRequestManipulators";
 import { DragPositionHandler } from "../../../domains/resize/Dragger";
 import { VResizeBar } from "../../../domains/resize/VResizeBar";
 import { waitUntil } from "../../../domains/time/waitFunctions";
+import { UserAssets } from "../../../domains/userAssets/UserAssets";
 import { useUserAssetsContext } from "../../../domains/userAssets/UserAssetsContext";
 import { useCurNote } from "../../../domains/userAssets/UserAssetsContextHooks";
 import { saveUserAssets } from "../../../domains/userAssets/userAssetsStore";
@@ -77,13 +89,16 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
     [setSendError]
   );
 
-  const submitChatMessageForm = () => {
+  const [chatResponse, setChatResponse] = useState<ChatRequestResponse | null>(
+    null
+  );
+  const submitChatMessageForm = async () => {
     // TODO support others
     if (note.type !== "chat") {
       throw new Error(`WIP`);
     }
 
-    requestMessage;
+    // create a history record by user
     const userMessage = buildChatMessage({
       body: requestMessage,
       complete: true,
@@ -92,6 +107,7 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
     });
     note.body.messages.push(userMessage);
 
+    // update user assets with the new record
     if (note.id === "") {
       note.id = generateRandomId();
       userAssets.notes.push(note);
@@ -108,8 +124,54 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
     const newAssets = { ...userAssets };
     saveUserAssets(newAssets);
     setUserAssets(newAssets);
+
+    // send request
+    const prompt = buildPromptText(note.body.messages) + "\n\nAI:";
+    const result = await sendChatRequest({
+      apiKey: userSettings.apiKey,
+      prompt,
+    });
+
+    setChatResponse(result);
     setRequestMessage("");
   };
+
+  useEffect(() => {
+    if (!chatResponse) {
+      return;
+    }
+
+    // TODO support others
+    if (note.type !== "chat") {
+      throw new Error(`WIP`);
+    }
+
+    // create the AI answer
+    const choice = chatResponse.data.choices[0];
+    const aiMessage = buildChatMessage({
+      body: choice.text?.trim() ?? "?",
+      complete: choice.finish_reason === "stop",
+      name: "ai",
+      type: "chat",
+    });
+
+    note.body.completionTokenUsage =
+      chatResponse.data.usage?.total_tokens ?? NaN;
+    note.body.messages = [...note.body.messages, aiMessage];
+
+    const index = userAssets.notes.findIndex((v) => v.id === note.id);
+    if (index < 0) {
+      throw new Error(`Something went wrong`);
+    }
+    userAssets.notes[index] = { ...note };
+    const newerAssets: UserAssets = { ...userAssets };
+
+    saveUserAssets(newerAssets);
+    setUserAssets(newerAssets);
+
+    setChatResponse(null);
+  }, [chatResponse, note, setUserAssets, userAssets]);
+
   // const submitChatMessageForm = useSubmitForm(() =>
   //   submitChatMessage(requestMessage)
   // );
