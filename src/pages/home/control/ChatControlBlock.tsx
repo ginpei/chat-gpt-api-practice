@@ -93,47 +93,57 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
     null
   );
   const submitChatMessageForm = async () => {
-    // TODO support others
-    if (note.type !== "chat") {
-      throw new Error(`WIP`);
-    }
+    setProcessingChat(true);
+    setSendError(null);
 
-    // create a history record by user
-    const userMessage = buildChatMessage({
-      body: requestMessage,
-      complete: true,
-      name: "you",
-      type: "chat",
-    });
-    note.body.messages.push(userMessage);
+    try {
+      // TODO support others
+      if (note.type !== "chat") {
+        throw new Error(`WIP`);
+      }
 
-    // update user assets with the new record
-    if (note.id === "") {
-      note.id = generateRandomId();
-      userAssets.notes.push(note);
-    } else {
-      const index = userAssets.notes.findIndex((v) => v.id === note.id);
-      if (index < 0) {
-        // this should not happen tho
+      // create a history record by user
+      const userMessage = buildChatMessage({
+        body: requestMessage,
+        complete: true,
+        name: "you",
+        type: "chat",
+      });
+      note.body.messages.push(userMessage);
+
+      // update user assets with the new record
+      if (note.id === "") {
+        note.id = generateRandomId();
         userAssets.notes.push(note);
       } else {
-        userAssets.notes[index] = { ...note };
+        const index = userAssets.notes.findIndex((v) => v.id === note.id);
+        if (index < 0) {
+          // this should not happen tho
+          userAssets.notes.push(note);
+        } else {
+          userAssets.notes[index] = { ...note };
+        }
       }
+
+      const newAssets = { ...userAssets };
+      saveUserAssets(newAssets);
+      setUserAssets(newAssets);
+
+      // send request
+      const prompt = buildPromptText(note.body.messages) + "\n\nAI:";
+      const result = await sendChatRequest({
+        apiKey: userSettings.apiKey,
+        prompt,
+      });
+
+      setChatResponse(result);
+      setRequestMessage("");
+    } catch (error) {
+      console.error(error);
+      setSendError(toError(error));
+    } finally {
+      setProcessingChat(false);
     }
-
-    const newAssets = { ...userAssets };
-    saveUserAssets(newAssets);
-    setUserAssets(newAssets);
-
-    // send request
-    const prompt = buildPromptText(note.body.messages) + "\n\nAI:";
-    const result = await sendChatRequest({
-      apiKey: userSettings.apiKey,
-      prompt,
-    });
-
-    setChatResponse(result);
-    setRequestMessage("");
   };
 
   useEffect(() => {
@@ -141,35 +151,45 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
       return;
     }
 
-    // TODO support others
-    if (note.type !== "chat") {
-      throw new Error(`WIP`);
+    setSendError(null);
+    setProcessingChat(true);
+
+    try {
+      // TODO support others
+      if (note.type !== "chat") {
+        throw new Error(`WIP`);
+      }
+
+      // create the AI answer
+      const choice = chatResponse.data.choices[0];
+      const aiMessage = buildChatMessage({
+        body: choice.text?.trim() ?? "?",
+        complete: choice.finish_reason === "stop",
+        name: "ai",
+        type: "chat",
+      });
+
+      note.body.completionTokenUsage =
+        chatResponse.data.usage?.total_tokens ?? NaN;
+      note.body.messages = [...note.body.messages, aiMessage];
+
+      const index = userAssets.notes.findIndex((v) => v.id === note.id);
+      if (index < 0) {
+        throw new Error(`Something went wrong`);
+      }
+      userAssets.notes[index] = { ...note };
+      const newerAssets: UserAssets = { ...userAssets };
+
+      saveUserAssets(newerAssets);
+      setUserAssets(newerAssets);
+
+      setChatResponse(null);
+    } catch (error) {
+      console.error(error);
+      setSendError(toError(error));
+    } finally {
+      setProcessingChat(false);
     }
-
-    // create the AI answer
-    const choice = chatResponse.data.choices[0];
-    const aiMessage = buildChatMessage({
-      body: choice.text?.trim() ?? "?",
-      complete: choice.finish_reason === "stop",
-      name: "ai",
-      type: "chat",
-    });
-
-    note.body.completionTokenUsage =
-      chatResponse.data.usage?.total_tokens ?? NaN;
-    note.body.messages = [...note.body.messages, aiMessage];
-
-    const index = userAssets.notes.findIndex((v) => v.id === note.id);
-    if (index < 0) {
-      throw new Error(`Something went wrong`);
-    }
-    userAssets.notes[index] = { ...note };
-    const newerAssets: UserAssets = { ...userAssets };
-
-    saveUserAssets(newerAssets);
-    setUserAssets(newerAssets);
-
-    setChatResponse(null);
   }, [chatResponse, note, setUserAssets, userAssets]);
 
   // const submitChatMessageForm = useSubmitForm(() =>
