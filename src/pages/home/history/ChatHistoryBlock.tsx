@@ -71,7 +71,8 @@ export function ChatHistoryBlock({}: ChatHistoryBlockProps): JSX.Element {
           />
         ))}
       </div>
-      {!userAssets.messages.at(-1)?.complete &&
+      {userAssets.messages.length > 0 &&
+        !userAssets.messages.at(-1)?.complete &&
         !processingContinueChatMessage && (
           <div className="grid">
             <ContinueButton onClick={onContinueClick}>
