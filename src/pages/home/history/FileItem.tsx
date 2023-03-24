@@ -1,50 +1,16 @@
-import { MouseEventHandler } from "react";
-import { NiceButton } from "../../../domains/button/NiceButton";
 import { Note } from "../../../domains/note/Note";
-import { PopupMenuItem } from "../../../domains/popupMenu/PopupMenuItem";
+import { ChatNoteFileItem } from "./ChatNoteFileItem";
 
-export interface FileItemProps {
-  note: Note;
+export interface FileItemProps<T extends Note = Note> {
+  note: T;
   onClick: () => void;
   onRemove: (note: Note) => void;
 }
 
-export function FileItem({
-  note,
-  onClick,
-  onRemove,
-}: FileItemProps): JSX.Element {
-  // TODO
-  if (note.type !== "chat") {
-    throw new Error(`WIP`);
+export function FileItem({ note, ...props }: FileItemProps): JSX.Element {
+  if (note.type === "chat") {
+    return <ChatNoteFileItem note={note} {...props} />;
   }
 
-  const title = note.title || note.body.messages[0]?.body || "(New note)";
-
-  return (
-    <div className="flex">
-      <span className="grid flex-grow">
-        <PopupMenuItem key={note.id} onClick={onClick}>
-          {title}
-        </PopupMenuItem>
-      </span>
-      <RemoveButton onClick={() => onRemove(note)} />
-    </div>
-  );
-}
-
-function RemoveButton(props: { onClick: MouseEventHandler }): JSX.Element {
-  return (
-    <button
-      className="
-      border border-transparent p-4
-      hover:border-gray-200
-      active:border-gray-200
-      "
-      onClick={props.onClick}
-      type="button"
-    >
-      🗑️
-    </button>
-  );
+  throw new Error(`Unknown note type "${note.type}"`);
 }
