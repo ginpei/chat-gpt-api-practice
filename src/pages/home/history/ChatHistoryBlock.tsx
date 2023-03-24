@@ -3,7 +3,7 @@ import { generateRandomId } from "../../../domains/id/id";
 import { KeyAssign } from "../../../domains/key/KeyAssign";
 import { useOnKey } from "../../../domains/key/keyHooks";
 import { Container } from "../../../domains/layout/Container";
-import { createChatNote, Note } from "../../../domains/note/Note";
+import { ChatNote, createChatNote, Note } from "../../../domains/note/Note";
 import { UserAssets } from "../../../domains/userAssets/UserAssets";
 import { useUserAssetsContext } from "../../../domains/userAssets/UserAssetsContext";
 import { useCurNote } from "../../../domains/userAssets/UserAssetsContextHooks";
@@ -20,9 +20,11 @@ import { DiscreetButton } from "./DiscreetButton";
 import { NewFilePopup, NewFilePopupCloseHandler } from "./NewFilePopup";
 import { SelectFileCloseHandler, SelectFilePopup } from "./SelectFilePopup";
 
-export interface ChatHistoryBlockProps {}
+export interface ChatHistoryBlockProps {
+  note: ChatNote;
+}
 
-export function ChatHistoryBlock({}: ChatHistoryBlockProps): JSX.Element {
+export function ChatHistoryBlock({ note }: ChatHistoryBlockProps): JSX.Element {
   const [userSettings] = useUserSettings();
   const [userAssets, setUserAssets] = useUserAssetsContext();
   const clearHistoryClick = useClearChatHistoryAction();
@@ -31,7 +33,6 @@ export function ChatHistoryBlock({}: ChatHistoryBlockProps): JSX.Element {
   const submitChatMessage = useSubmitChatMessage();
   const [processingContinueChatMessage, setProcessingContinueChatMessage] =
     useState(false);
-  const note = useCurNote();
   const [newFilePopupVisible, setNewFilePopupVisible] = useState(false);
   const setCurNoteId = useSetCurNoteId();
   const startNewNote = useStartNewNote();
@@ -83,11 +84,6 @@ export function ChatHistoryBlock({}: ChatHistoryBlockProps): JSX.Element {
       return;
     }
 
-    // TODO
-    if (note.type !== "chat") {
-      throw new Error(`WIP`);
-    }
-
     setCurNoteId(note.id);
   };
 
@@ -132,14 +128,13 @@ export function ChatHistoryBlock({}: ChatHistoryBlockProps): JSX.Element {
       <div>
         <div>Cur note: {note.id}</div>
         <div>
-          {note.type === "chat" &&
-            note.body.messages.map((message) => (
-              <ChatItem
-                key={message.id}
-                message={message}
-                renderMarkdown={userSettings.renderMarkdown}
-              />
-            ))}
+          {note.body.messages.map((message) => (
+            <ChatItem
+              key={message.id}
+              message={message}
+              renderMarkdown={userSettings.renderMarkdown}
+            />
+          ))}
         </div>
       </div>
       <div aria-hidden className="min-h-[5em]"></div>

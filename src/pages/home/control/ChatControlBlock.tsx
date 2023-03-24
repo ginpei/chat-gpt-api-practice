@@ -17,6 +17,7 @@ import { KeyAssign } from "../../../domains/key/KeyAssign";
 import { useOnKey } from "../../../domains/key/keyHooks";
 import { Container } from "../../../domains/layout/Container";
 import { VStack } from "../../../domains/layout/VStack";
+import { ChatNote } from "../../../domains/note/Note";
 import {
   ChatRequestResponse,
   sendChatRequest,
@@ -36,9 +37,11 @@ import {
 import { SendOptionCloseHandler, SendOptionPopup } from "./SendOptionPopup";
 import { ToolsDialog } from "./ToolsDialog";
 
-export interface ChatControlBlockProps {}
+export interface ChatControlBlockProps {
+  note: ChatNote;
+}
 
-export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
+export function ChatControlBlock({ note }: ChatControlBlockProps): JSX.Element {
   const [userSettings] = useUserSettings();
   const [userAssets, setUserAssets] = useUserAssetsContext();
   const [sendError, setSendError] = useError();
@@ -56,7 +59,6 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
   const [textBoxHeightTransitionPx, setTextBoxHeightTransitionPx] = useState(0);
   const submitChatMessage = useSubmitChatMessage();
   const submitImageRequest = useSubmitImageRequest();
-  const note = useCurNote();
 
   useOnKey("Ctrl+Shift+Enter", refText.current, () => {
     setSendOptionVisible(true);
@@ -97,11 +99,6 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
     setSendError(null);
 
     try {
-      // TODO support others
-      if (note.type !== "chat") {
-        throw new Error(`WIP`);
-      }
-
       // create a history record by user
       const userMessage = buildChatMessage({
         body: requestMessage,
@@ -155,11 +152,6 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
     setProcessingChat(true);
 
     try {
-      // TODO support others
-      if (note.type !== "chat") {
-        throw new Error(`WIP`);
-      }
-
       // create the AI answer
       const choice = chatResponse.data.choices[0];
       const aiMessage = buildChatMessage({
@@ -190,7 +182,7 @@ export function ChatControlBlock({}: ChatControlBlockProps): JSX.Element {
     } finally {
       setProcessingChat(false);
     }
-  }, [chatResponse, note, setUserAssets, userAssets]);
+  }, [chatResponse, note, setSendError, setUserAssets, userAssets]);
 
   // const submitChatMessageForm = useSubmitForm(() =>
   //   submitChatMessage(requestMessage)
