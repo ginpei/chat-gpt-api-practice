@@ -1,4 +1,4 @@
-import { NoteType } from "../../../domains/note/Note";
+import { noteIcons, NoteType } from "../../../domains/note/Note";
 import {
   PopupMenu,
   PopupMenuCloseHandler,
@@ -19,7 +19,9 @@ export function NewFilePopup({
     <PopupMenu onClose={onClose} open={open}>
       <form className="w-[80vw] flex flex-col" method="dialog">
         <PopupMenuHeading>New note</PopupMenuHeading>
-        <PopupMenuItem onClick={() => onClose("chat")}>💭 Chat</PopupMenuItem>
+        <PopupMenuItem onClick={() => onClose("chat")}>
+          {noteIcons["chat"]} Chat
+        </PopupMenuItem>
         <PopupMenuItem onClick={() => onClose(undefined)}>
           <small>Cancel</small>
         </PopupMenuItem>

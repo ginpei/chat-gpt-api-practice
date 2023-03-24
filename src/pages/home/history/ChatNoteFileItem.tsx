@@ -1,5 +1,5 @@
 import { MouseEventHandler } from "react";
-import { ChatNote, Note } from "../../../domains/note/Note";
+import { ChatNote, noteIcons } from "../../../domains/note/Note";
 import { PopupMenuItem } from "../../../domains/popupMenu/PopupMenuItem";
 import { FileItemProps } from "./FileItem";
 
@@ -16,7 +16,7 @@ export function ChatNoteFileItem({
     <div className="ChatNoteFileItem flex">
       <span className="grid flex-grow">
         <PopupMenuItem key={note.id} onClick={onClick}>
-          {title}
+          {noteIcons["chat"]} {title}
         </PopupMenuItem>
       </span>
       <RemoveButton onClick={() => onRemove(note)} />

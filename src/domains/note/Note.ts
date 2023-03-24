@@ -15,6 +15,11 @@ export type ImageNote = NoteBase<[string, string], "image">;
 
 export type NoteType = "chat" | "image";
 
+export const noteIcons: Readonly<Record<NoteType, string>> = {
+  chat: "💭",
+  image: "🖼️",
+};
+
 function createNoteBase<Body, Type extends NoteType>(
   init: Partial<NoteBase<Body, Type>>,
   type: Type,
