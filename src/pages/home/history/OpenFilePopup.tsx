@@ -8,19 +8,19 @@ import { PopupMenuHeading } from "../../../domains/popupMenu/PopupMenuHeading";
 import { PopupMenuItem } from "../../../domains/popupMenu/PopupMenuItem";
 import { FileItem } from "./FileItem";
 
-export interface SelectFilePopupProps extends PopupMenuCoreProps<Note> {
+export interface OpenFilePopupProps extends PopupMenuCoreProps<Note> {
   notes: Note[];
   onNoteRemove: (note: Note) => void;
 }
 
-export type SelectFileCloseHandler = PopupMenuCloseHandler<Note>;
+export type OpenFileCloseHandler = PopupMenuCloseHandler<Note>;
 
-export function SelectFilePopup({
+export function OpenFilePopup({
   notes,
   onClose,
   onNoteRemove,
   open,
-}: SelectFilePopupProps): JSX.Element {
+}: OpenFilePopupProps): JSX.Element {
   return (
     <PopupMenu onClose={onClose} open={open}>
       <form className="w-[80vw] flex flex-col" method="dialog">

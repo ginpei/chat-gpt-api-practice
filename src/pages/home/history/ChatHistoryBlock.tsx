@@ -16,7 +16,7 @@ import { useSetCurNoteId, useStartNewNote } from "../notes/noteHooks";
 import { ChatItem } from "./ChatItem";
 import { DiscreetButton } from "./DiscreetButton";
 import { NewFilePopup, NewFilePopupCloseHandler } from "./NewFilePopup";
-import { SelectFileCloseHandler, SelectFilePopup } from "./SelectFilePopup";
+import { OpenFileCloseHandler, OpenFilePopup } from "./OpenFilePopup";
 
 export interface ChatHistoryBlockProps {
   note: ChatNote;
@@ -27,7 +27,7 @@ export function ChatHistoryBlock({ note }: ChatHistoryBlockProps): JSX.Element {
   const [userAssets, setUserAssets] = useUserAssetsContext();
   const clearHistoryClick = useClearChatHistoryAction();
   const refMessageList = useRef<HTMLDivElement>(null);
-  const [selectFileVisible, setSelectFileVisible] = useState(false);
+  const [openFilePopupVisible, setOpenFilePopupVisible] = useState(false);
   const submitChatMessage = useSubmitChatMessage();
   const [processingContinueChatMessage, setProcessingContinueChatMessage] =
     useState(false);
@@ -38,7 +38,7 @@ export function ChatHistoryBlock({ note }: ChatHistoryBlockProps): JSX.Element {
   const { messages } = note.body;
 
   useOnKey("Ctrl+O", document.body, () => {
-    setSelectFileVisible(true);
+    setOpenFilePopupVisible(true);
   });
 
   useOnKey("Alt+N", document.body, () => {
@@ -78,8 +78,8 @@ export function ChatHistoryBlock({ note }: ChatHistoryBlockProps): JSX.Element {
     startNewNote();
   };
 
-  const onFileSelect: SelectFileCloseHandler = (note: Note | undefined) => {
-    setSelectFileVisible(false);
+  const onFileSelect: OpenFileCloseHandler = (note: Note | undefined) => {
+    setOpenFilePopupVisible(false);
     if (note === undefined) {
       return;
     }
@@ -144,7 +144,7 @@ export function ChatHistoryBlock({ note }: ChatHistoryBlockProps): JSX.Element {
             📚 New note... <KeyAssign>(Alt+N)</KeyAssign>
           </DiscreetButton>
           <DiscreetButton
-            onClick={() => setSelectFileVisible(true)}
+            onClick={() => setOpenFilePopupVisible(true)}
             type="button"
           >
             📁 Open... <KeyAssign>(Ctrl+O)</KeyAssign>
@@ -153,11 +153,11 @@ export function ChatHistoryBlock({ note }: ChatHistoryBlockProps): JSX.Element {
       </Container>
       <div aria-hidden className="min-h-[5em]"></div>
       <NewFilePopup onClose={onNewFileSelect} open={newFilePopupVisible} />
-      <SelectFilePopup
+      <OpenFilePopup
         notes={userAssets.notes}
         onClose={onFileSelect}
         onNoteRemove={onNoteRemove}
-        open={selectFileVisible}
+        open={openFilePopupVisible}
       />
     </div>
   );
