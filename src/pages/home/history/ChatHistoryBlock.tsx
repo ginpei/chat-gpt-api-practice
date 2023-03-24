@@ -37,6 +37,8 @@ export function ChatHistoryBlock({ note }: ChatHistoryBlockProps): JSX.Element {
   const setCurNoteId = useSetCurNoteId();
   const startNewNote = useStartNewNote();
 
+  const { messages } = note.body;
+
   useOnKey("Ctrl+O", document.body, () => {
     setSelectFileVisible(true);
   });
@@ -47,7 +49,7 @@ export function ChatHistoryBlock({ note }: ChatHistoryBlockProps): JSX.Element {
 
   useEffect(() => {
     const children = refMessageList.current?.children;
-    if (!children || userAssets.messages.length < 1) {
+    if (!children || messages.length < 1) {
       return;
     }
 
@@ -57,7 +59,7 @@ export function ChatHistoryBlock({ note }: ChatHistoryBlockProps): JSX.Element {
     }
 
     elLastItem.scrollIntoView({ block: "nearest" });
-  }, [userAssets.messages.length]);
+  }, [messages.length]);
 
   const onContinueClick = async () => {
     setProcessingContinueChatMessage(true);
@@ -104,7 +106,7 @@ export function ChatHistoryBlock({ note }: ChatHistoryBlockProps): JSX.Element {
   return (
     <div className="ChatHistoryBlock flex-grow overflow-auto bg-stone-50">
       <div ref={refMessageList}>
-        {userAssets.messages.map((message) => (
+        {messages.map((message) => (
           <ChatItem
             key={message.id}
             message={message}
@@ -112,7 +114,8 @@ export function ChatHistoryBlock({ note }: ChatHistoryBlockProps): JSX.Element {
           />
         ))}
       </div>
-      {!userAssets.messages.at(-1)?.complete &&
+      {messages.length > 0 &&
+        !messages.at(-1)?.complete &&
         !processingContinueChatMessage && (
           <div className="grid">
             <ContinueButton onClick={onContinueClick}>
@@ -122,33 +125,21 @@ export function ChatHistoryBlock({ note }: ChatHistoryBlockProps): JSX.Element {
         )}
       <Container>
         <div className="py-2 text-end text-sm text-gray-300">
-          Chat token usage: {userAssets.completionTokenUsage}
+          Chat token usage: {note.body.completionTokenUsage}
         </div>
       </Container>
-      <div>
-        <div>Cur note: {note.id}</div>
-        <div>
-          {note.body.messages.map((message) => (
-            <ChatItem
-              key={message.id}
-              message={message}
-              renderMarkdown={userSettings.renderMarkdown}
-            />
-          ))}
-        </div>
-      </div>
       <div aria-hidden className="min-h-[5em]"></div>
       <Container>
         <div className="grid gap-4">
           <DiscreetButton
-            disabled={userAssets.messages.length < 1}
+            disabled={messages.length < 1}
             onClick={clearHistoryClick}
             type="button"
           >
             🗑️ Clear history... <KeyAssign>(Ctrl+L)</KeyAssign>
           </DiscreetButton>
           <DiscreetButton
-            disabled={userAssets.messages.length < 1}
+            disabled={messages.length < 1}
             onClick={() => setNewFilePopupVisible(true)}
             type="button"
           >
