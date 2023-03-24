@@ -1,12 +1,10 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
-import { generateRandomId } from "../../../domains/id/id";
 import { KeyAssign } from "../../../domains/key/KeyAssign";
 import { useOnKey } from "../../../domains/key/keyHooks";
 import { Container } from "../../../domains/layout/Container";
-import { ChatNote, createChatNote, Note } from "../../../domains/note/Note";
+import { ChatNote, Note } from "../../../domains/note/Note";
 import { UserAssets } from "../../../domains/userAssets/UserAssets";
 import { useUserAssetsContext } from "../../../domains/userAssets/UserAssetsContext";
-import { useCurNote } from "../../../domains/userAssets/UserAssetsContextHooks";
 import { saveUserAssets } from "../../../domains/userAssets/userAssetsStore";
 import { useUserSettings } from "../../../domains/userSettings/UserSettingsContext";
 import { useClearChatHistoryAction } from "../chatHistoryManipulators";
