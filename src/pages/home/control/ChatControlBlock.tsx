@@ -33,7 +33,7 @@ export function ChatControlBlock({ note }: ChatControlBlockProps): JSX.Element {
   const [userAssets, setUserAssets] = useUserAssetsContext();
   const [sendError, setSendError] = useError();
   const [requestMessage, setRequestMessage] = useState(
-    userAssets.messages.length > 0 ? "" : "Say something funny"
+    note.body.messages.length > 0 ? "" : "Say something funny"
   );
   const [processingChat, setProcessingChat] = useState(false);
   const [toolsDialogOpen, setToolsDialogOpen] = useState(

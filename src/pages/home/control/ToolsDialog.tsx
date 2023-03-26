@@ -10,6 +10,7 @@ import {
 import { VStack } from "../../../domains/layout/VStack";
 import { NiceLink } from "../../../domains/link/NiceLink";
 import { useUserAssetsContext } from "../../../domains/userAssets/UserAssetsContext";
+import { useCurNote } from "../../../domains/userAssets/UserAssetsContextHooks";
 import {
   UserSettingsValue,
   useUserSettings,
@@ -22,6 +23,7 @@ export interface ToolsDialogProps extends NiceDialogCoreProps {}
 export function ToolsDialog({ onClose, open }: ToolsDialogProps): JSX.Element {
   const [userSettings, setUserSettings] = useUserSettings();
   const [userAssets] = useUserAssetsContext();
+  const note = useCurNote();
   const clearHistoryClick = useClearChatHistoryAction();
 
   const onUpdateClick: FormEventHandler = () => {
@@ -94,20 +96,24 @@ export function ToolsDialog({ onClose, open }: ToolsDialogProps): JSX.Element {
               </label>
             </p>
           </article>
-          <article>
-            <DialogGroupHeading>History</DialogGroupHeading>
-            <VStack>
-              <NiceButton onClick={clearHistoryClick} type="button">
-                🗑️ Clear history...
-              </NiceButton>
-              <NiceButtonLink
-                download="chatHistory.txt"
-                href={`data:text/plain,${buildPromptText(userAssets.messages)}`}
-              >
-                💾 Download
-              </NiceButtonLink>
-            </VStack>
-          </article>
+          {note.type === "chat" && (
+            <article>
+              <DialogGroupHeading>Current note</DialogGroupHeading>
+              <VStack>
+                <NiceButton onClick={clearHistoryClick} type="button">
+                  🗑️ Clear history...
+                </NiceButton>
+                <NiceButtonLink
+                  download="chatHistory.txt"
+                  href={`data:text/plain,${buildPromptText(
+                    note.body.messages
+                  )}`}
+                >
+                  💾 Download
+                </NiceButtonLink>
+              </VStack>
+            </article>
+          )}{" "}
         </VStack>
       </form>
     </NiceDialog>

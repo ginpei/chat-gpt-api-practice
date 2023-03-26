@@ -8,10 +8,6 @@ import { useUserAssetsContext } from "../../../domains/userAssets/UserAssetsCont
 import { saveUserAssets } from "../../../domains/userAssets/userAssetsStore";
 import { useUserSettings } from "../../../domains/userSettings/UserSettingsContext";
 import { useClearChatHistoryAction } from "../chatHistoryManipulators";
-import {
-  ContinueChatMessage,
-  useSubmitChatMessage,
-} from "../chatRequestManagers";
 import { useSetCurNoteId, useStartNewNote } from "../notes/noteHooks";
 import { ChatItem } from "./ChatItem";
 import { DiscreetButton } from "./DiscreetButton";
@@ -28,7 +24,6 @@ export function ChatHistoryBlock({ note }: ChatHistoryBlockProps): JSX.Element {
   const clearHistoryClick = useClearChatHistoryAction();
   const refMessageList = useRef<HTMLDivElement>(null);
   const [openFilePopupVisible, setOpenFilePopupVisible] = useState(false);
-  const submitChatMessage = useSubmitChatMessage();
   const [processingContinueChatMessage, setProcessingContinueChatMessage] =
     useState(false);
   const [newFilePopupVisible, setNewFilePopupVisible] = useState(false);
@@ -60,12 +55,13 @@ export function ChatHistoryBlock({ note }: ChatHistoryBlockProps): JSX.Element {
   }, [messages.length]);
 
   const onContinueClick = async () => {
-    setProcessingContinueChatMessage(true);
-    try {
-      await submitChatMessage(ContinueChatMessage);
-    } finally {
-      setProcessingContinueChatMessage(false);
-    }
+    // TODO
+    // setProcessingContinueChatMessage(true);
+    // try {
+    //   await submitChatMessage(ContinueChatMessage);
+    // } finally {
+    //   setProcessingContinueChatMessage(false);
+    // }
   };
 
   const onNewFileSelect: NewFilePopupCloseHandler = (type) => {
