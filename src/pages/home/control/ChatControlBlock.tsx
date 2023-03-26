@@ -1,10 +1,4 @@
-import {
-  FormEventHandler,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { FormEventHandler, useEffect, useRef, useState } from "react";
 import { NiceButton } from "../../../domains/button/NiceButton";
 import { PrimaryButton } from "../../../domains/button/PrimaryButton";
 import { buildChatMessage } from "../../../domains/chat/ChatMessage";
@@ -24,17 +18,10 @@ import {
 } from "../../../domains/openai/chatRequestManipulators";
 import { DragPositionHandler } from "../../../domains/resize/Dragger";
 import { VResizeBar } from "../../../domains/resize/VResizeBar";
-import { waitUntil } from "../../../domains/time/waitFunctions";
 import { UserAssets } from "../../../domains/userAssets/UserAssets";
 import { useUserAssetsContext } from "../../../domains/userAssets/UserAssetsContext";
-import { useCurNote } from "../../../domains/userAssets/UserAssetsContextHooks";
 import { saveUserAssets } from "../../../domains/userAssets/userAssetsStore";
 import { useUserSettings } from "../../../domains/userSettings/UserSettingsContext";
-import {
-  useSubmitChatMessage,
-  useSubmitImageRequest,
-} from "../chatRequestManagers";
-import { SendOptionCloseHandler, SendOptionPopup } from "./SendOptionPopup";
 import { ToolsDialog } from "./ToolsDialog";
 
 export interface ChatControlBlockProps {
@@ -53,43 +40,12 @@ export function ChatControlBlock({ note }: ChatControlBlockProps): JSX.Element {
     userSettings.apiKey === ""
   );
   const refText = useRef<HTMLTextAreaElement>(null);
-  const refSendOptionButton = useRef<HTMLButtonElement>(null);
-  const [sendOptionVisible, setSendOptionVisible] = useState(false);
   const [textBoxHeightPx, setTextBoxHeightPx] = useState(66);
   const [textBoxHeightTransitionPx, setTextBoxHeightTransitionPx] = useState(0);
-  const submitChatMessage = useSubmitChatMessage();
-  const submitImageRequest = useSubmitImageRequest();
-
-  useOnKey("Ctrl+Shift+Enter", refText.current, () => {
-    setSendOptionVisible(true);
-  });
 
   useOnKey("Ctrl+Enter", refText.current, () => {
     submitChatMessageForm();
   });
-
-  const useSubmitForm = useCallback(
-    (exec: () => Promise<void>) => {
-      return async () => {
-        setProcessingChat(true);
-        setSendError(null);
-        try {
-          await exec();
-
-          setRequestMessage("");
-          waitUntil(() => !refText.current?.disabled).then(() =>
-            refText.current?.focus()
-          );
-        } catch (error) {
-          console.error(error);
-          setSendError(toError(error));
-        } finally {
-          setProcessingChat(false);
-        }
-      };
-    },
-    [setSendError]
-  );
 
   const [chatResponse, setChatResponse] = useState<ChatRequestResponse | null>(
     null
@@ -184,14 +140,6 @@ export function ChatControlBlock({ note }: ChatControlBlockProps): JSX.Element {
     }
   }, [chatResponse, note, setSendError, setUserAssets, userAssets]);
 
-  // const submitChatMessageForm = useSubmitForm(() =>
-  //   submitChatMessage(requestMessage)
-  // );
-
-  const submitImageRequestForm = useSubmitForm(() =>
-    submitImageRequest(requestMessage)
-  );
-
   const onResizeBarMove: DragPositionHandler = (pos) => {
     const minHeight = 42;
     const dy = -pos.dy;
@@ -207,17 +155,6 @@ export function ChatControlBlock({ note }: ChatControlBlockProps): JSX.Element {
   const onFormSubmit: FormEventHandler = (event) => {
     event.preventDefault();
     submitChatMessageForm();
-  };
-
-  const onSendOptionClose: SendOptionCloseHandler = (type) => {
-    setSendOptionVisible(false);
-    if (type === "text") {
-      submitChatMessageForm();
-    } else if (type === "image") {
-      submitImageRequestForm();
-    } else if (type === undefined) {
-      // do nothing
-    }
   };
 
   const onToolsClick = () => {
@@ -256,14 +193,6 @@ export function ChatControlBlock({ note }: ChatControlBlockProps): JSX.Element {
                 <PrimaryButton disabled={processingChat} type="submit">
                   📨 Send <KeyAssign theme="primary">(Ctrl+Enter)</KeyAssign>
                 </PrimaryButton>
-                <PrimaryButton
-                  disabled={processingChat}
-                  onClick={() => setSendOptionVisible(true)}
-                  ref={refSendOptionButton}
-                  type="button"
-                >
-                  ︙
-                </PrimaryButton>
               </div>
               <NiceButton onClick={onToolsClick} type="button">
                 🛠️ Tools...
@@ -272,7 +201,6 @@ export function ChatControlBlock({ note }: ChatControlBlockProps): JSX.Element {
           </form>
         </VStack>
       </Container>
-      <SendOptionPopup onClose={onSendOptionClose} open={sendOptionVisible} />
       <ToolsDialog onClose={onToolsDialogClose} open={toolsDialogOpen} />
     </div>
   );
