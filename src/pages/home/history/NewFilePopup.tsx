@@ -22,6 +22,9 @@ export function NewFilePopup({
         <PopupMenuItem onClick={() => onClose("chat")}>
           {noteIcons["chat"]} Chat
         </PopupMenuItem>
+        <PopupMenuItem onClick={() => onClose("image")}>
+          {noteIcons["image"]} Image
+        </PopupMenuItem>
         <PopupMenuItem onClick={() => onClose(undefined)}>
           <small>Cancel</small>
         </PopupMenuItem>

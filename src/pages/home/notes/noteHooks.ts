@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { generateRandomId } from "../../../domains/id/id";
-import { createChatNote } from "../../../domains/note/Note";
+import { createChatNote, createImageNote } from "../../../domains/note/Note";
 import { UserAssets } from "../../../domains/userAssets/UserAssets";
 import { useUserAssetsContext } from "../../../domains/userAssets/UserAssetsContext";
 import { saveUserAssets } from "../../../domains/userAssets/userAssetsStore";
@@ -23,11 +23,28 @@ export function useSetCurNoteId(): (id: string) => void {
   return setCurNoteId;
 }
 
-export function useStartNewNote(): () => void {
+export function useStartNewChatNote(): () => void {
   const [userAssets, setUserAssets] = useUserAssetsContext();
 
   const startNewNote = useCallback(() => {
     const newNote = createChatNote({ id: generateRandomId() });
+    const newAssets: UserAssets = {
+      ...userAssets,
+      curNoteId: newNote.id,
+      notes: userAssets.notes.concat(newNote),
+    };
+    saveUserAssets(newAssets);
+    setUserAssets(newAssets);
+  }, [setUserAssets, userAssets]);
+
+  return startNewNote;
+}
+
+export function useStartNewImageNote(): () => void {
+  const [userAssets, setUserAssets] = useUserAssetsContext();
+
+  const startNewNote = useCallback(() => {
+    const newNote = createImageNote({ id: generateRandomId() });
     const newAssets: UserAssets = {
       ...userAssets,
       curNoteId: newNote.id,

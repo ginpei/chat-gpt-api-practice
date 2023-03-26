@@ -8,7 +8,11 @@ import { useUserAssetsContext } from "../../../domains/userAssets/UserAssetsCont
 import { saveUserAssets } from "../../../domains/userAssets/userAssetsStore";
 import { useUserSettings } from "../../../domains/userSettings/UserSettingsContext";
 import { useClearChatHistoryAction } from "../chatHistoryManipulators";
-import { useSetCurNoteId, useStartNewNote } from "../notes/noteHooks";
+import {
+  useSetCurNoteId,
+  useStartNewChatNote,
+  useStartNewImageNote,
+} from "../notes/noteHooks";
 import { ChatItem } from "./ChatItem";
 import { DiscreetButton } from "./DiscreetButton";
 import { NewFilePopup, NewFilePopupCloseHandler } from "./NewFilePopup";
@@ -28,7 +32,8 @@ export function ChatHistoryBlock({ note }: ChatHistoryBlockProps): JSX.Element {
     useState(false);
   const [newFilePopupVisible, setNewFilePopupVisible] = useState(false);
   const setCurNoteId = useSetCurNoteId();
-  const startNewNote = useStartNewNote();
+  const startNewChatNote = useStartNewChatNote();
+  const startNewImageNote = useStartNewImageNote();
 
   const { messages } = note.body;
 
@@ -71,7 +76,13 @@ export function ChatHistoryBlock({ note }: ChatHistoryBlockProps): JSX.Element {
       return;
     }
 
-    startNewNote();
+    if (type === "chat") {
+      startNewChatNote();
+    } else if (type === "image") {
+      startNewImageNote();
+    } else {
+      throw new Error(`Unknown note type: "${type}"`);
+    }
   };
 
   const onFileSelect: OpenFileCloseHandler = (note: Note | undefined) => {

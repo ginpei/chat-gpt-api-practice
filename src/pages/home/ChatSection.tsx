@@ -8,20 +8,25 @@ export interface ChatSectionProps {}
 
 export function ChatSection(): JSX.Element {
   const note = useCurNote();
+  const { type } = note;
 
   const clearChatHistory = useClearChatHistoryAction();
   useOnKey("Ctrl+L", document.body, () => {
     clearChatHistory();
   });
 
-  return (
-    <div className="ChatSection flex flex-col-reverse content-between">
-      {note.type === "chat" && (
-        <>
-          <ChatControlBlock note={note} />
-          <ChatHistoryBlock note={note} />
-        </>
-      )}
-    </div>
-  );
+  if (type === "chat") {
+    return (
+      <div className="ChatSection flex flex-col-reverse content-between">
+        <ChatControlBlock note={note} />
+        <ChatHistoryBlock note={note} />
+      </div>
+    );
+  }
+
+  if (type === "image") {
+    return <div className="ChatSection">IMAGE</div>;
+  }
+
+  throw new Error(`Unknown note type: "${type}"`);
 }
