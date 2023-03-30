@@ -1,16 +1,14 @@
 import { createChatNote, Note } from "../note/Note";
 import { useUserAssetsContext } from "./UserAssetsContext";
+import { findCurNote } from "./userAssetsManipulators";
 
+// TODO replace with findCurNote
 export function useCurNote(): Note {
   const [userAssets] = useUserAssetsContext();
-  const note = userAssets.notes.find((v) => v.id === userAssets.curNoteId);
+
+  const note = findCurNote(userAssets);
   if (note) {
     return note;
-  }
-
-  const firstNote = userAssets.notes[0];
-  if (firstNote) {
-    return firstNote;
   }
 
   const newNote = createChatNote();

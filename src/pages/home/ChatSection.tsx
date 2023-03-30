@@ -3,6 +3,7 @@ import { useCurNote } from "../../domains/userAssets/UserAssetsContextHooks";
 import { useClearChatHistoryAction } from "./chatHistoryManipulators";
 import { ChatControlBlock } from "./control/ChatControlBlock";
 import { ChatHistoryBlock } from "./history/ChatHistoryBlock";
+import { ImageNoteSection } from "./image/ImageNoteSection";
 
 export interface ChatSectionProps {}
 
@@ -25,7 +26,7 @@ export function ChatSection(): JSX.Element {
   }
 
   if (type === "image") {
-    return <div className="ChatSection">IMAGE</div>;
+    return <ImageNoteSection note={note} />;
   }
 
   throw new Error(`Unknown note type: "${type}"`);
