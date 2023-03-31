@@ -28,7 +28,7 @@ export function HistoryFrame({
   };
 
   return (
-    <div className="HistoryFrame flex flex-col-reverse content-between">
+    <div className="HistoryFrame flex flex-col-reverse">
       <div
         className="flex-shrink-0 max-h-full border-t pb-4 border-t-gray-200 bg-gray-100"
         style={{ height: `${textBoxHeightPx + textBoxHeightTransitionPx}px` }}
