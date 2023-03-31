@@ -2,17 +2,16 @@ import { ChangeEventHandler, FormEventHandler, useState } from "react";
 import { NiceButton } from "../../../domains/button/NiceButton";
 import { PrimaryButton } from "../../../domains/button/PrimaryButton";
 import {
-  buildChatMessage,
   ChatMessage,
-  createChatMessage,
+  buildChatMessage,
 } from "../../../domains/chat/ChatMessage";
 import { NiceText } from "../../../domains/input/NiceText";
 import { Container } from "../../../domains/layout/Container";
 import { VStack } from "../../../domains/layout/VStack";
 import { ImageNote } from "../../../domains/note/Note";
-import { UserAssets } from "../../../domains/userAssets/UserAssets";
 import { useUserAssetsContext } from "../../../domains/userAssets/UserAssetsContext";
 import { ChatItem } from "../history/ChatItem";
+import { NoteControlPanel } from "../history/NoteControlPanel";
 import { HistoryFrame } from "../history/HistoryFrame";
 
 export interface ImageNoteSectionProps {
@@ -83,6 +82,11 @@ export function ImageNoteSection({ note }: ImageNoteSectionProps): JSX.Element {
               renderMarkdown={false}
             />
           ))}
+          <Container>
+            <div className="mt-32 mb-32">
+              <NoteControlPanel note={note} />
+            </div>
+          </Container>
         </div>
       }
     />
