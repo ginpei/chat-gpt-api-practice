@@ -14,6 +14,8 @@ export function HistoryFrame({
   const [textBoxHeightPx, setTextBoxHeightPx] = useState(200);
   const [textBoxHeightTransitionPx, setTextBoxHeightTransitionPx] = useState(0);
 
+  const controlHeight = textBoxHeightPx + textBoxHeightTransitionPx;
+
   const onResizeBarDone: DragPositionHandler = () => {
     // TODO fix resize does not work when height is larger than 200
     setTextBoxHeightPx(textBoxHeightPx + textBoxHeightTransitionPx);
@@ -31,7 +33,7 @@ export function HistoryFrame({
     <div className="HistoryFrame flex flex-col-reverse">
       <div
         className="flex-shrink-0 max-h-full border-t pb-4 border-t-gray-200 bg-gray-100"
-        style={{ height: `${textBoxHeightPx + textBoxHeightTransitionPx}px` }}
+        style={{ height: `${controlHeight}px` }}
       >
         <VResizeBar onDone={onResizeBarDone} onMove={onResizeBarMove} />
         {ControlBlock}
