@@ -60,7 +60,6 @@ export function ChatControlBlock({ note }: ChatControlBlockProps): JSX.Element {
         body: requestMessage,
         complete: true,
         name: "you",
-        type: "chat",
       });
       note.body.messages.push(userMessage);
 
@@ -114,7 +113,6 @@ export function ChatControlBlock({ note }: ChatControlBlockProps): JSX.Element {
         body: choice.text?.trim() ?? "?",
         complete: choice.finish_reason === "stop",
         name: "ai",
-        type: "chat",
       });
 
       note.body.completionTokenUsage =

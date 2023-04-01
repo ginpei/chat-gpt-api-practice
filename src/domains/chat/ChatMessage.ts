@@ -6,7 +6,6 @@ export interface ChatMessage {
   date: number;
   id: string;
   name: "you" | "ai" | "";
-  type: "chat" | "image" | "";
 }
 
 export function createChatMessage(init: Partial<ChatMessage>): ChatMessage {
@@ -16,7 +15,6 @@ export function createChatMessage(init: Partial<ChatMessage>): ChatMessage {
     date: init?.date ?? NaN,
     id: init?.id ?? "",
     name: init?.name ?? "",
-    type: init?.type ?? "",
   };
 }
 
@@ -29,6 +27,5 @@ export function buildChatMessage(
     id: generateRandomId(),
     date: Date.now(),
     name: init.name,
-    type: init.type,
   };
 }
