@@ -1,5 +1,5 @@
 import { ChatHistory, createChatHistory } from "../chat/ChatHistory";
-import { ChatMessage } from "../chat/ChatMessage";
+import { ImageHistory } from "../imageGeneration/ImageHistory";
 
 export interface NoteBase<Body, Type extends NoteType> {
   body: Body;
@@ -12,7 +12,7 @@ export type Note = ChatNote | ImageNote;
 
 export type ChatNote = NoteBase<ChatHistory, "chat">;
 
-export type ImageNote = NoteBase<{ messages: ChatMessage[] }, "image">;
+export type ImageNote = NoteBase<ImageHistory, "image">;
 
 export type NoteType = "chat" | "image";
 
@@ -39,5 +39,5 @@ export function createChatNote(init: Partial<ChatNote> = {}): ChatNote {
 }
 
 export function createImageNote(init: Partial<ImageNote> = {}): ImageNote {
-  return createNoteBase(init, "image", { messages: [] });
+  return createNoteBase(init, "image", { images: [] });
 }

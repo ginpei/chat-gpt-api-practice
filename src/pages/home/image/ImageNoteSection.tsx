@@ -1,48 +1,30 @@
 import { ChangeEventHandler, FormEventHandler, useState } from "react";
 import { NiceButton } from "../../../domains/button/NiceButton";
 import { PrimaryButton } from "../../../domains/button/PrimaryButton";
-import {
-  ChatMessage,
-  buildChatMessage,
-} from "../../../domains/chat/ChatMessage";
+import { ImageGeneration } from "../../../domains/imageGeneration/ImageHistory";
 import { NiceText } from "../../../domains/input/NiceText";
 import { Container } from "../../../domains/layout/Container";
 import { VStack } from "../../../domains/layout/VStack";
 import { ImageNote } from "../../../domains/note/Note";
 import { useUserAssetsContext } from "../../../domains/userAssets/UserAssetsContext";
-import { ChatItem } from "../history/ChatItem";
-import { NoteControlPanel } from "../history/NoteControlPanel";
 import { HistoryFrame } from "../history/HistoryFrame";
+import { NoteControlPanel } from "../history/NoteControlPanel";
 
 export interface ImageNoteSectionProps {
   note: ImageNote;
 }
 
-const tmp__note_body_messages: ChatMessage[] = [
-  buildChatMessage({
-    body: "Hello World!",
-    complete: true,
-    name: "you",
-    type: "image",
-  }),
-  buildChatMessage({
-    body: "https://ginpei.dev/ginpei-1200.png",
-    complete: true,
-    name: "ai",
-    type: "image",
-  }),
-  buildChatMessage({
-    body: "Hello World!",
-    complete: true,
-    name: "you",
-    type: "image",
-  }),
-  buildChatMessage({
-    body: "https://ginpei.dev/ginpei-1200.png",
-    complete: true,
-    name: "ai",
-    type: "image",
-  }),
+const tmp__note_body_messages: ImageGeneration[] = [
+  {
+    id: "1",
+    prompt: "Hello World!",
+    url: "https://ginpei.dev/ginpei-1200.png",
+  },
+  {
+    id: "2",
+    prompt: "Hello World!",
+    url: "https://ginpei.dev/ginpei-1200.png",
+  },
 ];
 
 export function ImageNoteSection({ note }: ImageNoteSectionProps): JSX.Element {
@@ -76,11 +58,13 @@ export function ImageNoteSection({ note }: ImageNoteSectionProps): JSX.Element {
       HistoryBlock={
         <div>
           {tmp__note_body_messages.map((message) => (
-            <ChatItem
-              key={message.id}
-              message={message}
-              renderMarkdown={false}
-            />
+            // TODO
+            <div key={message.id}>
+              <Container>
+                Prompt: {message.prompt}
+                <GeneratedImage src={message.url} />
+              </Container>
+            </div>
           ))}
           <Container>
             <div className="mt-32 mb-32">
@@ -90,5 +74,20 @@ export function ImageNoteSection({ note }: ImageNoteSectionProps): JSX.Element {
         </div>
       }
     />
+  );
+}
+
+function GeneratedImage({ src }: { src: string }): JSX.Element {
+  return (
+    <div className="text-center">
+      <a href={src} target="_blank">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          alt={src}
+          className="inline-block mx-auto w-full max-w-[50vh]"
+          src={src}
+        />
+      </a>
+    </div>
   );
 }

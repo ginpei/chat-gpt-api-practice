@@ -13,7 +13,12 @@ export function FileItem({
   onClick,
   onRemove,
 }: FileItemProps): JSX.Element {
-  const title = note.title || note.body.messages[0]?.body || "(New note)";
+  const title =
+    note.title ||
+    (note.type === "chat"
+      ? note.body.messages[0]?.body
+      : note.body.images[0]?.prompt) ||
+    "(New note)";
 
   return (
     <div className="FileItem flex">

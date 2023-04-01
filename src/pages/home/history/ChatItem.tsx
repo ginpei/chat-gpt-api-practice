@@ -36,6 +36,7 @@ export function ChatItem({
   message,
   renderMarkdown,
 }: ChatItemProps): JSX.Element {
+  // TODO drop image type support
   const isImageUrl = message.name === "ai" && message.type === "image";
 
   return (
