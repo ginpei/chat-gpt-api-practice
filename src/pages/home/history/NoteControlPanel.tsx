@@ -16,11 +16,12 @@ import { NewFilePopup, NewFilePopupCloseHandler } from "./NewFilePopup";
 import { OpenFileCloseHandler, OpenFilePopup } from "./OpenFilePopup";
 
 export interface NoteControlPanelProps {
-  // TODO support any notes
-  note: ImageNote;
+  clearDisabled: boolean;
 }
 
-export function NoteControlPanel({ note }: NoteControlPanelProps): JSX.Element {
+export function NoteControlPanel({
+  clearDisabled,
+}: NoteControlPanelProps): JSX.Element {
   const [userAssets, setUserAssets] = useUserAssetsContext();
   const clearHistoryClick = useClearChatHistoryAction();
   const refMessageList = useRef<HTMLDivElement>(null);
@@ -29,8 +30,6 @@ export function NoteControlPanel({ note }: NoteControlPanelProps): JSX.Element {
   const setCurNoteId = useSetCurNoteId();
   const startNewChatNote = useStartNewChatNote();
   const startNewImageNote = useStartNewImageNote();
-
-  const { images } = note.body;
 
   useOnKey("Ctrl+O", document.body, () => {
     setOpenFilePopupVisible(true);
@@ -42,7 +41,7 @@ export function NoteControlPanel({ note }: NoteControlPanelProps): JSX.Element {
 
   useEffect(() => {
     const children = refMessageList.current?.children;
-    if (!children || images.length < 1) {
+    if (!children || clearDisabled) {
       return;
     }
 
@@ -52,7 +51,7 @@ export function NoteControlPanel({ note }: NoteControlPanelProps): JSX.Element {
     }
 
     elLastItem.scrollIntoView({ block: "nearest" });
-  }, [images.length]);
+  }, [clearDisabled]);
 
   const onNewFileSelect: NewFilePopupCloseHandler = (type) => {
     setNewFilePopupVisible(false);
@@ -96,7 +95,7 @@ export function NoteControlPanel({ note }: NoteControlPanelProps): JSX.Element {
   return (
     <div className="NoteControlPanel grid gap-4">
       <DiscreetButton
-        disabled={images.length < 1}
+        disabled={clearDisabled}
         onClick={clearHistoryClick}
         type="button"
       >

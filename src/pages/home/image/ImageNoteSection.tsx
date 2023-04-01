@@ -68,7 +68,7 @@ export function ImageNoteSection({ note }: ImageNoteSectionProps): JSX.Element {
           ))}
           <Container>
             <div className="mt-32 mb-32">
-              <NoteControlPanel note={note} />
+              <NoteControlPanel clearDisabled={note.body.images.length < 1} />
             </div>
           </Container>
         </div>
