@@ -58,7 +58,7 @@ export function ImageNoteSection({ note }: ImageNoteSectionProps): JSX.Element {
       }
       HistoryBlock={
         <div>
-          {tmp__note_body_messages.map((message) => (
+          {note.body.images.map((message) => (
             <ImageItem image={message} key={message.id} />
           ))}
           <Container>
