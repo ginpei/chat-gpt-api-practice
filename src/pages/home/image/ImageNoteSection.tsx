@@ -1,14 +1,11 @@
-import { ChangeEventHandler, FormEventHandler, useState } from "react";
-import { NiceButton } from "../../../domains/button/NiceButton";
-import { PrimaryButton } from "../../../domains/button/PrimaryButton";
+import { useState } from "react";
 import { ImageGeneration } from "../../../domains/imageGeneration/ImageHistory";
-import { NiceText } from "../../../domains/input/NiceText";
 import { Container } from "../../../domains/layout/Container";
-import { VStack } from "../../../domains/layout/VStack";
 import { ImageNote } from "../../../domains/note/Note";
 import { useUserAssetsContext } from "../../../domains/userAssets/UserAssetsContext";
 import { HistoryFrame } from "../history/HistoryFrame";
 import { NoteControlPanel } from "../history/NoteControlPanel";
+import { ImageForm, ImageFormData } from "./ImageForm";
 import { ImageItem } from "./ImageItem";
 
 export interface ImageNoteSectionProps {
@@ -30,31 +27,24 @@ const tmp__note_body_messages: ImageGeneration[] = [
 
 export function ImageNoteSection({ note }: ImageNoteSectionProps): JSX.Element {
   const [userAssets, setUserAssets] = useUserAssetsContext();
-  const [prompt, setPrompt] = useState("");
+  const [formData, setFormData] = useState<ImageFormData>({ prompt: "" });
 
-  const onSubmit: FormEventHandler = (event) => {
-    event.preventDefault();
-    console.log(`# Hi`, prompt);
+  const onSubmit = () => {
+    console.log(`# Hi`, formData);
   };
 
-  const onPromptChange: ChangeEventHandler<HTMLTextAreaElement> = (event) => {
-    setPrompt(event.currentTarget.value);
+  const onPromptChange = (data: ImageFormData) => {
+    setFormData(data);
   };
 
   return (
     <HistoryFrame
       ControlBlock={
-        <form className="p-4" onSubmit={onSubmit}>
-          <Container>
-            <VStack>
-              <NiceText onChange={onPromptChange} value={prompt} />
-              <div className="flex flex-row-reverse justify-between">
-                <PrimaryButton>Generate image</PrimaryButton>
-                <NiceButton disabled>Tools...</NiceButton>
-              </div>
-            </VStack>
-          </Container>
-        </form>
+        <ImageForm
+          data={formData}
+          onChange={onPromptChange}
+          onSubmit={onSubmit}
+        />
       }
       HistoryBlock={
         <div>
