@@ -9,6 +9,7 @@ import { ImageNote } from "../../../domains/note/Note";
 import { useUserAssetsContext } from "../../../domains/userAssets/UserAssetsContext";
 import { HistoryFrame } from "../history/HistoryFrame";
 import { NoteControlPanel } from "../history/NoteControlPanel";
+import { ImageItem } from "./ImageItem";
 
 export interface ImageNoteSectionProps {
   note: ImageNote;
@@ -58,13 +59,7 @@ export function ImageNoteSection({ note }: ImageNoteSectionProps): JSX.Element {
       HistoryBlock={
         <div>
           {tmp__note_body_messages.map((message) => (
-            // TODO
-            <div key={message.id}>
-              <Container>
-                Prompt: {message.prompt}
-                <GeneratedImage src={message.url} />
-              </Container>
-            </div>
+            <ImageItem image={message} key={message.id} />
           ))}
           <Container>
             <div className="mt-32 mb-32">
@@ -74,20 +69,5 @@ export function ImageNoteSection({ note }: ImageNoteSectionProps): JSX.Element {
         </div>
       }
     />
-  );
-}
-
-function GeneratedImage({ src }: { src: string }): JSX.Element {
-  return (
-    <div className="text-center">
-      <a href={src} target="_blank">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          alt={src}
-          className="inline-block mx-auto w-full max-w-[50vh]"
-          src={src}
-        />
-      </a>
-    </div>
   );
 }
