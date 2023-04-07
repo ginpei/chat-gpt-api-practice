@@ -6,11 +6,11 @@ import { sendImageRequest } from "../../../domains/openai/chatRequestManipulator
 import { useUserAssetsContext } from "../../../domains/userAssets/UserAssetsContext";
 import { addImageHistory } from "../../../domains/userAssets/userAssetsManipulators";
 import { useUserSettings } from "../../../domains/userSettings/UserSettingsContext";
+import { ToolsDialogButton } from "../control/ToolsDialogButton";
 import { HistoryFrame } from "../history/HistoryFrame";
 import { NoteControlPanel } from "../history/NoteControlPanel";
 import { ImageForm, ImageFormData } from "./ImageForm";
 import { ImageItem } from "./ImageItem";
-import { NiceButton } from "../../../domains/button/NiceButton";
 
 export interface ImageNoteSectionProps {
   note: ImageNote;
@@ -71,17 +71,12 @@ export function ImageNoteSection({ note }: ImageNoteSectionProps): JSX.Element {
     setFormData(data);
   };
 
-  const onToolsClick = () => {
-    // TODO
-    console.log(`# onToolsClick`);
-  };
-
   return (
     <HistoryFrame
       ControlBlock={
         <ImageForm
           asideContent={
-            <NiceButton onClick={onToolsClick}>Tools...</NiceButton>
+            <ToolsDialogButton hasApiKey={userSettings.apiKey === ""} />
           }
           data={formData}
           disabled={sending}
