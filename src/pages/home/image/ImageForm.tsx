@@ -34,11 +34,6 @@ export function ImageForm({
     onChange({ ...data, prompt });
   };
 
-  const onToolsClick = () => {
-    // TODO
-    console.log(`# onToolsClick`);
-  };
-
   return (
     <Container>
       <div className="ImageForm grid grid-rows-2 grid-cols-2 gap-2">
