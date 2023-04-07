@@ -17,7 +17,6 @@ export function HistoryFrame({
   const controlHeight = textBoxHeightPx + textBoxHeightTransitionPx;
 
   const onResizeBarDone: DragPositionHandler = () => {
-    // TODO fix resize does not work when height is larger than 200
     setTextBoxHeightPx(textBoxHeightPx + textBoxHeightTransitionPx);
     setTextBoxHeightTransitionPx(0);
   };
