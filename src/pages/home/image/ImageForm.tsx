@@ -32,19 +32,28 @@ export function ImageForm({
     onChange({ ...data, prompt });
   };
 
+  const onToolsClick = () => {
+    // TODO
+    console.log(`# onToolsClick`);
+  };
+
   return (
-    <form className="ImageForm p-4" onSubmit={onFormSubmit}>
-      <fieldset disabled={disabled}>
-        <Container>
-          <VStack>
-            <NiceText onChange={onPromptChange} value={data.prompt} />
-            <div className="flex flex-row-reverse justify-between">
-              <PrimaryButton>Generate image</PrimaryButton>
-              <NiceButton disabled>Tools...</NiceButton>
+    <Container>
+      <div className="ImageForm grid grid-rows-2 grid-cols-2 gap-2">
+        <form className="contents" onSubmit={onFormSubmit}>
+          <fieldset className="contents" disabled={disabled}>
+            <div className="col-span-full grid">
+              <NiceText onChange={onPromptChange} value={data.prompt} />
             </div>
-          </VStack>
-        </Container>
-      </fieldset>
-    </form>
+            <div className="col-start-2 text-right">
+              <PrimaryButton>Generate image</PrimaryButton>
+            </div>
+          </fieldset>
+        </form>
+        <div className="row-start-2">
+          <NiceButton onClick={onToolsClick}>Tools...</NiceButton>
+        </div>
+      </div>
+    </Container>
   );
 }
