@@ -10,6 +10,7 @@ import { HistoryFrame } from "../history/HistoryFrame";
 import { NoteControlPanel } from "../history/NoteControlPanel";
 import { ImageForm, ImageFormData } from "./ImageForm";
 import { ImageItem } from "./ImageItem";
+import { NiceButton } from "../../../domains/button/NiceButton";
 
 export interface ImageNoteSectionProps {
   note: ImageNote;
@@ -70,10 +71,18 @@ export function ImageNoteSection({ note }: ImageNoteSectionProps): JSX.Element {
     setFormData(data);
   };
 
+  const onToolsClick = () => {
+    // TODO
+    console.log(`# onToolsClick`);
+  };
+
   return (
     <HistoryFrame
       ControlBlock={
         <ImageForm
+          asideContent={
+            <NiceButton onClick={onToolsClick}>Tools...</NiceButton>
+          }
           data={formData}
           disabled={sending}
           onChange={onPromptChange}

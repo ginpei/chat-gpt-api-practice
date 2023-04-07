@@ -1,4 +1,4 @@
-import { ChangeEventHandler, FormEventHandler } from "react";
+import { ChangeEventHandler, FormEventHandler, ReactNode } from "react";
 import { NiceButton } from "../../../domains/button/NiceButton";
 import { PrimaryButton } from "../../../domains/button/PrimaryButton";
 import { NiceText } from "../../../domains/input/NiceText";
@@ -6,6 +6,7 @@ import { Container } from "../../../domains/layout/Container";
 import { VStack } from "../../../domains/layout/VStack";
 
 export interface ImageFormProps {
+  asideContent: ReactNode;
   data: ImageFormData;
   disabled: boolean;
   onChange: (data: ImageFormData) => void;
@@ -17,6 +18,7 @@ export interface ImageFormData {
 }
 
 export function ImageForm({
+  asideContent,
   data,
   disabled,
   onChange,
@@ -50,9 +52,7 @@ export function ImageForm({
             </div>
           </fieldset>
         </form>
-        <div className="row-start-2">
-          <NiceButton onClick={onToolsClick}>Tools...</NiceButton>
-        </div>
+        <div className="row-start-2">{asideContent}</div>
       </div>
     </Container>
   );
