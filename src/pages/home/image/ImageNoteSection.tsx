@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { generateRandomId } from "../../../domains/id/id";
 import { ImageGeneration } from "../../../domains/imageGeneration/ImageHistory";
 import { Container } from "../../../domains/layout/Container";
 import { ImageNote } from "../../../domains/note/Note";
 import { sendImageRequest } from "../../../domains/openai/chatRequestManipulators";
 import { useUserAssetsContext } from "../../../domains/userAssets/UserAssetsContext";
-import { findCurNote } from "../../../domains/userAssets/userAssetsManipulators";
+import { addImageHistory } from "../../../domains/userAssets/userAssetsManipulators";
 import { useUserSettings } from "../../../domains/userSettings/UserSettingsContext";
 import { HistoryFrame } from "../history/HistoryFrame";
 import { NoteControlPanel } from "../history/NoteControlPanel";
@@ -51,29 +50,12 @@ export function ImageNoteSection({ note }: ImageNoteSectionProps): JSX.Element {
         throw new Error("No URL");
       }
 
-      const curNote = findCurNote(userAssets);
-      if (!curNote || curNote.type !== "image") {
-        throw new Error("Note not found");
-      }
-
-      curNote.body.images = [
-        ...curNote.body.images,
-        {
-          id: generateRandomId(),
-          prompt: formData.prompt,
-          url,
-        },
-      ];
-
-      setUserAssets({
-        ...userAssets,
-        notes: userAssets.notes.map((note) => {
-          if (note.id === curNote.id) {
-            return curNote;
-          }
-          return note;
-        }),
+      const newAssets = addImageHistory(userAssets, {
+        prompt: formData.prompt,
+        url,
       });
+
+      setUserAssets(newAssets);
       setFormData({ prompt: "" });
       // TODO: save to local storage
     } catch (error) {
