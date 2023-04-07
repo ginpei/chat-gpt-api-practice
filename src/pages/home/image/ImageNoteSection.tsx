@@ -76,7 +76,7 @@ export function ImageNoteSection({ note }: ImageNoteSectionProps): JSX.Element {
       ControlBlock={
         <ImageForm
           asideContent={
-            <ToolsDialogButton hasApiKey={userSettings.apiKey === ""} />
+            <ToolsDialogButton initialOpen={userSettings.apiKey === ""} />
           }
           data={formData}
           disabled={sending}

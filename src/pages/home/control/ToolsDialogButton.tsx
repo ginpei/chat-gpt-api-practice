@@ -3,11 +3,11 @@ import { NiceButton } from "../../../domains/button/NiceButton";
 import { ToolsDialog } from "./ToolsDialog";
 
 export interface ToolsDialogButtonProps {
-  hasApiKey: boolean;
+  initialOpen: boolean;
 }
 
 export function ToolsDialogButton({
-  hasApiKey,
+  initialOpen: hasApiKey,
 }: ToolsDialogButtonProps): JSX.Element {
   const [toolsDialogOpen, setToolsDialogOpen] = useState(hasApiKey);
 
