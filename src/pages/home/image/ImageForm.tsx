@@ -7,6 +7,7 @@ import { VStack } from "../../../domains/layout/VStack";
 
 export interface ImageFormProps {
   data: ImageFormData;
+  disabled: boolean;
   onChange: (data: ImageFormData) => void;
   onSubmit: (data: ImageFormData) => void;
 }
@@ -17,6 +18,7 @@ export interface ImageFormData {
 
 export function ImageForm({
   data,
+  disabled,
   onChange,
   onSubmit,
 }: ImageFormProps): JSX.Element {
@@ -32,15 +34,17 @@ export function ImageForm({
 
   return (
     <form className="ImageForm p-4" onSubmit={onFormSubmit}>
-      <Container>
-        <VStack>
-          <NiceText onChange={onPromptChange} value={data.prompt} />
-          <div className="flex flex-row-reverse justify-between">
-            <PrimaryButton>Generate image</PrimaryButton>
-            <NiceButton disabled>Tools...</NiceButton>
-          </div>
-        </VStack>
-      </Container>
+      <fieldset disabled={disabled}>
+        <Container>
+          <VStack>
+            <NiceText onChange={onPromptChange} value={data.prompt} />
+            <div className="flex flex-row-reverse justify-between">
+              <PrimaryButton>Generate image</PrimaryButton>
+              <NiceButton disabled>Tools...</NiceButton>
+            </div>
+          </VStack>
+        </Container>
+      </fieldset>
     </form>
   );
 }
