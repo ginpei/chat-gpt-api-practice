@@ -21,7 +21,10 @@ export function ToolsDialogButton({
 
   return (
     <>
-      <NiceButton onClick={onToolsClick}>🛠️ Tools...</NiceButton>
+      <NiceButton onClick={onToolsClick}>
+        🛠️ Tools...
+        {hasApiKey && "⚠️"}
+      </NiceButton>
       <ToolsDialog onClose={onToolsDialogClose} open={toolsDialogOpen} />
     </>
   );

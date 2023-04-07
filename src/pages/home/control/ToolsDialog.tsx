@@ -61,7 +61,7 @@ export function ToolsDialog({ onClose, open }: ToolsDialogProps): JSX.Element {
               {userSettings.apiKey ? (
                 "********"
               ) : (
-                <span className="italic text-red-500">not set</span>
+                <span className="italic text-red-500">⚠️ not set</span>
               )}
               <NiceButton onClick={onUpdateClick} type="button">
                 ✏️
