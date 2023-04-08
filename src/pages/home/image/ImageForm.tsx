@@ -35,20 +35,22 @@ export function ImageForm({
   };
 
   return (
-    <Container>
-      <div className="ImageForm grid grid-rows-2 grid-cols-2 gap-2">
-        <form className="contents" onSubmit={onFormSubmit}>
-          <fieldset className="contents" disabled={disabled}>
-            <div className="col-span-full grid">
-              <NiceText onChange={onPromptChange} value={data.prompt} />
-            </div>
-            <div className="col-start-2 text-right">
-              <PrimaryButton>Generate image</PrimaryButton>
-            </div>
-          </fieldset>
-        </form>
-        <div className="row-start-2">{asideContent}</div>
-      </div>
-    </Container>
+    <div className="ImageForm [&>*]:h-full">
+      <Container>
+        <div className="grid grid-rows-[auto_min-content] h-full grid-cols-2 gap-2">
+          <form className="contents" onSubmit={onFormSubmit}>
+            <fieldset className="contents" disabled={disabled}>
+              <div className="col-span-full grid">
+                <NiceText onChange={onPromptChange} value={data.prompt} />
+              </div>
+              <div className="col-start-2 text-right">
+                <PrimaryButton>Generate image</PrimaryButton>
+              </div>
+            </fieldset>
+          </form>
+          <div className="row-start-2">{asideContent}</div>
+        </div>
+      </Container>
+    </div>
   );
 }

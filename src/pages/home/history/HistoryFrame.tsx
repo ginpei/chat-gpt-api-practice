@@ -31,11 +31,11 @@ export function HistoryFrame({
   return (
     <div className="HistoryFrame flex flex-col-reverse">
       <div
-        className="flex-shrink-0 max-h-full border-t pb-4 border-t-gray-200 bg-gray-100"
+        className="flex flex-col flex-shrink-0 max-h-full border-t pb-4 border-t-gray-200 bg-gray-100"
         style={{ height: `${controlHeight}px` }}
       >
         <VResizeBar onDone={onResizeBarDone} onMove={onResizeBarMove} />
-        {ControlBlock}
+        <div className="flex-grow grid">{ControlBlock}</div>
       </div>
       <div className="overflow-auto bg-stone-50">{HistoryBlock}</div>
     </div>
