@@ -37,7 +37,7 @@ export function HistoryFrame({
         <VResizeBar onDone={onResizeBarDone} onMove={onResizeBarMove} />
         <div className="flex-grow grid">{ControlBlock}</div>
       </div>
-      <div className="overflow-auto bg-stone-50">{HistoryBlock}</div>
+      <div className="flex-grow overflow-auto bg-stone-50">{HistoryBlock}</div>
     </div>
   );
 }
