@@ -17,10 +17,12 @@ import { OpenFileCloseHandler, OpenFilePopup } from "./OpenFilePopup";
 
 export interface NoteControlPanelProps {
   clearDisabled: boolean;
+  clearHistory: () => void;
 }
 
 export function NoteControlPanel({
   clearDisabled,
+  clearHistory,
 }: NoteControlPanelProps): JSX.Element {
   const [userAssets, setUserAssets] = useUserAssetsContext();
   const clearHistoryClick = useClearChatHistoryAction();
@@ -30,6 +32,21 @@ export function NoteControlPanel({
   const setCurNoteId = useSetCurNoteId();
   const startNewChatNote = useStartNewChatNote();
   const startNewImageNote = useStartNewImageNote();
+
+  useOnKey("Ctrl+L", document.body, () => {
+    if (clearDisabled) {
+      return;
+    }
+
+    const ok = window.confirm(
+      "Are you sure you want to remove history on this note?"
+    );
+    if (!ok) {
+      return;
+    }
+
+    clearHistory();
+  });
 
   useOnKey("Ctrl+O", document.body, () => {
     setOpenFilePopupVisible(true);

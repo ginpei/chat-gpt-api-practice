@@ -4,6 +4,10 @@ import { Container } from "../../../domains/layout/Container";
 import { ImageNote } from "../../../domains/note/Note";
 import { sendImageRequest } from "../../../domains/openai/chatRequestManipulators";
 import { useUserAssetsContext } from "../../../domains/userAssets/UserAssetsContext";
+import {
+  addImageHistory,
+  updateNote,
+} from "../../../domains/userAssets/userAssetsManipulators";
 import { saveUserAssets } from "../../../domains/userAssets/userAssetsStore";
 import { useUserSettings } from "../../../domains/userSettings/UserSettingsContext";
 import { ToolsDialogButton } from "../control/ToolsDialogButton";
@@ -33,7 +37,10 @@ export function ImageNoteSection({ note }: ImageNoteSectionProps): JSX.Element {
   const [userSettings] = useUserSettings();
   const [userAssets, setUserAssets] = useUserAssetsContext();
   const [formData, setFormData] = useState<ImageFormData>({
-    prompt: "a brown horse running in a field in rain",
+    prompt:
+      note.body.images.length < 1
+        ? "a brown horse running in a field in rain"
+        : "",
   });
   const [sending, setSending] = useState(false);
 
@@ -71,6 +78,13 @@ export function ImageNoteSection({ note }: ImageNoteSectionProps): JSX.Element {
     setFormData(data);
   };
 
+  const clearHistory = () => {
+    note.body.images = [];
+    const newAssets = updateNote(userAssets, note);
+    setUserAssets(newAssets);
+    saveUserAssets(newAssets);
+  };
+
   return (
     <HistoryFrame
       ControlBlock={
@@ -91,7 +105,10 @@ export function ImageNoteSection({ note }: ImageNoteSectionProps): JSX.Element {
           ))}
           <Container>
             <div className="mt-32 mb-32">
-              <NoteControlPanel clearDisabled={note.body.images.length < 1} />
+              <NoteControlPanel
+                clearDisabled={note.body.images.length < 1}
+                clearHistory={clearHistory}
+              />
             </div>
           </Container>
         </div>
