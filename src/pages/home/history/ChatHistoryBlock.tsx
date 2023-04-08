@@ -37,6 +37,11 @@ export function ChatHistoryBlock({ note }: ChatHistoryBlockProps): JSX.Element {
 
   const { messages } = note.body;
 
+  const clearChatHistory = useClearChatHistoryAction();
+  useOnKey("Ctrl+L", document.body, () => {
+    clearChatHistory();
+  });
+
   useOnKey("Ctrl+O", document.body, () => {
     setOpenFilePopupVisible(true);
   });

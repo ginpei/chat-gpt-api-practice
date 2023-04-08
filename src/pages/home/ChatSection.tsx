@@ -11,11 +11,6 @@ export function ChatSection(): JSX.Element {
   const note = useCurNote();
   const { type } = note;
 
-  const clearChatHistory = useClearChatHistoryAction();
-  useOnKey("Ctrl+L", document.body, () => {
-    clearChatHistory();
-  });
-
   if (type === "chat") {
     return (
       <div className="ChatSection flex flex-col-reverse content-between">
