@@ -7,26 +7,25 @@ export interface ImageItemProps {
 
 export function ImageItem({ image }: ImageItemProps): JSX.Element {
   return (
-    <div className="ImageItem" key={image.id}>
+    <div className="ImageItem border-b py-4">
       <Container>
-        Prompt: {image.prompt}
-        <GeneratedImage src={image.url} />
+        <div className="text-center flex flex-col gap-4">
+          <div>
+            <a href={image.url} target="_blank">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                alt={image.url}
+                className="inline-block mx-auto w-full max-w-[50vh] border"
+                src={image.url}
+              />
+            </a>
+          </div>
+          <p>
+            <small className="text-stone-500 pr-1 select-none">Prompt:</small>
+            {image.prompt}
+          </p>
+        </div>
       </Container>
-    </div>
-  );
-}
-
-function GeneratedImage({ src }: { src: string }): JSX.Element {
-  return (
-    <div className="text-center">
-      <a href={src} target="_blank">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          alt={src}
-          className="inline-block mx-auto w-full max-w-[50vh]"
-          src={src}
-        />
-      </a>
     </div>
   );
 }
