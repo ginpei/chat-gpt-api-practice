@@ -4,7 +4,7 @@ import { Container } from "../../../domains/layout/Container";
 import { ImageNote } from "../../../domains/note/Note";
 import { sendImageRequest } from "../../../domains/openai/chatRequestManipulators";
 import { useUserAssetsContext } from "../../../domains/userAssets/UserAssetsContext";
-import { addImageHistory } from "../../../domains/userAssets/userAssetsManipulators";
+import { saveUserAssets } from "../../../domains/userAssets/userAssetsStore";
 import { useUserSettings } from "../../../domains/userSettings/UserSettingsContext";
 import { ToolsDialogButton } from "../control/ToolsDialogButton";
 import { HistoryFrame } from "../history/HistoryFrame";
@@ -57,8 +57,8 @@ export function ImageNoteSection({ note }: ImageNoteSectionProps): JSX.Element {
       });
 
       setUserAssets(newAssets);
+      saveUserAssets(newAssets);
       setFormData({ prompt: "" });
-      // TODO: save to local storage
     } catch (error) {
       // TODO show error
       console.error(error);
