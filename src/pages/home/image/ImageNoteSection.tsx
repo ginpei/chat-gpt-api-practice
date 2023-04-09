@@ -20,19 +20,6 @@ export interface ImageNoteSectionProps {
   note: ImageNote;
 }
 
-const tmp__note_body_messages: ImageGeneration[] = [
-  {
-    id: "1",
-    prompt: "Hello World!",
-    url: "https://ginpei.dev/ginpei-1200.png",
-  },
-  {
-    id: "2",
-    prompt: "Hello World!",
-    url: "https://ginpei.dev/ginpei-1200.png",
-  },
-];
-
 export function ImageNoteSection({ note }: ImageNoteSectionProps): JSX.Element {
   const [userSettings] = useUserSettings();
   const [userAssets, setUserAssets] = useUserAssetsContext();
