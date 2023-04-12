@@ -32,7 +32,7 @@ export function ImageItem({ image }: ImageItemProps): JSX.Element {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 alt={image.url}
-                className="inline-block mx-auto w-full max-w-[50vh] border"
+                className="inline-block mx-auto w-[50vmin] h-[50vmin] border"
                 onError={onError}
                 src={errored ? fallbackUrl : image.url}
               />

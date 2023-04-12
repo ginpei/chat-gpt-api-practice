@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { ImageGeneration } from "../../../domains/imageGeneration/ImageHistory";
+import { createRef, useEffect, useState } from "react";
 import { Container } from "../../../domains/layout/Container";
 import { ImageNote } from "../../../domains/note/Note";
 import { sendImageRequest } from "../../../domains/openai/chatRequestManipulators";
@@ -15,6 +14,7 @@ import { HistoryFrame } from "../history/HistoryFrame";
 import { NoteControlPanel } from "../history/NoteControlPanel";
 import { ImageForm, ImageFormData } from "./ImageForm";
 import { ImageItem } from "./ImageItem";
+import { scrollToElement } from "../../../domains/scroll/scrollFunctions";
 
 export interface ImageNoteSectionProps {
   note: ImageNote;
@@ -30,6 +30,15 @@ export function ImageNoteSection({ note }: ImageNoteSectionProps): JSX.Element {
         : "",
   });
   const [sending, setSending] = useState(false);
+  const refScrollAim = createRef<HTMLDivElement>();
+
+  useEffect(() => {
+    const elTarget = refScrollAim.current;
+    if (!elTarget) {
+      return;
+    }
+    scrollToElement(elTarget);
+  }, [refScrollAim]);
 
   const onSubmit = async () => {
     setSending(true);
@@ -90,6 +99,7 @@ export function ImageNoteSection({ note }: ImageNoteSectionProps): JSX.Element {
           {note.body.images.map((message) => (
             <ImageItem image={message} key={message.id} />
           ))}
+          <div aria-hidden className="h-8" ref={refScrollAim}></div>
           <Container>
             <div className="mt-32 mb-32">
               <NoteControlPanel
