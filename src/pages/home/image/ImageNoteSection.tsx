@@ -14,7 +14,6 @@ import { HistoryFrame } from "../history/HistoryFrame";
 import { NoteControlPanel } from "../history/NoteControlPanel";
 import { ImageForm, ImageFormData } from "./ImageForm";
 import { ImageItem } from "./ImageItem";
-import { scrollToElement } from "../../../domains/scroll/scrollFunctions";
 
 export interface ImageNoteSectionProps {
   note: ImageNote;
@@ -37,7 +36,11 @@ export function ImageNoteSection({ note }: ImageNoteSectionProps): JSX.Element {
     if (!elTarget) {
       return;
     }
-    scrollToElement(elTarget);
+
+    elTarget.scrollIntoView({
+      behavior: "smooth",
+      block: "end",
+    });
   }, [refScrollAim]);
 
   const onSubmit = async () => {
