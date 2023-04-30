@@ -2,8 +2,8 @@ import { PointerEventHandler, ReactNode, useRef, useState } from "react";
 
 export interface DraggerProps {
   children: ReactNode;
-  onDone?: DragPositionHandler;
-  onMove?: DragPositionHandler;
+  onDone?: DragPositionHandler | undefined;
+  onMove?: DragPositionHandler | undefined;
 }
 
 export interface DragPosition {

@@ -9,7 +9,6 @@ import {
 } from "../../../domains/dialog/NiceDialog";
 import { VStack } from "../../../domains/layout/VStack";
 import { NiceLink } from "../../../domains/link/NiceLink";
-import { useUserAssetsContext } from "../../../domains/userAssets/UserAssetsContext";
 import { useCurNote } from "../../../domains/userAssets/UserAssetsContextHooks";
 import {
   UserSettingsValue,
@@ -22,7 +21,6 @@ export interface ToolsDialogProps extends NiceDialogCoreProps {}
 
 export function ToolsDialog({ onClose, open }: ToolsDialogProps): JSX.Element {
   const [userSettings, setUserSettings] = useUserSettings();
-  const [userAssets] = useUserAssetsContext();
   const note = useCurNote();
   const clearHistoryClick = useClearChatHistoryAction();
 

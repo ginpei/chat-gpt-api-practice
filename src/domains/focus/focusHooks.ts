@@ -25,7 +25,7 @@ function focusNext(el: HTMLElement, direction: 1 | -1): void {
 
   const elActive = el.ownerDocument.activeElement;
   if (!elActive || !(elActive instanceof HTMLElement)) {
-    elFocusables[0].focus();
+    elFocusables[0]?.focus();
     return;
   }
 
@@ -34,7 +34,7 @@ function focusNext(el: HTMLElement, direction: 1 | -1): void {
     elFocusables[curIndex + direction] ??
     elFocusables.at(direction > 0 ? 0 : -1);
 
-  elNext.focus();
+  elNext?.focus();
 }
 
 function getAllFocusable(el: HTMLElement): HTMLElement[] {

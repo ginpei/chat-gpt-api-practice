@@ -52,7 +52,7 @@ export function ImageNoteSection({ note }: ImageNoteSectionProps): JSX.Element {
         prompt: formData.prompt,
       });
 
-      const url = res.data.data[0].url;
+      const url = res.data.data[0]?.url;
       if (!url) {
         throw new Error("No URL");
       }

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { KeyAssign } from "../../../domains/key/KeyAssign";
 import { useOnKey } from "../../../domains/key/keyHooks";
-import { ImageNote, Note } from "../../../domains/note/Note";
+import { Note } from "../../../domains/note/Note";
 import { UserAssets } from "../../../domains/userAssets/UserAssets";
 import { useUserAssetsContext } from "../../../domains/userAssets/UserAssetsContext";
 import { saveUserAssets } from "../../../domains/userAssets/userAssetsStore";

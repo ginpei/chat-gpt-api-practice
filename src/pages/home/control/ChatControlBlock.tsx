@@ -109,6 +109,9 @@ export function ChatControlBlock({ note }: ChatControlBlockProps): JSX.Element {
     try {
       // create the AI answer
       const choice = chatResponse.data.choices[0];
+      if (!choice) {
+        throw new Error(`Something went wrong`);
+      }
       const aiMessage = buildChatMessage({
         body: choice.text?.trim() ?? "?",
         complete: choice.finish_reason === "stop",

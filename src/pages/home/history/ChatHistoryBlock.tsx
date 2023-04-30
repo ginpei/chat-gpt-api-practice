@@ -28,8 +28,7 @@ export function ChatHistoryBlock({ note }: ChatHistoryBlockProps): JSX.Element {
   const clearHistoryClick = useClearChatHistoryAction();
   const refMessageList = useRef<HTMLDivElement>(null);
   const [openFilePopupVisible, setOpenFilePopupVisible] = useState(false);
-  const [processingContinueChatMessage, setProcessingContinueChatMessage] =
-    useState(false);
+  const [processingContinueChatMessage] = useState(false);
   const [newFilePopupVisible, setNewFilePopupVisible] = useState(false);
   const setCurNoteId = useSetCurNoteId();
   const startNewChatNote = useStartNewChatNote();

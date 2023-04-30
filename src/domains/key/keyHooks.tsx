@@ -58,6 +58,9 @@ function parseKeyCombination(input: string): KeyCombination {
   const alt = Boolean(matched[2]);
   const shift = Boolean(matched[3]);
   const key = matched[4];
+  if (!key) {
+    throw new Error(`Key is required`);
+  }
 
   return {
     alt,
