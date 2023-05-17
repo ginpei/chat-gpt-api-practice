@@ -1,6 +1,5 @@
 import { useCurNote } from "../../domains/userAssets/UserAssetsContextHooks";
-import { ChatControlBlock } from "./control/ChatControlBlock";
-import { ChatHistoryBlock } from "./history/ChatHistoryBlock";
+import { ChatNoteSection } from "./chat/ChatNoteSection";
 import { ImageNoteSection } from "./image/ImageNoteSection";
 
 export interface ChatSectionProps {}
@@ -10,12 +9,7 @@ export function ChatSection(): JSX.Element {
   const { type } = note;
 
   if (type === "chat") {
-    return (
-      <div className="ChatSection flex flex-col-reverse content-between">
-        <ChatControlBlock note={note} />
-        <ChatHistoryBlock note={note} />
-      </div>
-    );
+    return <ChatNoteSection note={note} />;
   }
 
   if (type === "image") {
